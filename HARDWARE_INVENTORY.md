@@ -6,7 +6,7 @@ This file is the consolidated engineering view. Procurement status is normalized
 
 | Category | Item | Planned use |
 |---|---|---|
-| Controller | Classic ESP32 38-pin DevKit-style board with CP2102 USB-UART and Micro-USB | Main controller; ESP32-WROOM-32-class layout and full pin labels visible; verify flash size during first upload |
+| Controller | Classic ESP32 38-pin DevKit-style board with CP2102 USB-UART and USB-C | Main controller; USB-C physically confirmed by owner; verify flash size during first upload |
 | Prototyping | MB-102-style breadboard kit, power module, jumper wires | Bench build |
 | Prototyping | Xinwei 1/4W metal-film resistor assortment, 30 values x 10, ±1% | Includes confirmed 1 kΩ UART series resistors |
 | Display | 1.28-inch GC9A01 240 x 240 round RGB TFT, 4-wire SPI | Default Tech Week candidate; photo label identifies Shenzhen Esida Electronics |

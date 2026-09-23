@@ -18,7 +18,7 @@ No hardware assembly, wiring assignment, firmware implementation, enclosure sele
 - The wearable should look intentionally slapped together and visibly homemade while remaining electrically and mechanically safe.
 - A small screen faces outward from the middle of the assembly and shows images, text, and tiny pre-rendered video/GIF-like loops.
 - The Adafruit Circuit Playground Express provides a circular LED halo behind/around the display and casts animated light onto the shirt.
-- The photographed main controller is a classic 38-pin ESP32 DevKit-style board with a CP2102 USB-UART bridge and Micro-USB connector. Its ESP32-WROOM-32-class layout has sufficient SPI, UART, Bluetooth, and GPIO resources for the planned build.
+- The main controller is a classic 38-pin ESP32 DevKit-style board with a CP2102 USB-UART bridge and a USB-C connector physically confirmed by the owner. Its ESP32-WROOM-32-class layout has sufficient SPI, UART, Bluetooth, and GPIO resources for the planned build.
 - The Tech Week version is manually triggered by a removable pedal. First verify the reportedly owned Bluetooth music pedal; retain a detachable 1/4-inch wired switch as the fallback.
 - A wired foot-switch lead must be stage-friendly, strain-relieved, and detachable.
 - The wearable must have a dedicated local manual-trigger button independent of the pedal.
@@ -67,7 +67,7 @@ Those are content targets, not requirements for the first electronics test.
 
 - Compare the GC9A01 and ST7735S using real face/caption mockups.
 - Confirm the exact ESP32 model and safe GPIO assignments before wiring.
-- Confirm a short USB-C-to-Micro-USB power lead from the Smatree pack, the shared 5V distribution method, mounting materials, and any wired-fallback jack/cable.
+- Confirm the physically matched USB-C cable supports both data and power, then confirm the shared 5V distribution method, mounting materials, and any wired-fallback jack/cable.
 - Find and identify the Bluetooth music pedal; determine whether it sends BLE MIDI, keyboard/page-turn commands, or a proprietary protocol.
 - Test whether the Circuit Playground can sit behind the selected display while leaving its ten NeoPixels visible enough to create the desired halo.
 - Choose whether the foot-switch cable runs down the inside of a pant leg or along the wearer’s side.

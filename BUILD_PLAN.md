@@ -18,10 +18,10 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 ## Phase 0 — Confirm and label
 
-- Controller identified from photo as a classic 38-pin ESP32 DevKit-style board with CP2102 USB-UART and Micro-USB; confirm it accepts a basic firmware upload and record detected flash size.
+- Controller identified as a classic 38-pin ESP32 DevKit-style board with CP2102 USB-UART and owner-confirmed USB-C; confirm it accepts a basic firmware upload and record detected flash size.
 - Confirm their operating voltages and pin labels.
 - Find and identify the Bluetooth music pedal and document whether it emits BLE MIDI, BLE keyboard/page-turn keys, or another protocol.
-- Select a short USB-C-to-Micro-USB lead and safe 5V distribution method for the confirmed Smatree DP20S pack; do not route the full system load through an unverified ESP32 regulator path.
+- Use the physically matched USB-C cable for the first upload and power test; verify it carries data, then select a safe 5V distribution method for the confirmed Smatree DP20S pack. Do not route the full system load through an unverified ESP32 regulator path.
 - Inventory cards, connectors, buttons, and rough mounting materials.
 - Label all confirmed components; do not assume similar-looking modules share a pinout.
 
