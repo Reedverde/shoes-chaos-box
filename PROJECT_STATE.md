@@ -92,7 +92,7 @@ Those are content targets, not requirements for the first electronics test.
 
 ## Next actions
 
-1. Confirm or purchase the Tier 1 items in `GEAR_NEED.md`.
+1. Place the travel-critical order in `GEAR_NEED.md` immediately; target arrival by September 28 to preserve replacement and test time before the recorded October 5 outbound flight.
 2. Breadboard ESP32 + selected display and render one image/caption.
 3. Add DFPlayer Mini + speaker and play one locally stored cue.
 4. Add the Circuit Playground LED halo and synchronize one effect.

@@ -2,6 +2,13 @@
 
 All notable documentation and project-direction changes are recorded here.
 
+## 2026-09-23 — Travel-critical purchase list
+
+### Changed
+
+- Converted `GEAR_NEED.md` into an urgent pre-travel order: redundant DFPlayers, speakers, visual-storage breakouts, three microSD cards, and the recommended UART resistor.
+- Reconciled the spoken October 3 departure estimate with the trip manifest: the recorded outbound flight is October 5; October 3 is the hotel cancellation-policy date.
+
 ## 2026-09-22 — Wearable concept clarified
 
 ### Changed
