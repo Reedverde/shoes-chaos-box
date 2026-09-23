@@ -5,6 +5,7 @@
 ```text
 Bluetooth music pedal (preferred if compatible) -----------+
 detachable wired foot switch (fallback) --------------------+--> ESP32
+local manual-trigger button --------------------------------+
 local mute / emergency button ------------------------------+     |-- SPI --> center TFT display
                                                                  |-- SPI --> visual microSD
                                                                  |-- UART -> DFPlayer Mini -> 4 ohm speaker
@@ -64,8 +65,9 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 - Add the wearable mute/emergency-stop button.
 - Define controls:
   - Bluetooth or wired foot trigger: launch a scene
-  - Short local-button press: mute/unmute
-  - Long local-button press: emergency stop / return to idle
+  - Dedicated wearable trigger button: launch the same scene path without a pedal
+  - Mute/stop button short press: mute/unmute
+  - Mute/stop button long press: emergency stop / return to idle
   - Mode changes may initially be performed at boot or through a second owned button if needed
 
 **Exit:** Deliberate presses trigger once; bounce, held presses, reconnects, and accidental repeats do not. At least one removable trigger works without touching the wearable.
@@ -80,6 +82,16 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 - Fail gracefully if either card is absent: show an error screen and preserve mute/stop behavior.
 
 **Exit:** At least five scenes can be selected and played reliably from local storage.
+
+## Phase 4B — Event-host integrations (stretch)
+
+- Use Kling AI to create a small number of short reaction loops from cleared source images or original artwork.
+- Convert the results into the exact frame format and dimensions selected in Phase 1; do not decode or stream Kling output at runtime.
+- Build a minimal Cloudflare Flue “Chaos Director” that accepts a theme or tone and produces a validated scene manifest using only known local asset IDs.
+- Export/download the manifest and content pack before boarding.
+- Demonstrate the Cloudflare/Kling provenance if useful, but keep a known-good hand-curated pack as the default and fallback.
+
+**Exit:** At least one Kling-assisted local loop and one Flue-generated scene manifest run on the device without network access.
 
 ## Phase 5 — Wearable integration
 

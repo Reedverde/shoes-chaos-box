@@ -20,7 +20,8 @@ No hardware assembly, wiring assignment, firmware implementation, enclosure sele
 - The Adafruit Circuit Playground Express provides a circular LED halo behind/around the display and casts animated light onto the shirt.
 - The Tech Week version is manually triggered by a removable pedal. First verify the reportedly owned Bluetooth music pedal; retain a detachable 1/4-inch wired switch as the fallback.
 - A wired foot-switch lead must be stage-friendly, strain-relieved, and detachable.
-- The wearable must have a local mute/emergency-stop control independent of the pedal.
+- The wearable must have a dedicated local manual-trigger button independent of the pedal.
+- The wearable must also have a local mute/emergency-stop control independent of the trigger button.
 - The owned GC9A01 round 240 x 240 TFT is the default screen candidate; the owned ST7735S rectangular TFT is the fallback/alternate.
 - A DFPlayer Mini will handle local audio from its own microSD card and drive a small 4-ohm speaker.
 - A separate SPI microSD breakout will hold the larger visual library.
@@ -29,12 +30,18 @@ No hardware assembly, wiring assignment, firmware implementation, enclosure sele
 - The demonstration premise is that the home version uses a pressure pad beneath a welcome mat; the removable pedal substitutes for that sensor during the live demo.
 - A later real home installation can use the pressure mat as the primary trigger, with an optional door contact and owned PIR sensor for arrival confirmation.
 
+## Event-host integration direction
+
+- **Kling AI:** candidate production tool for short image-to-video reaction loops. Runtime exports remain local frame sequences.
+- **Cloudflare Flue:** candidate framework for a hosted Chaos Director that generates or curates scene manifests and downloadable content packs.
+- These integrations are stretch enhancements. The core pedal/button-triggered wearable must be complete and offline-capable without them.
+
 ## MVP acceptance criteria
 
 The first prototype is successful when it can:
 
 1. Boot reliably from USB power.
-2. Convert one button/pedal press into exactly one trigger, including Bluetooth reconnect and wired-switch bounce cases.
+2. Convert one Bluetooth-pedal or local-trigger-button press into exactly one scene, including reconnect and switch-bounce cases.
 3. Show one prepared face image or short frame loop plus a caption.
 4. Play one short audio cue locally.
 5. Run one synchronized Circuit Playground LED effect at a brightness safe for power and comfort.

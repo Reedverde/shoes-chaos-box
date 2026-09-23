@@ -8,7 +8,15 @@ The device should feel like a tiny randomized performance character, not a singl
 
 The spoken setup is: “At home, there is a pressure pad beneath the welcome mat. When I step into the house, it reminds me to take off my shoes, but it mixes the reminders up so they stay fresh and funny. Today this removable foot pedal is standing in for the mat.”
 
-The stage/demo mode and future mat installation should call the same scene-selection function; only the physical trigger changes.
+The stage/demo mode and future mat installation should call the same scene-selection function; only the physical trigger changes. It is not limited to the owner: a visitor stepping on the future mat, or a participant pressing the boat-demo pedal, receives the same randomized reminder experience.
+
+Each scene follows the same reusable rhythm: trigger, reveal a face or shoe shot on the round screen, add a short caption over or beside it, play the matching sound and LED animation, then reset to idle for the next person. The assets can repeat, but the combinations should stay varied enough that several consecutive demonstrations feel fresh.
+
+## Production tools
+
+- **Kling AI:** optional source for very short image-to-video reaction loops. Export the result into optimized local frame sequences; record the source, prompt, permission, and export settings in the manifest.
+- **Cloudflare Flue / Chaos Director:** optional hosted agent that proposes captions and assembles valid combinations of existing image, audio, look, and LED IDs. It must output the same deterministic `scenes.csv` format used by hand-authored packs.
+- AI-generated assets and manifests always pass a human review before being copied to the device.
 
 ## Modes
 

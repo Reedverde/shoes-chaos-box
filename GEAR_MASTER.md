@@ -26,10 +26,10 @@ This is the authoritative configuration and status map. It prevents “recommend
 | Audio storage | 4–32 GB microSD card | NEED | FAT32; dedicated to DFPlayer |
 | Visual storage card | 4–32 GB microSD card | NEED | FAT32; dedicated to visuals |
 | Preferred trigger | Existing Bluetooth music pedal | CONFIRM | Find exact model and determine BLE MIDI, keyboard/page-turn, or proprietary behavior |
-| Bench trigger | Owned momentary pushbutton | HAVE | Uses same logical trigger path while pedal is evaluated |
+| On-device trigger | Owned momentary pushbutton | HAVE | Required wearable backup; launches the same scene path as the pedal |
 | Wired fallback trigger | Normally open momentary foot switch | CONDITIONAL | Buy/build only if the Bluetooth pedal is unsuitable; dry contact, not expression |
 | Wired trigger connection | Detachable 1/4-inch TS/TRS path | CONDITIONAL | Panel jack/cable plus strain relief if fallback is used |
-| Local control | Owned momentary pushbutton | HAVE | Mute and emergency-stop behavior |
+| Local safety control | Second owned momentary pushbutton | HAVE | Separate mute and emergency-stop behavior |
 | Power | Smatree DP20S USB-C battery pack, 5V/2A, 5000mAh / 18.5Wh | HAVE | Pocket power; test auto-shutoff, runtime, and combined load under the 2A ceiling |
 | Mounting | Purposefully rough lapel/suit-pocket assembly | CONFIRM | Visible boards/wires are acceptable; sharp edges and exposed conductors are not |
 | Home trigger | Low-voltage pressure pad beneath welcome mat | DEFER | Future primary home input and current demonstration premise |

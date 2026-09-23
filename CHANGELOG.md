@@ -16,6 +16,10 @@ All notable documentation and project-direction changes are recorded here.
 - Confirmed the pocket battery as a Smatree DP20S USB-C pack labeled 5V/2A input/output and 5000mAh at 3.7V / 18.5Wh; purchasing another bank is now conditional on load testing.
 - Set Hack Alcatraz on October 5, 2026 as the first deployment target: arrive by 5:30 p.m., board at 5:45, cruise 6:00–9:00, and prepare a rapid 1–2 minute offline demo.
 - Replaced the vague all-day power question with a five-hour event-profile endurance requirement on the confirmed DP20S pack.
+- Made a dedicated on-device scene-trigger button mandatory alongside the Bluetooth pedal, with a separate mute/emergency-stop control.
+- Added Kling AI as an optional short-loop production tool and Cloudflare Flue as the proposed hosted Chaos Director for generating local scene manifests.
+- Clarified that the same reusable scene flow serves the owner or any visitor: trigger, face/shoe image, overlaid reminder text, audio and circular LED response, then reset for the next person.
+- Kept both host-product integrations outside the critical runtime path so the boat demo remains fully offline.
 
 ## 2026-09-22 — Repository baseline
 

@@ -10,7 +10,8 @@ Shoes Chaos Box is a portable, wearable performance prop that responds to a remo
 - The wearable also carries the ESP32, audio board, speaker, and local visual storage.
 - The confirmed Smatree DP20S USB-C battery pack rides in an inside jacket pocket, with a short power lead routed inside the jacket. It is labeled 5V/2A output and 5000mAh / 18.5Wh.
 - A removable foot trigger launches scenes. The owner believes an existing Bluetooth music pedal may fill this role; its model and protocol must be verified. A detachable wired switch remains the reliable fallback.
-- The wearable includes a local mute/emergency-stop button.
+- The wearable includes a dedicated local scene-trigger button so the demo still works if the Bluetooth pedal is missing, disconnected, or inconvenient.
+- A separate local mute/emergency-stop control remains available during playback.
 - If the wired fallback is used, cable strain relief and a breakaway-friendly detachable connection are required so a snag does not pull the unit off the wearer.
 
 The default display candidate is the owned 1.28-inch, 240 x 240 GC9A01 round TFT because it suits face-first comedy and has the best resolution of the confirmed displays. The owned ST7735S rectangular TFT remains the alternate for caption-heavy layouts. Both should be bench-tested before the enclosure is finalized.
@@ -21,13 +22,19 @@ The first real outing is **Hack Alcatraz with Cloudflare and Kling AI** on Monda
 
 The wearable therefore needs at least five hours of ready-to-demo battery life, reliable offline operation, a fast reset between short demonstrations, and a physical design that tolerates movement and unreliable reception on the Bay.
 
+### Optional event-host integrations
+
+- Use Kling AI during content production to turn selected stills or original artwork into tiny reaction loops, then export display-sized frames to the visual microSD card.
+- Use Cloudflare Flue as a hosted “Chaos Director” that creates scene manifests by combining captions, media IDs, audio IDs, timing, and LED patterns.
+- Keep the generated pack local on the wearable. Flue and Kling enhance what is prepared before the cruise; neither may become a live network dependency.
+
 ## Trigger behavior
 
-Each pedal press launches a short scene selected within the current mode. A scene may combine:
+Each pedal or local-button press launches one short, reusable scene selected within the current mode. The same interaction can be repeated for the wearer or any nearby participant; every press can produce a different combination. A scene may combine:
 
-1. A still image or pre-rendered animation frames
+1. A still image, shoe close-up, or pre-rendered animation frames
 2. A visual treatment such as alert, glitch, monochrome, neon, or VHS
-3. A caption
+3. A caption rendered on top of or alongside the image
 4. A short audio cue
 5. A Circuit Playground LED pattern or color chase
 6. An optional follow-up frame
