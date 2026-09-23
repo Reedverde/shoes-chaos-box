@@ -8,13 +8,17 @@ The current trip manifest has the outbound flight on **Monday, October 5, 2026**
 
 | Priority | Order | Recommended qty | Why / exact requirement | Current reference |
 |---|---|---:|---|---|
-| 1 | Authentic DFRobot DFPlayer Mini, SKU DFR0299 | 2 | One build unit plus one cheap travel/build spare; avoid unbranded clones | [Mouser DFR0299](https://www.mouser.com/en/ProductDetail/DFRobot/DFR0299?mgh=1&qs=Zcin8yvlhnPSNhqM2hweWw%3D%3D) |
-| 1 | 40 mm speaker, 4 ohms, rated 3 W or higher | 2 | One build unit plus spare; connect to DFPlayer SPK1/SPK2 | [Adafruit product 3968](https://www.adafruit.com/product/3968) |
-| 1 | 3.3 V microSD SPI breakout | 2 | One build unit plus spare for the visual library; product 4682 works with ESP32 logic | [Adafruit product 4682](https://www.adafruit.com/product/4682) |
-| 1 | 16 GB or 32 GB name-brand microSD cards | 3 | Audio card, visual card, and ready-to-swap travel spare; all must be FAT32-capable | Buy locally or from a reputable retailer |
-| 1 | 1 kΩ resistors | 5 or small assortment | DFRobot recommends one in the ESP32-TX-to-DFPlayer-RX path | Buy locally or add to electronics order |
+| 1 | Authentic DFRobot DFPlayer Mini, SKU DFR0299 | 1 | Dedicated audio player; avoid unbranded clones | [Mouser DFR0299](https://www.mouser.com/en/ProductDetail/DFRobot/DFR0299?mgh=1&qs=Zcin8yvlhnPSNhqM2hweWw%3D%3D) |
+| 1 | 40 mm speaker, 4 ohms, rated 3 W or higher | 1 | Connect to DFPlayer SPK1/SPK2 | [Adafruit product 3968](https://www.adafruit.com/product/3968) |
+| 1 | 3.3 V microSD SPI breakout | 1 | Gives the ESP32 separate access to the visual library; product 4682 works with ESP32 logic | [Adafruit product 4682](https://www.adafruit.com/product/4682) |
+| 1 | 16 GB or 32 GB name-brand microSD cards | 2 | One card lives in the DFPlayer for audio; the other lives in the ESP32 breakout for images and animation frames | Buy locally or from a reputable retailer |
+| Verify | 1 kΩ resistor | 1 | Owner believes this is already available; verify the value before omitting it from the order | Existing supply or local/electronics retailer |
 
 Current public listings checked September 23, 2026 showed the authentic DFR0299 available through Mouser, and Adafruit products 3968 and 4682 in stock. Stock and delivery promises can change at checkout; use an expedited option that arrives no later than September 28 if practical.
+
+### Optional travel redundancy
+
+None of these backups is required for the circuit. If budget and shipping make it sensible, the most useful spare is one additional blank microSD card because it can replace either storage card. A second DFPlayer, speaker, or breakout is optional insurance only—not part of the minimum order.
 
 ### Check at home today; add to the order if missing
 
@@ -31,11 +35,11 @@ Do not delay the display/LED prototype for these deliveries. The ESP32, round di
 
 | Item | Qty | Requirement | Reference |
 |---|---:|---|---|
-| DFPlayer Mini | 1 installed + 1 spare | Authentic DFR0299 board, UART control, direct compact-speaker output, microSD support | [Mouser DFR0299](https://www.mouser.com/en/ProductDetail/DFRobot/DFR0299?mgh=1&qs=Zcin8yvlhnPSNhqM2hweWw%3D%3D) |
-| Compact speaker | 1 installed + 1 spare | 4 ohms; small enough for wearable; rated for at least 3 W | [Adafruit 40 mm 4-ohm speaker](https://www.adafruit.com/product/3968) |
-| Visual microSD breakout | 1 installed + 1 spare | SPI, compatible with 3.3V ESP32 logic | [Adafruit Micro SD SPI/SDIO breakout](https://www.adafruit.com/product/4682) |
-| microSD cards | 2 installed + 1 spare | Separate audio and visual cards; use 16–32 GB name-brand cards that can be formatted FAT32 | Buy from a reputable local/electronics retailer |
-| UART series resistor | 1 installed + spares | 1 kΩ between ESP32 TX and DFPlayer RX per manufacturer guidance | Buy locally or add to electronics order |
+| DFPlayer Mini | 1 | Authentic DFR0299 board, UART control, direct compact-speaker output, microSD support | [Mouser DFR0299](https://www.mouser.com/en/ProductDetail/DFRobot/DFR0299?mgh=1&qs=Zcin8yvlhnPSNhqM2hweWw%3D%3D) |
+| Compact speaker | 1 | 4 ohms; small enough for wearable; rated for at least 3 W | [Adafruit 40 mm 4-ohm speaker](https://www.adafruit.com/product/3968) |
+| Visual microSD breakout | 1 | SPI, compatible with 3.3V ESP32 logic | [Adafruit Micro SD SPI/SDIO breakout](https://www.adafruit.com/product/4682) |
+| microSD cards | 2 | Separate audio and visual cards; use 16–32 GB name-brand cards that can be formatted FAT32 | Buy from a reputable local/electronics retailer |
+| UART series resistor | 1 | 1 kΩ between ESP32 TX and DFPlayer RX per manufacturer guidance; verify owned supply first | Existing supply or local/electronics retailer |
 
 The DFPlayer manufacturer documents UART control, a 3W mono amplifier, FAT16/FAT32 cards up to 32 GB, and a 1 kΩ series resistor in the controller-to-player serial path. The linked Adafruit speaker is currently sold as a 4-ohm 5W revision and is described as suitable where 3W or less is required.
 
