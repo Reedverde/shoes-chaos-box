@@ -15,6 +15,7 @@ Only confirmed equipment belongs here. Quantities are intentionally described as
 | MB-102-style breadboard kit | Confirmed | Prototyping |
 | Breadboard power module | Confirmed | Bench support only |
 | Jumper wires | Confirmed | Prototyping |
+| Xinwei 1/4W metal-film resistor assortment, 30 values x 10, ±1% | 1 kit confirmed | Includes ten 1 kΩ resistors for the ESP32-to-DFPlayer UART line |
 | Smatree DP20S cylindrical USB-C battery pack | 1 confirmed | Tech Week pocket power; label: 5V/2A input/output, 5000mAh at 3.7V / 18.5Wh |
 
 ## Useful for later entryway version

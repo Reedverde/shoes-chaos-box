@@ -25,6 +25,7 @@ This is the authoritative configuration and status map. It prevents “recommend
 | Visual storage | HiLetgo SPI microSD modules | ORDERED | Five ordered; level-shifted module requires 5V VCC; bench-test with ESP32 |
 | Audio storage | Bliksem 8 GB Class 10 microSD card | ORDERED | One of two ordered cards; FAT32; dedicated to DFPlayer |
 | Visual storage card | Bliksem 8 GB Class 10 microSD card | ORDERED | One of two ordered cards; FAT32; dedicated to visuals |
+| UART series resistor | 1 kΩ, 1/4W, ±1% metal-film resistor | HAVE | Use one from confirmed Xinwei assortment between ESP32 TX and DFPlayer RX |
 | Preferred trigger | Existing Bluetooth music pedal | CONFIRM | Find exact model and determine BLE MIDI, keyboard/page-turn, or proprietary behavior |
 | On-device trigger | Owned momentary pushbutton | HAVE | Required wearable backup; launches the same scene path as the pedal |
 | Wired fallback trigger | Normally open momentary foot switch | CONDITIONAL | Buy/build only if the Bluetooth pedal is unsuitable; dry contact, not expression |

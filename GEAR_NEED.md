@@ -13,7 +13,7 @@ The four-item Amazon order was placed on September 23, 2026. These items remain 
 | HiLetgo SPI microSD module pack | 1 pack / 5 modules | One visual-storage interface plus spares | Confirm level shifting, 5V VCC requirement, pin labels, and ESP32 operation | [Amazon listing](https://www.amazon.com/dp/B07BJ2P6X6) |
 | Bliksem 8 GB Class 10 microSD two-pack | 1 pack / 2 cards | One audio card and one visual card | Capacity-test both cards, format FAT32, label AUDIO and VISUAL, then read/write-test | [Amazon listing](https://www.amazon.com/dp/B0CYZ2WKNF) |
 
-The owner believes a 1 kΩ resistor is already available. Verify the value before the DFPlayer UART build.
+The 1 kΩ resistor is confirmed in the owned Xinwei 1/4W, ±1% metal-film assortment; no resistor purchase is needed.
 
 The ordered speaker and microSD-module multipacks include extra units, so no additional travel spares are needed now.
 
@@ -36,7 +36,7 @@ Do not delay the display/LED prototype for these deliveries. The ESP32, round di
 | Compact speaker | 2 ordered | 4 ohms, 3 W; one installed plus one spare | [Amazon order listing](https://www.amazon.com/dp/B08JCHK7GR) |
 | Visual microSD modules | 5 ordered | SPI modules with onboard level shifting; one installed plus spares | [Amazon order listing](https://www.amazon.com/dp/B07BJ2P6X6) |
 | microSD cards | 2 ordered | Separate 8 GB Class 10 audio and visual cards; format FAT32 and test capacity | [Amazon order listing](https://www.amazon.com/dp/B0CYZ2WKNF) |
-| UART series resistor | 1 | 1 kΩ between ESP32 TX and DFPlayer RX per manufacturer guidance; verify owned supply first | Existing supply or local/electronics retailer |
+| UART series resistor | 1 confirmed owned | 1 kΩ between ESP32 TX and DFPlayer RX per manufacturer guidance | Xinwei assortment in `GEAR_HAVE.md` |
 
 The DFPlayer manufacturer documents UART control, a 3W mono amplifier, FAT16/FAT32 cards up to 32 GB, and a 1 kΩ series resistor in the controller-to-player serial path. The ordered MakerHawk speakers are listed as 4 ohms and 3 watts, matching that direct-output target.
 

@@ -12,6 +12,7 @@ All notable documentation and project-direction changes are recorded here.
 - Kept ordered items out of `GEAR_HAVE.md` until they arrive and pass label, capacity, and basic-operation checks.
 - Identified the owned controller from a new photo as a classic 38-pin ESP32 DevKit-style board with CP2102 USB-UART and a Micro-USB connector.
 - Added ESP32 pin guardrails and corrected the battery lead requirement to USB-C-to-Micro-USB.
+- Confirmed an owned Xinwei 1/4W, ±1% metal-film assortment containing ten 1 kΩ resistors; removed the resistor purchase uncertainty.
 - Reconciled the spoken October 3 departure estimate with the trip manifest: the recorded outbound flight is October 5; October 3 is the hotel cancellation-policy date.
 
 ## 2026-09-22 — Wearable concept clarified
