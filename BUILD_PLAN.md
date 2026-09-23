@@ -3,14 +3,14 @@
 ## Architecture
 
 ```text
-momentary foot switch -- detachable 1/4 in cable --+
-                                                     |
-local mute / emergency button -----------------------+--> ESP32
-                                                           |-- SPI --> TFT display
-                                                           |-- SPI --> visual microSD
-                                                           `-- UART -> DFPlayer Mini -> 4 ohm speaker
+Bluetooth music pedal (preferred if compatible) -----------+
+detachable wired foot switch (fallback) --------------------+--> ESP32
+local mute / emergency button ------------------------------+     |-- SPI --> center TFT display
+                                                                 |-- SPI --> visual microSD
+                                                                 |-- UART -> DFPlayer Mini -> 4 ohm speaker
+                                                                 `-- trigger/sync -> Circuit Playground LED halo
 
-USB power bank (inside jacket pocket) ---------------------> regulated USB input/power rail
+USB power bank (inside jacket pocket) ---------------------------> shared regulated power plan
 ```
 
 The display and visual microSD may share the SPI bus with separate chip-select lines. Exact GPIOs must be chosen only after the specific ESP32 board and both display pinouts are verified.
@@ -19,7 +19,8 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 - Photograph and identify the exact ESP32, GC9A01, and ST7735S boards.
 - Confirm their operating voltages and pin labels.
-- Inventory power bank, cables, cards, connectors, buttons, and enclosure materials.
+- Find and identify the Bluetooth music pedal and document whether it emits BLE MIDI, BLE keyboard/page-turn keys, or another protocol.
+- Inventory power bank, cables, cards, connectors, buttons, and rough mounting materials.
 - Label all confirmed components; do not assume similar-looking modules share a pinout.
 
 **Exit:** Exact boards and missing purchases are known.
@@ -33,6 +34,16 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 **Exit:** One display is selected and can render the idle screen plus one scene reliably.
 
+## Phase 1B — LED halo proof
+
+- Place the Circuit Playground Express behind the selected center display without permanent attachment.
+- Confirm that enough of its ten NeoPixels remain visible to produce a ring and shirt backlight.
+- Prototype idle, trigger, alert, spin/chase, and fade patterns at conservative brightness.
+- Decide whether the ESP32 sends a simple trigger line or serial scene/color data to the Circuit Playground.
+- Power-test the display, audio, and LED halo together; avoid sustained full-white NeoPixel output.
+
+**Exit:** One scene synchronizes the screen with a visible LED sweep without brownouts, uncomfortable glare, or excessive heat.
+
 ## Phase 2 — Audio proof
 
 - Format a 4–32 GB microSD card as FAT32 for DFPlayer compatibility.
@@ -45,16 +56,18 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 ## Phase 3 — Controls
 
-- Wire the momentary foot switch as a dry-contact input using an internal or external pull-up.
-- Add software debounce and a scene-active lockout.
+- Use an owned pushbutton as the initial bench trigger.
+- If the Bluetooth pedal is compatible, pair it and map its event to the same trigger interface used by the button.
+- Build the detachable wired dry-contact switch only as the dependable fallback; use an internal or external pull-up.
+- Add software debounce/reconnect handling and a scene-active lockout.
 - Add the wearable mute/emergency-stop button.
 - Define controls:
-  - Foot switch: trigger a scene
+  - Bluetooth or wired foot trigger: launch a scene
   - Short local-button press: mute/unmute
   - Long local-button press: emergency stop / return to idle
   - Mode changes may initially be performed at boot or through a second owned button if needed
 
-**Exit:** Deliberate presses trigger once; bounce, held presses, and accidental repeats do not.
+**Exit:** Deliberate presses trigger once; bounce, held presses, reconnects, and accidental repeats do not. At least one removable trigger works without touching the wearable.
 
 ## Phase 4 — Visual storage and scene engine
 
@@ -69,13 +82,14 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 ## Phase 5 — Wearable integration
 
-- Mock the layout in cardboard before committing to an enclosure.
-- Put the screen and speaker grille on the visible face.
+- Mock the layout with cardboard, exposed backing, tape, clips, visible wire, and other intentionally rough materials before committing to mounting.
+- Center the outward-facing screen over/within the Circuit Playground LED ring, with the LEDs able to wash the shirt.
+- Preserve the purposefully slapped-together look; do not hide every board, fastener, or wire.
 - Mount the ESP32, DFPlayer, and SD breakout so cards and USB remain serviceable.
 - Put the power bank in an inside pocket; route a short USB cable inside the jacket.
-- Use a panel-mounted 1/4-inch jack or equally robust detachable connector for the pedal.
-- Add strain relief on both sides of the wearable, plus a slack loop.
+- If using the wired fallback, use a panel-mounted 1/4-inch jack or equally robust detachable connector and add strain relief plus a slack loop.
 - Ensure no sharp edges, exposed conductors, hot components, or rigid loads press into the wearer.
+- Keep roughness theatrical only: insulation, load spreading, secure pins/clips, and emergency control remain non-negotiable.
 
 **Exit:** The unit can be worn, moved, muted, disconnected, and removed safely.
 
@@ -91,12 +105,12 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 **Exit:** Repeatable Tech Week demo with a documented fallback.
 
-## Phase 7 — Post–Tech Week entryway conversion
+## Phase 7 — Home welcome-mat version
 
-- Add a normally closed magnetic door contact.
-- Add one owned HC-SR501 PIR sensor.
-- Trigger only after the door opens and presence/motion is observed within a defined window.
+- Put a suitable low-voltage pressure pad beneath the welcome mat as the primary arrival trigger.
+- Treat the wearable pedal and welcome-mat pressure pad as interchangeable inputs to the same scene engine.
+- Optionally add a normally closed magnetic door contact and one owned HC-SR501 PIR sensor to confirm an arrival.
+- Trigger only after the chosen combination of mat/door/presence events occurs within a defined window.
 - Add a 2–5 minute cooldown and retain the foot switch as manual test/trigger control.
 - Begin with USB wall power; battery charging hardware remains optional.
 - A local ESP32 web page may later expose volume, mute, sensitivity, cooldown, and test controls.
-

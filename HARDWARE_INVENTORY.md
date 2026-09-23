@@ -17,7 +17,7 @@ This file is the consolidated engineering view. Procurement status is normalized
 | Power | TP4056 lithium charging boards | Future rechargeable experiments; not Tech Week power |
 | Power | Four-AAA battery holder with switch and two-pin lead | Future use; not the Tech Week power plan |
 | Interface | Logic-level converter boards | Available if a verified interface requires them |
-| Other | Adafruit Circuit Playground Express, product 3333 | Spare platform; not in current architecture |
+| Lighting | Adafruit Circuit Playground Express, product 3333 | Circular ten-NeoPixel halo behind/around center display; animated shirt backlight |
 | Other | 5V relay module | Not needed for current build |
 | Other | CC1101 radio modules | Not needed for current build |
 | Other | NRF24L01+PA+LNA 2.4 GHz module with SMA antenna | Not needed for current build |
@@ -30,11 +30,12 @@ This file is the consolidated engineering view. Procurement status is normalized
 |---|---|---|
 | Tier 1 | DFPlayer Mini (DFR0299 or compatible verified board) | Local audio playback over UART |
 | Tier 1 | 4-ohm speaker rated for at least the DFPlayer's output | Audible cue |
-| Tier 1 | Momentary foot switch | Manual scene trigger |
 | Tier 1 | Two microSD cards, 4–32 GB, FAT32-capable | Separate audio and visual libraries |
 | Tier 1 | SPI microSD breakout compatible with 3.3V ESP32 logic | Visual storage |
+| Confirm | Existing Bluetooth music pedal | Preferred removable scene trigger if its protocol is ESP32-compatible |
+| Conditional | Normally open momentary wired foot switch | Reliable fallback only if Bluetooth pedal is missing or incompatible |
 | Confirm | USB power bank and short matching cable | Pocket power |
-| Confirm | 1/4-inch panel jack, matching cable/plug, strain relief | Detachable stage connection |
+| Conditional | 1/4-inch panel jack, matching cable/plug, strain relief | Detachable stage connection only for the wired fallback |
 | Confirm | Compact wearable enclosure and secure mounting hardware | Finished lapel/chest unit |
 | Build supply | Perfboard or solderable prototype board, wire, headers/connectors, heat-shrink | Reliable integration after breadboard proof |
 
@@ -42,7 +43,8 @@ This file is the consolidated engineering view. Procurement status is normalized
 
 | Item | Status |
 |---|---|
-| Normally closed magnetic reed door/contact sensor | Need after Tech Week |
+| Low-voltage pressure pad/mat switch | Primary future trigger beneath welcome mat |
+| Normally closed magnetic reed door/contact sensor | Optional arrival confirmation after Tech Week |
 | Quality 5V/2A USB wall adapter and cable | Confirm/need when converting to fixed installation |
 | Wall enclosure/mount | Design after trigger logic is validated |
 

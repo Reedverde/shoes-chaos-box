@@ -9,6 +9,7 @@ Only confirmed equipment belongs here. Quantities are intentionally described as
 | ESP32 development board | At least 1 confirmed | Main controller |
 | GC9A01 1.28-inch 240 x 240 round RGB TFT, 4-wire SPI | 1 confirmed | Primary screen candidate; Shenzhen Esida label visible |
 | 1.8-inch 128 x 160 RGB TFT, ST7735S-class SPI board with K1/K2/K3 buttons | 1 confirmed | Alternate screen candidate |
+| Adafruit Circuit Playground Express, product 3333 | 1 confirmed | Circular NeoPixel halo behind/around the center screen |
 | Pushbuttons | Multiple confirmed | Local mute/stop/mode controls |
 | Mini slide switches | Multiple confirmed | Optional hard power/mode control |
 | MB-102-style breadboard kit | Confirmed | Prototyping |
@@ -30,7 +31,6 @@ Only confirmed equipment belongs here. Quantities are intentionally described as
 | Logic-level converter boards | Use only if a verified interface requires them |
 | TP4056 lithium charging boards | Future rechargeable builds; not the pocket power plan |
 | Four-AAA battery holder with switch and two-pin lead | Not part of the Tech Week pocket-power plan |
-| Adafruit Circuit Playground Express, product 3333 | Spare platform |
 | 5V relay module | Not needed |
 | CC1101 433 MHz radio modules | Not needed |
 | NRF24L01+PA+LNA 2.4 GHz module with SMA antenna | Not needed |

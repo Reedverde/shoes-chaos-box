@@ -2,6 +2,18 @@
 
 All notable documentation and project-direction changes are recorded here.
 
+## 2026-09-22 — Wearable concept clarified
+
+### Changed
+
+- Locked the intentionally slapped-together lapel/suit-pocket aesthetic; the build should look improvised while remaining safe and reliable underneath.
+- Put the small outward-facing image/text/animation screen at the visual center of the wearable.
+- Promoted the owned Adafruit Circuit Playground Express from spare hardware to the circular LED halo behind/around the screen, washing animated light onto the shirt.
+- Added many randomized audio/video samples and synchronized LED patterns to the scene concept.
+- Made the believed-owned Bluetooth music pedal the first trigger to evaluate and moved the detachable wired foot switch to fallback status.
+- Defined the presentation story: a pressure pad beneath the home welcome mat normally triggers randomized shoe reminders; the removable pedal substitutes for it during the traveling demo.
+- Changed the future home build’s primary input from door sensing to the welcome-mat pressure pad, with door contact and PIR retained as optional confirmation sensors.
+
 ## 2026-09-22 — Repository baseline
 
 ### Added

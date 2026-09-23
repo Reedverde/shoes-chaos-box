@@ -2,7 +2,13 @@
 
 ## Creative direction
 
-The device should feel like a tiny randomized performance character, not a single repeating sound button. Every trigger launches a short “scene” assembled from compatible visual, caption, audio, and effect assets.
+The device should feel like a tiny randomized performance character, not a single repeating sound button. Its physical language is intentionally homemade: a small center screen, an LED ring glowing onto the shirt, visible construction, and a surprising amount of media. Every trigger launches a short “scene” assembled from compatible visual, caption, audio, screen effect, and LED assets.
+
+## Demonstration story
+
+The spoken setup is: “At home, there is a pressure pad beneath the welcome mat. When I step into the house, it reminds me to take off my shoes, but it mixes the reminders up so they stay fresh and funny. Today this removable foot pedal is standing in for the mat.”
+
+The stage/demo mode and future mat installation should call the same scene-selection function; only the physical trigger changes.
 
 ## Modes
 
@@ -23,6 +29,7 @@ An optional escalation sequence can replace pure randomization: gentle warning, 
 - 30–50 captions
 - 10–20 short audio cues
 - 8–10 looks: normal, monochrome, posterized, neon, glitch, VHS, red alert, pixelated, zoom burst, and comic halftone
+- 6–10 LED patterns: idle pulse, color wipe, chase, alarm spin, flash, sparkle, success fade, and blackout
 
 Start with five fully curated Clean Demo scenes before expanding the pools.
 
@@ -38,6 +45,8 @@ Start with five fully curated Clean Demo scenes before expanding the pools.
       FRAME_002.raw
   /audio
     AUDIO_001.mp3
+  /led
+    led_patterns.csv
   captions.csv
   scenes.csv
   manifest.csv
@@ -56,7 +65,7 @@ The final bitmap format depends on the selected display library. Store source ar
 Example scene record:
 
 ```text
-SCENE_001,CLEAN,IMG_004,CAP_012,AUDIO_003,LOOK_ALERT,3500
+SCENE_001,CLEAN,IMG_004,CAP_012,AUDIO_003,LOOK_ALERT,LED_CHASE_RED,3500
 ```
 
 ## Starter caption bank
@@ -115,8 +124,9 @@ SCENE_001,CLEAN,IMG_004,CAP_012,AUDIO_003,LOOK_ALERT,3500
 ## Content safety and rights
 
 - Do not make the device depend on YouTube or network access.
-- Do not distribute ripped video/audio in this repository.
-- Use an original performance, licensed excerpt, or other cleared audio inspired by the desired comic timing.
+- YouTube is the creative source for desired images, moments, and little clips, but the live device must not depend on streaming.
+- Do not commit or distribute ripped video/audio in this repository. Keep source references and permissions in the manifest.
+- For any public or distributed version, use licensed/cleared excerpts, original recreations, or other permitted assets with the desired comic timing.
 - Obtain permission before using identifiable face images, especially for public performance or publication.
 - Keep Clean Demo content free of personal attacks, private references, and unexpected high-volume cues.
 
@@ -126,6 +136,6 @@ SCENE_001,CLEAN,IMG_004,CAP_012,AUDIO_003,LOOK_ALERT,3500
 2. Avoid repeating the last image, caption, or audio cue when alternatives exist.
 3. Respect audio/animation duration so the scene ends cleanly.
 4. Give emergency stop and mute priority over all playback.
-5. Return to the idle screen after each scene.
-6. Log or expose a debug scene ID during development so failures are reproducible.
-
+5. Synchronize the Circuit Playground pattern with the screen/audio scene and cap LED brightness globally.
+6. Return to the idle screen and idle LED state after each scene.
+7. Log or expose a debug scene ID during development so failures are reproducible.
