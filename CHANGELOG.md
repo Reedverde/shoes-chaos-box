@@ -13,6 +13,7 @@ All notable documentation and project-direction changes are recorded here.
 - Made the believed-owned Bluetooth music pedal the first trigger to evaluate and moved the detachable wired foot switch to fallback status.
 - Defined the presentation story: a pressure pad beneath the home welcome mat normally triggers randomized shoe reminders; the removable pedal substitutes for it during the traveling demo.
 - Changed the future home build’s primary input from door sensing to the welcome-mat pressure pad, with door contact and PIR retained as optional confirmation sensors.
+- Confirmed the pocket battery as a Smatree DP20S USB-C pack labeled 5V/2A input/output and 5000mAh at 3.7V / 18.5Wh; purchasing another bank is now conditional on load testing.
 
 ## 2026-09-22 — Repository baseline
 

@@ -15,6 +15,7 @@ Only confirmed equipment belongs here. Quantities are intentionally described as
 | MB-102-style breadboard kit | Confirmed | Prototyping |
 | Breadboard power module | Confirmed | Bench support only |
 | Jumper wires | Confirmed | Prototyping |
+| Smatree DP20S cylindrical USB-C battery pack | 1 confirmed | Tech Week pocket power; label: 5V/2A input/output, 5000mAh at 3.7V / 18.5Wh |
 
 ## Useful for later entryway version
 
@@ -39,4 +40,4 @@ Only confirmed equipment belongs here. Quantities are intentionally described as
 
 ## Not yet counted as owned
 
-Do not move the following here until physically confirmed: USB power bank, short USB cable, DFPlayer Mini, speaker, microSD cards, visual microSD breakout, foot switch, 1/4-inch cable/jack, enclosure, perfboard, and magnetic door contact.
+Do not move the following here until physically confirmed: short USB-C power lead/distribution parts, DFPlayer Mini, speaker, microSD cards, visual microSD breakout, Bluetooth pedal model, wired fallback pedal/jack/cable, mounting materials, perfboard, pressure mat, and magnetic door contact.

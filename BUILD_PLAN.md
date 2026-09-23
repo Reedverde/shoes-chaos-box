@@ -10,7 +10,7 @@ local mute / emergency button ------------------------------+     |-- SPI --> ce
                                                                  |-- UART -> DFPlayer Mini -> 4 ohm speaker
                                                                  `-- trigger/sync -> Circuit Playground LED halo
 
-USB power bank (inside jacket pocket) ---------------------------> shared regulated power plan
+Smatree DP20S USB-C pack, 5V/2A (inside jacket pocket) ----------> shared 5V power distribution
 ```
 
 The display and visual microSD may share the SPI bus with separate chip-select lines. Exact GPIOs must be chosen only after the specific ESP32 board and both display pinouts are verified.
@@ -20,7 +20,8 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 - Photograph and identify the exact ESP32, GC9A01, and ST7735S boards.
 - Confirm their operating voltages and pin labels.
 - Find and identify the Bluetooth music pedal and document whether it emits BLE MIDI, BLE keyboard/page-turn keys, or another protocol.
-- Inventory power bank, cables, cards, connectors, buttons, and rough mounting materials.
+- Select a short USB-C lead and safe 5V distribution method for the confirmed Smatree DP20S pack; do not route the full system load through an unverified ESP32 regulator path.
+- Inventory cards, connectors, buttons, and rough mounting materials.
 - Label all confirmed components; do not assume similar-looking modules share a pinout.
 
 **Exit:** Exact boards and missing purchases are known.
@@ -40,7 +41,7 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 - Confirm that enough of its ten NeoPixels remain visible to produce a ring and shirt backlight.
 - Prototype idle, trigger, alert, spin/chase, and fade patterns at conservative brightness.
 - Decide whether the ESP32 sends a simple trigger line or serial scene/color data to the Circuit Playground.
-- Power-test the display, audio, and LED halo together; avoid sustained full-white NeoPixel output.
+- Power-test the display, audio, and LED halo together from the DP20S; stay below its labeled 5V/2A output and avoid sustained full-white NeoPixel output.
 
 **Exit:** One scene synchronizes the screen with a visible LED sweep without brownouts, uncomfortable glare, or excessive heat.
 
@@ -86,7 +87,7 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 - Center the outward-facing screen over/within the Circuit Playground LED ring, with the LEDs able to wash the shirt.
 - Preserve the purposefully slapped-together look; do not hide every board, fastener, or wire.
 - Mount the ESP32, DFPlayer, and SD breakout so cards and USB remain serviceable.
-- Put the power bank in an inside pocket; route a short USB cable inside the jacket.
+- Put the cylindrical DP20S power bank in an inside pocket and restrain it from rolling; route a short USB-C power lead inside the jacket.
 - If using the wired fallback, use a panel-mounted 1/4-inch jack or equally robust detachable connector and add strain relief plus a slack loop.
 - Ensure no sharp edges, exposed conductors, hot components, or rigid loads press into the wearer.
 - Keep roughness theatrical only: insulation, load spreading, secure pins/clips, and emergency control remain non-negotiable.
@@ -97,7 +98,7 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 - Run 100 trigger cycles and record failures.
 - Test at expected volume and ambient noise.
-- Confirm the power bank stays awake during a 30-minute idle/run test.
+- Confirm the DP20S stays awake during a 30-minute idle/run test and remains stable during worst-case screen + audio + LED peaks.
 - Walk, sit, turn, and step away while wearing the full system.
 - Perform a controlled cable snag/pull test with the wearable supported.
 - Pack spare cards, USB cable, and a fallback manual trigger button.

@@ -30,7 +30,7 @@ This is the authoritative configuration and status map. It prevents “recommend
 | Wired fallback trigger | Normally open momentary foot switch | CONDITIONAL | Buy/build only if the Bluetooth pedal is unsuitable; dry contact, not expression |
 | Wired trigger connection | Detachable 1/4-inch TS/TRS path | CONDITIONAL | Panel jack/cable plus strain relief if fallback is used |
 | Local control | Owned momentary pushbutton | HAVE | Mute and emergency-stop behavior |
-| Power | USB power bank in inside jacket pocket | CONFIRM | Test auto-shutoff and runtime |
+| Power | Smatree DP20S USB-C battery pack, 5V/2A, 5000mAh / 18.5Wh | HAVE | Pocket power; test auto-shutoff, runtime, and combined load under the 2A ceiling |
 | Mounting | Purposefully rough lapel/suit-pocket assembly | CONFIRM | Visible boards/wires are acceptable; sharp edges and exposed conductors are not |
 | Home trigger | Low-voltage pressure pad beneath welcome mat | DEFER | Future primary home input and current demonstration premise |
 | Entry sensor | Normally closed magnetic door contact | OPTIONAL/DEFER | May supplement the mat |

@@ -8,7 +8,7 @@ Shoes Chaos Box is a portable, wearable performance prop that responds to a remo
 - A small outward-facing screen sits in the middle and shows images, text, and short pre-rendered GIF-like loops.
 - The owned Adafruit Circuit Playground Express sits behind or around the screen as a circular LED halo, washing light onto the shirt and emphasizing each scene.
 - The wearable also carries the ESP32, audio board, speaker, and local visual storage.
-- A USB power bank rides in an inside jacket pocket, with a short power cable routed inside the jacket.
+- The confirmed Smatree DP20S USB-C battery pack rides in an inside jacket pocket, with a short power lead routed inside the jacket. It is labeled 5V/2A output and 5000mAh / 18.5Wh.
 - A removable foot trigger launches scenes. The owner believes an existing Bluetooth music pedal may fill this role; its model and protocol must be verified. A detachable wired switch remains the reliable fallback.
 - The wearable includes a local mute/emergency-stop button.
 - If the wired fallback is used, cable strain relief and a breakaway-friendly detachable connection are required so a snag does not pull the unit off the wearer.

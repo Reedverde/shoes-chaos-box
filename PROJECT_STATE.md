@@ -23,7 +23,7 @@ No hardware assembly, wiring assignment, firmware implementation, enclosure sele
 - The owned GC9A01 round 240 x 240 TFT is the default screen candidate; the owned ST7735S rectangular TFT is the fallback/alternate.
 - A DFPlayer Mini will handle local audio from its own microSD card and drive a small 4-ohm speaker.
 - A separate SPI microSD breakout will hold the larger visual library.
-- Power comes from a normal USB power bank in the jacket pocket for the Tech Week build. No custom lithium charging circuit is required.
+- Power comes from the confirmed Smatree DP20S USB-C battery pack in the jacket pocket. Its label specifies 5V/2A input/output and 5000mAh at 3.7V (18.5Wh). No custom lithium charging circuit is required.
 - The live demo must function without Wi-Fi.
 - The demonstration premise is that the home version uses a pressure pad beneath a welcome mat; the removable pedal substitutes for that sensor during the live demo.
 - A later real home installation can use the pressure mat as the primary trigger, with an optional door contact and owned PIR sensor for arrival confirmation.
@@ -57,7 +57,7 @@ Those are content targets, not requirements for the first electronics test.
 
 - Compare the GC9A01 and ST7735S using real face/caption mockups.
 - Confirm the exact ESP32 model and safe GPIO assignments before wiring.
-- Confirm whether a suitable USB power bank, short power cable, microSD cards, enclosure materials, 1/4-inch cable, and panel jack are already owned.
+- Confirm the short USB-C power lead/distribution method, microSD cards, mounting materials, and any wired-fallback jack/cable.
 - Find and identify the Bluetooth music pedal; determine whether it sends BLE MIDI, keyboard/page-turn commands, or a proprietary protocol.
 - Test whether the Circuit Playground can sit behind the selected display while leaving its ten NeoPixels visible enough to create the desired halo.
 - Choose whether the foot-switch cable runs down the inside of a pant leg or along the wearer’s side.
@@ -74,6 +74,7 @@ Those are content targets, not requirements for the first electronics test.
 | Audio is too quiet | Bench-test speaker orientation and enclosure grille before fabrication |
 | Visual playback is slow | Pre-render 240 x 240 frames and benchmark SD reads early |
 | LED halo causes excess current draw or glare | Cap brightness, avoid sustained full-white output, and test against the actual shirt |
+| Combined load exceeds the pack's 5V/2A rating | Measure worst-case current with screen, loud audio, and LED effect active; impose firmware brightness/volume limits |
 | Power-bank auto-shutoff | Test the exact bank under idle load before travel |
 | ESP32 brownout during audio peaks | Use short power wiring, adequate supply, and local decoupling as needed |
 | Demo content creates rights/privacy issues | Use owned, licensed, or original assets and obtain consent for identifiable faces |

@@ -17,8 +17,7 @@ The DFPlayer manufacturer documents UART control, a 3W mono amplifier, and FAT16
 
 | Item | What to verify |
 |---|---|
-| USB power bank | Already owned? Stable USB output? Does it remain awake at the device’s idle load? |
-| Short USB cable | Correct connector for the exact ESP32; flexible enough for inside-jacket routing |
+| USB-C power lead/distribution | Use the owned Smatree DP20S as the source; choose a short flexible lead and a safe shared 5V distribution method after the ESP32 connector/power path is identified |
 | Bluetooth music pedal | Find the believed-owned pedal; record brand/model and whether it emits BLE MIDI, keyboard/page-turn commands, or a proprietary signal |
 | Wired momentary pedal | Buy only if the Bluetooth pedal is missing or incompatible; normally open dry-contact example: [Nektar NP-1 family](https://nektartech.com/np-1_np-2_nx-p/) |
 | 1/4-inch connection hardware | Needed only for the wired fallback; select a matching panel jack/cable or extension |
@@ -36,6 +35,8 @@ The DFPlayer manufacturer documents UART control, a 3W mono amplifier, and FAT16
 - Second local button for mode advance, if one-button gestures prove awkward
 - Status LED, only if the display does not provide enough feedback
 - Backup hand trigger using an owned pushbutton
+
+The USB battery pack itself is already owned; do not buy another unless the DP20S fails its idle-shutoff, runtime, or 5V/2A peak-load test.
 
 ## Deferred — post–Tech Week entryway version
 

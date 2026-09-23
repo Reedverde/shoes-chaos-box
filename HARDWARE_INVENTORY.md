@@ -16,6 +16,7 @@ This file is the consolidated engineering view. Procurement status is normalized
 | Sensor | Several HC-SR501 PIR motion sensors | Post-event entry confirmation |
 | Power | TP4056 lithium charging boards | Future rechargeable experiments; not Tech Week power |
 | Power | Four-AAA battery holder with switch and two-pin lead | Future use; not the Tech Week power plan |
+| Power | Smatree DP20S cylindrical USB-C battery pack, 5V/2A input/output, 5000mAh at 3.7V / 18.5Wh | Confirmed Tech Week pocket power; must pass idle and peak-load tests |
 | Interface | Logic-level converter boards | Available if a verified interface requires them |
 | Lighting | Adafruit Circuit Playground Express, product 3333 | Circular ten-NeoPixel halo behind/around center display; animated shirt backlight |
 | Other | 5V relay module | Not needed for current build |
@@ -34,7 +35,7 @@ This file is the consolidated engineering view. Procurement status is normalized
 | Tier 1 | SPI microSD breakout compatible with 3.3V ESP32 logic | Visual storage |
 | Confirm | Existing Bluetooth music pedal | Preferred removable scene trigger if its protocol is ESP32-compatible |
 | Conditional | Normally open momentary wired foot switch | Reliable fallback only if Bluetooth pedal is missing or incompatible |
-| Confirm | USB power bank and short matching cable | Pocket power |
+| Confirm | Short USB-C power lead and safe 5V distribution | Connect confirmed DP20S pack to the wearable electronics |
 | Conditional | 1/4-inch panel jack, matching cable/plug, strain relief | Detachable stage connection only for the wired fallback |
 | Confirm | Compact wearable enclosure and secure mounting hardware | Finished lapel/chest unit |
 | Build supply | Perfboard or solderable prototype board, wire, headers/connectors, heat-shrink | Reliable integration after breadboard proof |
