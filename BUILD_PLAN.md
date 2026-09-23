@@ -18,12 +18,21 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 ## Phase 0 — Confirm and label
 
-- Photograph and identify the exact ESP32, GC9A01, and ST7735S boards.
+- Controller identified from photo as a classic 38-pin ESP32 DevKit-style board with CP2102 USB-UART and Micro-USB; confirm it accepts a basic firmware upload and record detected flash size.
 - Confirm their operating voltages and pin labels.
 - Find and identify the Bluetooth music pedal and document whether it emits BLE MIDI, BLE keyboard/page-turn keys, or another protocol.
-- Select a short USB-C lead and safe 5V distribution method for the confirmed Smatree DP20S pack; do not route the full system load through an unverified ESP32 regulator path.
+- Select a short USB-C-to-Micro-USB lead and safe 5V distribution method for the confirmed Smatree DP20S pack; do not route the full system load through an unverified ESP32 regulator path.
 - Inventory cards, connectors, buttons, and rough mounting materials.
 - Label all confirmed components; do not assume similar-looking modules share a pinout.
+
+Controller pin guardrails for the first wiring draft:
+
+- Reserve GPIO18/19/23 for the shared SPI bus unless a library constraint requires otherwise.
+- Reserve GPIO16/17 as the preferred hardware UART pair for the DFPlayer.
+- Do not use the exposed CLK/CMD/SD0/SD1/SD2/SD3 pins; they are tied to the ESP32 module's flash interface.
+- Treat GPIO34/35/36/39 as input-only.
+- Avoid GPIO0/2/5/12/15 for the first peripheral assignments because their levels can affect boot behavior.
+- Freeze chip-select, display-control, button, and Circuit Playground communication pins only after the display and microSD modules are on the bench together.
 
 **Exit:** Exact boards and missing purchases are known.
 

@@ -10,6 +10,8 @@ All notable documentation and project-direction changes are recorded here.
 - Marked the 1 kΩ UART resistor as verify-owned rather than an automatic purchase.
 - Recorded the completed four-item Amazon order as in transit: one DFPlayer, two MakerHawk speakers, five HiLetgo microSD modules, and two Bliksem 8 GB microSD cards.
 - Kept ordered items out of `GEAR_HAVE.md` until they arrive and pass label, capacity, and basic-operation checks.
+- Identified the owned controller from a new photo as a classic 38-pin ESP32 DevKit-style board with CP2102 USB-UART and a Micro-USB connector.
+- Added ESP32 pin guardrails and corrected the battery lead requirement to USB-C-to-Micro-USB.
 - Reconciled the spoken October 3 departure estimate with the trip manifest: the recorded outbound flight is October 5; October 3 is the hotel cancellation-policy date.
 
 ## 2026-09-22 — Wearable concept clarified

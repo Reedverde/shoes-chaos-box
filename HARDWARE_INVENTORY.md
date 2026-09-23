@@ -6,7 +6,7 @@ This file is the consolidated engineering view. Procurement status is normalized
 
 | Category | Item | Planned use |
 |---|---|---|
-| Controller | ESP32 development board | Main controller; exact model/pinout still to verify |
+| Controller | Classic ESP32 38-pin DevKit-style board with CP2102 USB-UART and Micro-USB | Main controller; ESP32-WROOM-32-class layout and full pin labels visible; verify flash size during first upload |
 | Prototyping | MB-102-style breadboard kit, power module, jumper wires | Bench build |
 | Display | 1.28-inch GC9A01 240 x 240 round RGB TFT, 4-wire SPI | Default Tech Week candidate; photo label identifies Shenzhen Esida Electronics |
 | Display | 1.8-inch 128 x 160 RGB TFT, ST7735S-class SPI board with K1/K2/K3 buttons | Caption-heavy alternate; PCB labels include GND, VCC, SCL, SDA, RES, DC, CS, and BLK |

@@ -16,7 +16,7 @@ This is the authoritative configuration and status map. It prevents “recommend
 
 | System | Selected item | Status | Notes |
 |---|---|---|---|
-| Controller | ESP32 development board | HAVE | Exact model and pin map must be verified |
+| Controller | Classic ESP32 38-pin DevKit-style board with CP2102 and Micro-USB | HAVE | ESP32-WROOM-32-class layout photographed; use visible labels and verify flash size in firmware |
 | Primary display | GC9A01 1.28-inch 240 x 240 SPI TFT | HAVE | Default, pending real-asset comparison |
 | Alternate display | ST7735S rectangular color TFT | HAVE | Better candidate for stacked captions |
 | LED halo | Adafruit Circuit Playground Express, product 3333 | HAVE | Mount behind/around center display; synchronize its ten NeoPixels with scenes |

@@ -6,7 +6,7 @@ Only confirmed equipment belongs here. Quantities are intentionally described as
 
 | Item | Quantity/status | Intended use |
 |---|---|---|
-| ESP32 development board | At least 1 confirmed | Main controller |
+| Classic ESP32 38-pin development board, CP2102 USB-UART, Micro-USB | At least 1 confirmed | Main controller; ESP32-WROOM-32/DevKit-style pinout visible in supplied photo |
 | GC9A01 1.28-inch 240 x 240 round RGB TFT, 4-wire SPI | 1 confirmed | Primary screen candidate; Shenzhen Esida label visible |
 | 1.8-inch 128 x 160 RGB TFT, ST7735S-class SPI board with K1/K2/K3 buttons | 1 confirmed | Alternate screen candidate |
 | Adafruit Circuit Playground Express, product 3333 | 1 confirmed | Circular NeoPixel halo behind/around the center screen |
