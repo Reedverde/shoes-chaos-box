@@ -92,10 +92,10 @@ Those are content targets, not requirements for the first electronics test.
 
 ## Next actions
 
-1. Place the travel-critical order in `GEAR_NEED.md` immediately; target arrival by September 28 to preserve replacement and test time before the recorded October 5 outbound flight.
-2. Breadboard ESP32 + selected display and render one image/caption.
-3. Add DFPlayer Mini + speaker and play one locally stored cue.
-4. Add the Circuit Playground LED halo and synchronize one effect.
+1. While the four-item electronics order is in transit, breadboard ESP32 + selected display and render one image/caption.
+2. Add the Circuit Playground LED halo and synchronize one effect using the owned hardware.
+3. On delivery, inspect and test the ordered DFPlayer, speakers, microSD modules, and both 8 GB cards before moving them to `GEAR_HAVE.md`.
+4. Add DFPlayer Mini + speaker and play one locally stored cue.
 5. Identify/test the Bluetooth pedal; add and debounce the wired fallback only if needed.
 6. Add the emergency-stop button and visual microSD; benchmark scene load time.
 7. Freeze connectors and pin map, then assemble the intentionally rough-looking wearable safely.

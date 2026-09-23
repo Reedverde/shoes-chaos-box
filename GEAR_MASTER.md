@@ -20,11 +20,11 @@ This is the authoritative configuration and status map. It prevents “recommend
 | Primary display | GC9A01 1.28-inch 240 x 240 SPI TFT | HAVE | Default, pending real-asset comparison |
 | Alternate display | ST7735S rectangular color TFT | HAVE | Better candidate for stacked captions |
 | LED halo | Adafruit Circuit Playground Express, product 3333 | HAVE | Mount behind/around center display; synchronize its ten NeoPixels with scenes |
-| Audio player | DFPlayer Mini | NEED | UART control; local audio card |
-| Speaker | 4-ohm compact speaker, 3W-class load | NEED | Confirm enclosure loudness |
-| Visual storage | 3.3V-compatible SPI microSD breakout | NEED | Separate from DFPlayer card |
-| Audio storage | 4–32 GB microSD card | NEED | FAT32; dedicated to DFPlayer |
-| Visual storage card | 4–32 GB microSD card | NEED | FAT32; dedicated to visuals |
+| Audio player | DFPlayer Mini | ORDERED | One Amazon-listed DFRobot DFR0299; verify branding and operation on arrival |
+| Speaker | MakerHawk 4-ohm, 3W compact speakers | ORDERED | Two ordered; one installed plus one spare; confirm enclosure loudness |
+| Visual storage | HiLetgo SPI microSD modules | ORDERED | Five ordered; level-shifted module requires 5V VCC; bench-test with ESP32 |
+| Audio storage | Bliksem 8 GB Class 10 microSD card | ORDERED | One of two ordered cards; FAT32; dedicated to DFPlayer |
+| Visual storage card | Bliksem 8 GB Class 10 microSD card | ORDERED | One of two ordered cards; FAT32; dedicated to visuals |
 | Preferred trigger | Existing Bluetooth music pedal | CONFIRM | Find exact model and determine BLE MIDI, keyboard/page-turn, or proprietary behavior |
 | On-device trigger | Owned momentary pushbutton | HAVE | Required wearable backup; launches the same scene path as the pedal |
 | Wired fallback trigger | Normally open momentary foot switch | CONDITIONAL | Buy/build only if the Bluetooth pedal is unsuitable; dry contact, not expression |

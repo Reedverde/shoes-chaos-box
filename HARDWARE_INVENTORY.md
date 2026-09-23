@@ -25,14 +25,19 @@ This file is the consolidated engineering view. Procurement status is normalized
 | Other | BME280 environmental sensor | Not needed for current build |
 | Other | RC522 RFID/NFC reader | Not needed for current build |
 
-## Required for Tech Week but not confirmed owned
+## Ordered for Tech Week but not yet received
+
+| Priority | Item | Ordered quantity | Purpose / receipt check |
+|---|---|---:|---|
+| Tier 1 | Amazon-listed DFRobot DFPlayer Mini DFR0299 | 1 | Local audio playback over UART; verify authenticity and operation |
+| Tier 1 | MakerHawk 4-ohm, 3W speaker | 2 | Audible cue; one installed and one spare |
+| Tier 1 | Bliksem 8 GB Class 10 microSD card | 2 | Separate FAT32 audio and visual libraries; capacity-test both |
+| Tier 1 | HiLetgo level-shifted SPI microSD module | 5 | Visual storage; confirm 5V VCC and ESP32 logic operation |
+
+## Still required or unresolved for Tech Week
 
 | Priority | Item | Purpose |
 |---|---|---|
-| Tier 1 | DFPlayer Mini (DFR0299 or compatible verified board) | Local audio playback over UART |
-| Tier 1 | 4-ohm speaker rated for at least the DFPlayer's output | Audible cue |
-| Tier 1 | Two microSD cards, 4–32 GB, FAT32-capable | Separate audio and visual libraries |
-| Tier 1 | SPI microSD breakout compatible with 3.3V ESP32 logic | Visual storage |
 | Confirm | Existing Bluetooth music pedal | Preferred removable scene trigger if its protocol is ESP32-compatible |
 | Conditional | Normally open momentary wired foot switch | Reliable fallback only if Bluetooth pedal is missing or incompatible |
 | Confirm | Short USB-C power lead and safe 5V distribution | Connect confirmed DP20S pack to the wearable electronics |

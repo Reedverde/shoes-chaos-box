@@ -2,23 +2,20 @@
 
 Links are references, not proof of purchase. Availability and revisions can change; verify electrical details before ordering. Move an item to `GEAR_HAVE.md` as soon as it is physically confirmed.
 
-## Order now — travel-critical package
+## Ordered — awaiting delivery and inspection
 
-The current trip manifest has the outbound flight on **Monday, October 5, 2026**, with check-in opening Sunday, October 4. October 3 is the hotel cancellation-policy date, not the recorded departure date. Even so, place the electronics orders immediately so there is time for bench testing and one replacement cycle before travel.
+The four-item Amazon order was placed on September 23, 2026. These items remain here—not in `GEAR_HAVE.md`—until they arrive and their labels, quantities, electrical specifications, and basic operation are confirmed.
 
-| Priority | Order | Recommended qty | Why / exact requirement | Current reference |
-|---|---|---:|---|---|
-| 1 | Authentic DFRobot DFPlayer Mini, SKU DFR0299 | 1 | Dedicated audio player; avoid unbranded clones | [Mouser DFR0299](https://www.mouser.com/en/ProductDetail/DFRobot/DFR0299?mgh=1&qs=Zcin8yvlhnPSNhqM2hweWw%3D%3D) |
-| 1 | 40 mm speaker, 4 ohms, rated 3 W or higher | 1 | Connect to DFPlayer SPK1/SPK2 | [Adafruit product 3968](https://www.adafruit.com/product/3968) |
-| 1 | 3.3 V microSD SPI breakout | 1 | Gives the ESP32 separate access to the visual library; product 4682 works with ESP32 logic | [Adafruit product 4682](https://www.adafruit.com/product/4682) |
-| 1 | 16 GB or 32 GB name-brand microSD cards | 2 | One card lives in the DFPlayer for audio; the other lives in the ESP32 breakout for images and animation frames | Buy locally or from a reputable retailer |
-| Verify | 1 kΩ resistor | 1 | Owner believes this is already available; verify the value before omitting it from the order | Existing supply or local/electronics retailer |
+| Ordered item | Ordered qty | Intended use | Arrival checks | Reference |
+|---|---:|---|---|---|
+| DFPlayer Mini listing represented as DFRobot DFR0299 | 1 | Dedicated audio player | Confirm DFRobot branding/model, pin labels, and playback from FAT32 card | [Amazon listing](https://www.amazon.com/dp/B089D5NLW1) |
+| MakerHawk 4-ohm, 3-watt speaker pack | 1 pack / 2 speakers | One installed speaker plus one spare | Confirm 4-ohm/3-watt label and connector/wire arrangement | [Amazon listing](https://www.amazon.com/dp/B08JCHK7GR) |
+| HiLetgo SPI microSD module pack | 1 pack / 5 modules | One visual-storage interface plus spares | Confirm level shifting, 5V VCC requirement, pin labels, and ESP32 operation | [Amazon listing](https://www.amazon.com/dp/B07BJ2P6X6) |
+| Bliksem 8 GB Class 10 microSD two-pack | 1 pack / 2 cards | One audio card and one visual card | Capacity-test both cards, format FAT32, label AUDIO and VISUAL, then read/write-test | [Amazon listing](https://www.amazon.com/dp/B0CYZ2WKNF) |
 
-Current public listings checked September 23, 2026 showed the authentic DFR0299 available through Mouser, and Adafruit products 3968 and 4682 in stock. Stock and delivery promises can change at checkout; use an expedited option that arrives no later than September 28 if practical.
+The owner believes a 1 kΩ resistor is already available. Verify the value before the DFPlayer UART build.
 
-### Optional travel redundancy
-
-None of these backups is required for the circuit. If budget and shipping make it sensible, the most useful spare is one additional blank microSD card because it can replace either storage card. A second DFPlayer, speaker, or breakout is optional insurance only—not part of the minimum order.
+The ordered speaker and microSD-module multipacks include extra units, so no additional travel spares are needed now.
 
 ### Check at home today; add to the order if missing
 
@@ -31,17 +28,17 @@ None of these backups is required for the circuit. If budget and shipping make i
 
 Do not delay the display/LED prototype for these deliveries. The ESP32, round display, Circuit Playground, breadboard, buttons, and battery are already sufficient to build the silent trigger-and-visual path first.
 
-## Tier 1 — required for the bench MVP
+## Tier 1 — ordered for the bench MVP
 
 | Item | Qty | Requirement | Reference |
 |---|---:|---|---|
-| DFPlayer Mini | 1 | Authentic DFR0299 board, UART control, direct compact-speaker output, microSD support | [Mouser DFR0299](https://www.mouser.com/en/ProductDetail/DFRobot/DFR0299?mgh=1&qs=Zcin8yvlhnPSNhqM2hweWw%3D%3D) |
-| Compact speaker | 1 | 4 ohms; small enough for wearable; rated for at least 3 W | [Adafruit 40 mm 4-ohm speaker](https://www.adafruit.com/product/3968) |
-| Visual microSD breakout | 1 | SPI, compatible with 3.3V ESP32 logic | [Adafruit Micro SD SPI/SDIO breakout](https://www.adafruit.com/product/4682) |
-| microSD cards | 2 | Separate audio and visual cards; use 16–32 GB name-brand cards that can be formatted FAT32 | Buy from a reputable local/electronics retailer |
+| DFPlayer Mini | 1 ordered | UART control, direct compact-speaker output, microSD support; verify authenticity on arrival | [Amazon order listing](https://www.amazon.com/dp/B089D5NLW1) |
+| Compact speaker | 2 ordered | 4 ohms, 3 W; one installed plus one spare | [Amazon order listing](https://www.amazon.com/dp/B08JCHK7GR) |
+| Visual microSD modules | 5 ordered | SPI modules with onboard level shifting; one installed plus spares | [Amazon order listing](https://www.amazon.com/dp/B07BJ2P6X6) |
+| microSD cards | 2 ordered | Separate 8 GB Class 10 audio and visual cards; format FAT32 and test capacity | [Amazon order listing](https://www.amazon.com/dp/B0CYZ2WKNF) |
 | UART series resistor | 1 | 1 kΩ between ESP32 TX and DFPlayer RX per manufacturer guidance; verify owned supply first | Existing supply or local/electronics retailer |
 
-The DFPlayer manufacturer documents UART control, a 3W mono amplifier, FAT16/FAT32 cards up to 32 GB, and a 1 kΩ series resistor in the controller-to-player serial path. The linked Adafruit speaker is currently sold as a 4-ohm 5W revision and is described as suitable where 3W or less is required.
+The DFPlayer manufacturer documents UART control, a 3W mono amplifier, FAT16/FAT32 cards up to 32 GB, and a 1 kΩ series resistor in the controller-to-player serial path. The ordered MakerHawk speakers are listed as 4 ohms and 3 watts, matching that direct-output target.
 
 ## Confirm before buying
 

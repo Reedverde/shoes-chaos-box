@@ -8,6 +8,8 @@ All notable documentation and project-direction changes are recorded here.
 
 - Converted `GEAR_NEED.md` into an urgent pre-travel order and then clarified minimum versus optional redundancy: one DFPlayer, one speaker, one visual-storage breakout, and two functionally required microSD cards; any duplicates are optional travel insurance.
 - Marked the 1 kΩ UART resistor as verify-owned rather than an automatic purchase.
+- Recorded the completed four-item Amazon order as in transit: one DFPlayer, two MakerHawk speakers, five HiLetgo microSD modules, and two Bliksem 8 GB microSD cards.
+- Kept ordered items out of `GEAR_HAVE.md` until they arrive and pass label, capacity, and basic-operation checks.
 - Reconciled the spoken October 3 departure estimate with the trip manifest: the recorded outbound flight is October 5; October 3 is the hotel cancellation-policy date.
 
 ## 2026-09-22 — Wearable concept clarified
