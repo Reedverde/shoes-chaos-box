@@ -8,18 +8,19 @@ This file is the consolidated engineering view. Procurement status is normalized
 |---|---|---|
 | Controller | ESP32 development board | Main controller; exact model/pinout still to verify |
 | Prototyping | MB-102-style breadboard kit, power module, jumper wires | Bench build |
-| Display | 1.28-inch GC9A01 240 x 240 SPI round TFT | Default Tech Week candidate |
-| Display | ST7735S rectangular color TFT | Caption-heavy alternate |
-| Display | Two small monochrome OLED displays | Status/debug or future use |
+| Display | 1.28-inch GC9A01 240 x 240 round RGB TFT, 4-wire SPI | Default Tech Week candidate; photo label identifies Shenzhen Esida Electronics |
+| Display | 1.8-inch 128 x 160 RGB TFT, ST7735S-class SPI board with K1/K2/K3 buttons | Caption-heavy alternate; PCB labels include GND, VCC, SCL, SDA, RES, DC, CS, and BLK |
+| Display | 0.91-inch 128 x 32 white I2C OLED | Status/debug or future use |
+| Display | 0.96-inch blue OLED | Status/debug or future use |
 | Input | Pushbuttons and mini slide switches | Mute, emergency stop, mode/test |
 | Sensor | Several HC-SR501 PIR motion sensors | Post-event entry confirmation |
 | Power | TP4056 lithium charging boards | Future rechargeable experiments; not Tech Week power |
-| Power | Battery holder | Future use; chemistry/fit not confirmed |
+| Power | Four-AAA battery holder with switch and two-pin lead | Future use; not the Tech Week power plan |
 | Interface | Logic-level converter boards | Available if a verified interface requires them |
-| Other | Adafruit Circuit Playground Express | Spare platform; not in current architecture |
+| Other | Adafruit Circuit Playground Express, product 3333 | Spare platform; not in current architecture |
 | Other | 5V relay module | Not needed for current build |
 | Other | CC1101 radio modules | Not needed for current build |
-| Other | NRF24L01/PA/LNA radio module(s) | Not needed for current build |
+| Other | NRF24L01+PA+LNA 2.4 GHz module with SMA antenna | Not needed for current build |
 | Other | BME280 environmental sensor | Not needed for current build |
 | Other | RC522 RFID/NFC reader | Not needed for current build |
 
@@ -54,4 +55,3 @@ This file is the consolidated engineering view. Procurement status is normalized
 - Additional radios
 - A custom lithium pack or TP4056-based charging system
 - A native phone app
-

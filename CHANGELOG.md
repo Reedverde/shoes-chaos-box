@@ -28,3 +28,5 @@ All notable documentation and project-direction changes are recorded here.
 - The round GC9A01 is the default display candidate, but the rectangular ST7735S must be compared using real content before final enclosure work.
 - Power bank, cards, connectors, enclosure supplies, and other common items are **confirm before buying**, not assumed owned.
 - The project will not distribute ripped YouTube media; runtime assets must be original, licensed, or otherwise cleared.
+- Rechecked the recoverable component photos and recorded the exact 1.8-inch 128 x 160 TFT format, both OLED variants, four-AAA holder, NRF24L01+PA+LNA configuration, and Adafruit Circuit Playground Express product number.
+- The exact ESP32 model remains unconfirmed because its board markings are not visible in the recoverable photos.
