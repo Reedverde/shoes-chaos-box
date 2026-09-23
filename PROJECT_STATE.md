@@ -1,16 +1,25 @@
 # Project State
 
-Last updated: 2026-09-22
+Last updated: 2026-09-23
 
 ## Status
 
-**Phase:** Documentation and procurement, before bench prototype  
+**Phase:** Bench prototype — firmware ready for the first screen/button test
 **Primary milestone:** Wearable Tech Week demo  
 **Current form factor:** Purposefully rough lapel/suit-pocket wearable + outward screen + Circuit Playground LED halo + pocket battery + removable foot trigger
 **First deployment:** Hack Alcatraz, Monday, October 5, 2026, 5:00–9:00 p.m. PT; arrive by 5:30, board at 5:45, cruise 6:00–9:00
 **Source of truth:** This GitHub repository
 
-No hardware assembly, wiring assignment, firmware implementation, enclosure selection, or purchase has yet been recorded as complete.
+The first firmware milestone is implemented and compile-verified. It boots the confirmed ESP32 target, drives the round GC9A01 display, shows an idle screen, and cycles through four test scenes from a debounced local button. Physical wiring and upload have not yet been completed.
+
+## Current firmware milestone
+
+- Project location: `firmware/`
+- Build target: classic ESP32 Dev Module using the Arduino framework
+- Compile status: successful on 2026-09-23
+- Bench scope: ESP32 + round screen + one local trigger button only
+- Preliminary bench GPIO map: display SPI on GPIO18/23, display controls on GPIO27/25/33/32, trigger button on GPIO13
+- The DFPlayer, speaker, visual microSD, Circuit Playground, Bluetooth pedal, and battery pack remain disconnected until this proof works.
 
 ## Locked decisions
 
@@ -66,7 +75,6 @@ Those are content targets, not requirements for the first electronics test.
 ## Open decisions
 
 - Compare the GC9A01 and ST7735S using real face/caption mockups.
-- Confirm the exact ESP32 model and safe GPIO assignments before wiring.
 - Confirm the physically matched USB-C cable supports both data and power, then confirm the shared 5V distribution method, mounting materials, and any wired-fallback jack/cable.
 - Find and identify the Bluetooth music pedal; determine whether it sends BLE MIDI, keyboard/page-turn commands, or a proprietary protocol.
 - Test whether the Circuit Playground can sit behind the selected display while leaving its ten NeoPixels visible enough to create the desired halo.
@@ -93,7 +101,7 @@ Those are content targets, not requirements for the first electronics test.
 
 ## Next actions
 
-1. While the four-item electronics order is in transit, breadboard ESP32 + selected display and render one image/caption.
+1. Follow `firmware/WIRING_MILESTONE_1.md`, upload the compile-verified firmware, and confirm the idle screen plus four button-triggered test scenes.
 2. Add the Circuit Playground LED halo and synchronize one effect using the owned hardware.
 3. On delivery, inspect and test the ordered DFPlayer, speakers, microSD modules, and both 8 GB cards before moving them to `GEAR_HAVE.md`.
 4. Add DFPlayer Mini + speaker and play one locally stored cue.

@@ -16,6 +16,10 @@ Smatree DP20S USB-C pack, 5V/2A (inside jacket pocket) ----------> shared 5V pow
 
 The display and visual microSD may share the SPI bus with separate chip-select lines. Exact GPIOs must be chosen only after the specific ESP32 board and both display pinouts are verified.
 
+## Implemented bench milestone
+
+The first compile-verified firmware is in `firmware/`. It intentionally uses only the ESP32, GC9A01 round display, and one local trigger button. The exact temporary wiring is in `firmware/WIRING_MILESTONE_1.md`. No audio, SD, LED halo, relay, battery holder, or external breadboard power is part of this first test.
+
 ## Phase 0 — Confirm and label
 
 - Controller identified as a classic 38-pin ESP32 DevKit-style board with CP2102 USB-UART and owner-confirmed USB-C; confirm it accepts a basic firmware upload and record detected flash size.
@@ -39,7 +43,8 @@ Controller pin guardrails for the first wiring draft:
 ## Phase 1 — Display proof
 
 - Power the ESP32 from USB on the bench.
-- Wire the GC9A01 and render a solid-color test, text, then one 240 x 240 face asset.
+- Wire the GC9A01 and run the implemented idle screen plus four button-triggered text/color scenes.
+- After that proof works, render one 240 x 240 face asset.
 - Repeat a representative caption layout on the ST7735S.
 - Choose the screen by readability, comic effect, refresh speed, wiring, and enclosure fit.
 

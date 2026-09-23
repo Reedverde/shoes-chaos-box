@@ -2,6 +2,19 @@
 
 All notable documentation and project-direction changes are recorded here.
 
+## 2026-09-23 — First firmware milestone
+
+### Added
+
+- Added a PlatformIO/Arduino firmware project for the confirmed classic ESP32 board and GC9A01 round display.
+- Added an idle screen and four button-triggered diagnostic scenes with debounce and automatic return to idle.
+- Added the exact Milestone 1 breadboard wiring for the ESP32, display, and one local button.
+- Reserved later pins for the visual microSD, DFPlayer UART, and mute button without connecting those devices yet.
+
+### Verified
+
+- Compiled the firmware successfully for the `esp32dev` target; the build used 6.6% of RAM and 21.7% of the available application flash.
+
 ## 2026-09-23 — Travel-critical purchase list
 
 ### Changed
