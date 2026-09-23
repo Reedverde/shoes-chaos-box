@@ -7,6 +7,7 @@ Last updated: 2026-09-22
 **Phase:** Documentation and procurement, before bench prototype  
 **Primary milestone:** Wearable Tech Week demo  
 **Current form factor:** Purposefully rough lapel/suit-pocket wearable + outward screen + Circuit Playground LED halo + pocket battery + removable foot trigger
+**First deployment:** Hack Alcatraz, Monday, October 5, 2026, 5:00–9:00 p.m. PT; arrive by 5:30, board at 5:45, cruise 6:00–9:00
 **Source of truth:** This GitHub repository
 
 No hardware assembly, wiring assignment, firmware implementation, enclosure selection, or purchase has yet been recorded as complete.
@@ -40,6 +41,7 @@ The first prototype is successful when it can:
 6. Return to an idle screen/LED state after the scene.
 7. Stop or mute immediately from the wearable control.
 8. Run for a 30-minute handling test without resets, loose connectors, excessive heat, or unsafe cable pull.
+9. Run in ready-to-demo mode for at least five hours on the Smatree DP20S, with repeated short scenes and no recharge.
 
 ## Tech Week target
 
@@ -76,6 +78,8 @@ Those are content targets, not requirements for the first electronics test.
 | LED halo causes excess current draw or glare | Cap brightness, avoid sustained full-white output, and test against the actual shirt |
 | Combined load exceeds the pack's 5V/2A rating | Measure worst-case current with screen, loud audio, and LED effect active; impose firmware brightness/volume limits |
 | Power-bank auto-shutoff | Test the exact bank under idle load before travel |
+| Cellular/Wi-Fi reception is poor on the boat | Keep every runtime asset and trigger path local; use no network dependency |
+| Movement, wind, or crowd contact disturbs the wearable | Use load-spreading backing, secure clips/pins, restrained pocket battery, and a pre-boarding movement test |
 | ESP32 brownout during audio peaks | Use short power wiring, adequate supply, and local decoupling as needed |
 | Demo content creates rights/privacy issues | Use owned, licensed, or original assets and obtain consent for identifiable faces |
 
@@ -89,3 +93,4 @@ Those are content targets, not requirements for the first electronics test.
 6. Add the emergency-stop button and visual microSD; benchmark scene load time.
 7. Freeze connectors and pin map, then assemble the intentionally rough-looking wearable safely.
 8. Load the first curated content pack and rehearse the pressure-mat story plus pedal demonstration.
+9. Rehearse a 1–2 minute Hack Alcatraz version and complete a five-hour battery soak test.

@@ -15,6 +15,12 @@ Shoes Chaos Box is a portable, wearable performance prop that responds to a remo
 
 The default display candidate is the owned 1.28-inch, 240 x 240 GC9A01 round TFT because it suits face-first comedy and has the best resolution of the confirmed displays. The owned ST7735S rectangular TFT remains the alternate for caption-heavy layouts. Both should be bench-tested before the enclosure is finalized.
 
+## Deployment target: Hack Alcatraz
+
+The first real outing is **Hack Alcatraz with Cloudflare and Kling AI** on Monday, October 5, 2026. The event runs 5:00–9:00 p.m.; requested arrival is 5:30 p.m., boarding is 5:45 p.m., and the cruise is 6:00–9:00 p.m. The event calls for fun, simple hacks rather than pitch decks and uses rapid 1–2 minute demos before networking on the boat.
+
+The wearable therefore needs at least five hours of ready-to-demo battery life, reliable offline operation, a fast reset between short demonstrations, and a physical design that tolerates movement and unreliable reception on the Bay.
+
 ## Trigger behavior
 
 Each pedal press launches a short scene selected within the current mode. A scene may combine:

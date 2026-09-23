@@ -14,6 +14,8 @@ All notable documentation and project-direction changes are recorded here.
 - Defined the presentation story: a pressure pad beneath the home welcome mat normally triggers randomized shoe reminders; the removable pedal substitutes for it during the traveling demo.
 - Changed the future home build’s primary input from door sensing to the welcome-mat pressure pad, with door contact and PIR retained as optional confirmation sensors.
 - Confirmed the pocket battery as a Smatree DP20S USB-C pack labeled 5V/2A input/output and 5000mAh at 3.7V / 18.5Wh; purchasing another bank is now conditional on load testing.
+- Set Hack Alcatraz on October 5, 2026 as the first deployment target: arrive by 5:30 p.m., board at 5:45, cruise 6:00–9:00, and prepare a rapid 1–2 minute offline demo.
+- Replaced the vague all-day power question with a five-hour event-profile endurance requirement on the confirmed DP20S pack.
 
 ## 2026-09-22 — Repository baseline
 

@@ -99,12 +99,15 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 - Run 100 trigger cycles and record failures.
 - Test at expected volume and ambient noise.
 - Confirm the DP20S stays awake during a 30-minute idle/run test and remains stable during worst-case screen + audio + LED peaks.
+- Run a five-hour event-profile soak test: mostly idle/low-brightness operation with repeated 1–2 minute demonstrations and no charging.
 - Walk, sit, turn, and step away while wearing the full system.
 - Perform a controlled cable snag/pull test with the wearable supported.
 - Pack spare cards, USB cable, and a fallback manual trigger button.
 - Rehearse Clean Demo mode first; enable Chaos/Roast only when appropriate.
+- Rehearse the Hack Alcatraz format: explain the welcome-mat premise, trigger two or three randomized scenes, and finish inside two minutes.
+- Pack the wearable fully charged and self-contained because reception and access to power may be unreliable on the boat.
 
-**Exit:** Repeatable Tech Week demo with a documented fallback.
+**Exit:** Repeatable offline boat demo, five-hour measured battery endurance, and a documented trigger/power fallback.
 
 ## Phase 7 — Home welcome-mat version
 
