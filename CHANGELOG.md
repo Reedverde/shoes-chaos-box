@@ -2,6 +2,16 @@
 
 All notable documentation and project-direction changes are recorded here.
 
+## 2026-09-24 — First physical bench proof
+
+### Verified
+
+- Uploaded the firmware successfully to a replacement 38-pin ESP32 after the first board failed to remain powered.
+- Confirmed the round GC9A01 displays the idle screen and all four diagnostic scenes.
+- Confirmed the local trigger button works with GPIO13 at `A5 → A36` and ground at `J38 → E32`.
+- Corrected the button wiring record after the initial row-36 pair landed on the same internal switch contact.
+- Corrected the scene timer so each diagnostic scene remains visible for the intended 2.2 seconds.
+
 ## 2026-09-23 — First firmware milestone
 
 ### Added

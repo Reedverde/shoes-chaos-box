@@ -1,6 +1,6 @@
 # Project State
 
-Last updated: 2026-09-23
+Last updated: 2026-09-24
 
 ## Status
 
@@ -10,16 +10,16 @@ Last updated: 2026-09-23
 **First deployment:** Hack Alcatraz, Monday, October 5, 2026, 5:00–9:00 p.m. PT; arrive by 5:30, board at 5:45, cruise 6:00–9:00
 **Source of truth:** This GitHub repository
 
-The first firmware milestone is implemented and compile-verified. It boots the confirmed ESP32 target, drives the round GC9A01 display, shows an idle screen, and cycles through four test scenes from a debounced local button. Physical wiring and upload have not yet been completed.
+The first firmware milestone is physically verified. The replacement 38-pin ESP32 boots over USB, drives the round GC9A01 display, shows the idle screen, and cycles through all four 2.2-second test scenes from the local button.
 
 ## Current firmware milestone
 
 - Project location: `firmware/`
 - Build target: classic ESP32 Dev Module using the Arduino framework
-- Compile status: successful on 2026-09-23
+- Compile/upload/bench status: successful on 2026-09-24
 - Bench scope: ESP32 + round screen + one local trigger button only
 - Confirmed Milestone 1 breadboard GPIO map: display clock/data on GPIO14/27, display controls on GPIO26/25/33/32, trigger button on GPIO13
-- The DFPlayer, speaker, visual microSD, Circuit Playground, Bluetooth pedal, and battery pack remain disconnected until this proof works.
+- The DFPlayer, speaker, visual microSD, Circuit Playground, Bluetooth pedal, and battery pack remain disconnected for later milestones.
 
 ## Locked decisions
 

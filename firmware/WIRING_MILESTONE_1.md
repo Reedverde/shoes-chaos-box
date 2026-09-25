@@ -32,9 +32,9 @@ Use one large momentary pushbutton. In the photographed bench layout its legs oc
 | Button side | ESP32 label |
 |---|---|
 | One contact (`A36`) | G13 (`A5`) |
-| Opposite contact (`J36`) | GND (`E32`) |
+| Opposite contact (`J38`) | GND (`E32`) |
 
-The firmware enables the ESP32's internal pull-up resistor, so no external resistor is required for this button. On a four-legged tactile switch, the two legs on each side are already joined internally; use contacts from opposite sides.
+The firmware enables the ESP32's internal pull-up resistor, so no external resistor is required for this button. This button orientation required rows 36 and 38 to reach opposite internal contacts; using `A36` and `J36` placed both wires on the same contact pair.
 
 ## First power-on expectation
 
