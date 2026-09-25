@@ -9,12 +9,12 @@ Shoes Chaos Box is a portable, wearable performance prop that responds to a remo
 - The owned Adafruit Circuit Playground Express sits behind or around the screen as a circular LED halo, washing light onto the shirt and emphasizing each scene.
 - The wearable also carries the ESP32, audio board, speaker, and local visual storage.
 - The confirmed Smatree DP20S USB-C battery pack rides in an inside jacket pocket, with a short power lead routed inside the jacket. It is labeled 5V/2A output and 5000mAh / 18.5Wh.
-- A removable foot trigger launches scenes. The owner believes an existing Bluetooth music pedal may fill this role; its model and protocol must be verified. A detachable wired switch remains the reliable fallback.
+- The confirmed STRICH SPT-10 pedal launches scenes over classic Bluetooth HID in Mode 5: left sends Space and right sends Enter. Both sides are verified against the ESP32. A detachable wired switch remains an optional fallback.
 - The wearable includes a dedicated local scene-trigger button so the demo still works if the Bluetooth pedal is missing, disconnected, or inconvenient.
 - A separate local mute/emergency-stop control remains available during playback.
 - If the wired fallback is used, cable strain relief and a breakaway-friendly detachable connection are required so a snag does not pull the unit off the wearer.
 
-The default display candidate is the owned 1.28-inch, 240 x 240 GC9A01 round TFT because it suits face-first comedy and has the best resolution of the confirmed displays. The owned ST7735S rectangular TFT remains the alternate for caption-heavy layouts. Both should be bench-tested before the enclosure is finalized.
+The selected display is the owned 1.28-inch, 240 x 240 GC9A01 round TFT. The combined bench firmware now supports the screen, local button, and STRICH pedal together. The owned ST7735S rectangular TFT remains an alternate for caption-heavy layouts.
 
 ## Deployment target: Hack Alcatraz
 

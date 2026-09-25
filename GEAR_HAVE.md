@@ -17,7 +17,7 @@ Only confirmed equipment belongs here. Quantities are intentionally described as
 | Jumper wires | Confirmed | Prototyping |
 | Xinwei 1/4W metal-film resistor assortment, 30 values x 10, ±1% | 1 kit confirmed | Includes ten 1 kΩ resistors for the ESP32-to-DFPlayer UART line |
 | Smatree DP20S cylindrical USB-C battery pack | 1 confirmed | Tech Week pocket power; label: 5V/2A input/output, 5000mAh at 3.7V / 18.5Wh |
-| STRICH SPT-10 Bluetooth music/page-turn pedal | 1 confirmed | Preferred removable trigger; 400mAh rechargeable battery, 5V charging; keyboard/page-turn modes require pairing test with ESP32 |
+| STRICH SPT-10 Bluetooth music/page-turn pedal | 1 confirmed and bench-verified | Preferred removable trigger; 400mAh rechargeable battery, 5V charging; classic Bluetooth HID Mode 5 works with ESP32, left=Space and right=Enter |
 
 ## Useful for later entryway version
 

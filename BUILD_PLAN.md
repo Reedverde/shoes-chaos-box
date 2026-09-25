@@ -3,7 +3,7 @@
 ## Architecture
 
 ```text
-Bluetooth music pedal (preferred if compatible) -----------+
+STRICH SPT-10 classic Bluetooth HID pedal (verified) ------+
 detachable wired foot switch (fallback) --------------------+--> ESP32
 local manual-trigger button --------------------------------+
 local mute / emergency button ------------------------------+     |-- SPI --> center TFT display
@@ -18,13 +18,13 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 ## Implemented bench milestone
 
-The first compile-verified firmware is in `firmware/`. It intentionally uses only the ESP32, GC9A01 round display, and one local trigger button. The exact temporary wiring is in `firmware/WIRING_MILESTONE_1.md`. No audio, SD, LED halo, relay, battery holder, or external breadboard power is part of this first test.
+The original screen/button proof remains in `firmware/`. The combined verified build is in `firmware/idf_wearable/` and uses ESP-IDF to support the GC9A01, local button, and classic Bluetooth HID pedal together. The exact temporary wiring is in `firmware/WIRING_MILESTONE_1.md`. No audio, SD, LED halo, relay, battery holder, or external breadboard power is part of this milestone.
 
 ## Phase 0 — Confirm and label
 
 - Controller identified as a classic 38-pin ESP32 DevKit-style board with CP2102 USB-UART and owner-confirmed USB-C; confirm it accepts a basic firmware upload and record detected flash size.
 - Confirm their operating voltages and pin labels.
-- Find and identify the Bluetooth music pedal and document whether it emits BLE MIDI, BLE keyboard/page-turn keys, or another protocol.
+- The pedal is identified and verified: STRICH SPT-10, classic Bluetooth HID, Mode 5, left Space (`0x2C`) and right Enter (`0x28`).
 - Use the physically matched USB-C cable for the first upload and power test; verify it carries data, then select a safe 5V distribution method for the confirmed Smatree DP20S pack. Do not route the full system load through an unverified ESP32 regulator path.
 - Inventory cards, connectors, buttons, and rough mounting materials.
 - Label all confirmed components; do not assume similar-looking modules share a pinout.
@@ -73,7 +73,7 @@ Controller pin guardrails for the first wiring draft:
 ## Phase 3 — Controls
 
 - Use an owned pushbutton as the initial bench trigger.
-- If the Bluetooth pedal is compatible, pair it and map its event to the same trigger interface used by the button.
+- Keep both verified pedal keys mapped to the same scene queue used by the local button; retain reconnect scanning and ignore release/empty reports.
 - Build the detachable wired dry-contact switch only as the dependable fallback; use an internal or external pull-up.
 - Add software debounce/reconnect handling and a scene-active lockout.
 - Add the wearable mute/emergency-stop button.

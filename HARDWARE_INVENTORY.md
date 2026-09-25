@@ -13,7 +13,8 @@ This file is the consolidated engineering view. Procurement status is normalized
 | Display | 1.8-inch 128 x 160 RGB TFT, ST7735S-class SPI board with K1/K2/K3 buttons | Caption-heavy alternate; PCB labels include GND, VCC, SCL, SDA, RES, DC, CS, and BLK |
 | Display | 0.91-inch 128 x 32 white I2C OLED | Status/debug or future use |
 | Display | 0.96-inch blue OLED | Status/debug or future use |
-| Input | Pushbuttons and mini slide switches | Mute, emergency stop, mode/test |
+| Input | Pushbuttons and mini slide switches | Local trigger verified on GPIO13; remaining parts for mute, emergency stop, mode/test |
+| Input | STRICH SPT-10 Bluetooth music/page-turn pedal | Verified classic Bluetooth HID trigger in Mode 5; left=Space (`0x2C`), right=Enter (`0x28`) |
 | Sensor | Several HC-SR501 PIR motion sensors | Post-event entry confirmation |
 | Power | TP4056 lithium charging boards | Future rechargeable experiments; not Tech Week power |
 | Power | Four-AAA battery holder with switch and two-pin lead | Future use; not the Tech Week power plan |
@@ -39,7 +40,6 @@ This file is the consolidated engineering view. Procurement status is normalized
 
 | Priority | Item | Purpose |
 |---|---|---|
-| Confirm | Existing Bluetooth music pedal | Preferred removable scene trigger if its protocol is ESP32-compatible |
 | Conditional | Normally open momentary wired foot switch | Reliable fallback only if Bluetooth pedal is missing or incompatible |
 | Confirm | Short USB-C power lead and safe 5V distribution | Connect confirmed DP20S pack to the wearable electronics |
 | Conditional | 1/4-inch panel jack, matching cable/plug, strain relief | Detachable stage connection only for the wired fallback |

@@ -1,25 +1,25 @@
 # Project State
 
-Last updated: 2026-09-24
+Last updated: 2026-09-25
 
 ## Status
 
-**Phase:** Bench prototype — firmware ready for the first screen/button test
+**Phase:** Bench prototype — screen, local button, and wireless pedal verified together
 **Primary milestone:** Wearable Tech Week demo  
 **Current form factor:** Purposefully rough lapel/suit-pocket wearable + outward screen + Circuit Playground LED halo + pocket battery + removable foot trigger
 **First deployment:** Hack Alcatraz, Monday, October 5, 2026, 5:00–9:00 p.m. PT; arrive by 5:30, board at 5:45, cruise 6:00–9:00
 **Source of truth:** This GitHub repository
 
-The first firmware milestone is physically verified. The replacement 38-pin ESP32 boots over USB, drives the round GC9A01 display, shows the idle screen, and cycles through all four 2.2-second test scenes from the local button.
+The combined trigger milestone is physically verified. The replacement 38-pin ESP32 boots over USB, drives the round GC9A01 display, shows the idle screen, and cycles through all four 2.2-second test scenes from either the local button or both sides of the STRICH SPT-10 pedal.
 
 ## Current firmware milestone
 
-- Project location: `firmware/`
-- Build target: classic ESP32 Dev Module using the Arduino framework
-- Compile/upload/bench status: successful on 2026-09-24
-- Bench scope: ESP32 + round screen + one local trigger button only
+- Project locations: `firmware/` for the original Arduino screen proof; `firmware/idf_wearable/` for the combined ESP-IDF wearable firmware
+- Build target: classic ESP32 Dev Module; combined firmware uses ESP-IDF because the pedal requires classic Bluetooth HID host support
+- Compile/upload/bench status: screen/button proof successful on 2026-09-24; combined pedal build successful on 2026-09-25
+- Bench scope: ESP32 + round screen + local trigger button + STRICH SPT-10 wireless pedal
 - Confirmed Milestone 1 breadboard GPIO map: display clock/data on GPIO14/27, display controls on GPIO26/25/33/32, trigger button on GPIO13
-- The DFPlayer, speaker, visual microSD, Circuit Playground, Bluetooth pedal, and battery pack remain disconnected for later milestones.
+- The pedal is connected wirelessly. The DFPlayer, speaker, visual microSD, Circuit Playground, and battery pack remain disconnected for later milestones.
 
 ## Locked decisions
 
@@ -76,7 +76,7 @@ Those are content targets, not requirements for the first electronics test.
 
 - Compare the GC9A01 and ST7735S using real face/caption mockups.
 - Confirm the physically matched USB-C cable supports both data and power, then confirm the shared 5V distribution method, mounting materials, and any wired-fallback jack/cable.
-- Pair-test the STRICH SPT-10 and confirm which Bluetooth HID profile/events the ESP32 receives; begin with Mode 5 (Space/Enter) and Repeat off.
+- Keep the STRICH SPT-10 in verified Mode 5 with Repeat off. Left emits Space (`0x2C`) and right emits Enter (`0x28`) over classic Bluetooth HID; both invoke the same scene queue as the local button.
 - Test whether the Circuit Playground can sit behind the selected display while leaving its ten NeoPixels visible enough to create the desired halo.
 - Choose whether the foot-switch cable runs down the inside of a pant leg or along the wearer’s side.
 - Measure practical speaker loudness in the Tech Week environment.
@@ -101,11 +101,11 @@ Those are content targets, not requirements for the first electronics test.
 
 ## Next actions
 
-1. Follow `firmware/WIRING_MILESTONE_1.md`, upload the compile-verified firmware, and confirm the idle screen plus four button-triggered test scenes.
+1. Preserve the verified `firmware/idf_wearable/` screen/button/pedal baseline and perform repeated cold-boot and pedal-reconnect tests.
 2. Add the Circuit Playground LED halo and synchronize one effect using the owned hardware.
 3. On delivery, inspect and test the ordered DFPlayer, speakers, microSD modules, and both 8 GB cards before moving them to `GEAR_HAVE.md`.
 4. Add DFPlayer Mini + speaker and play one locally stored cue.
-5. Pair/test the STRICH SPT-10 Bluetooth pedal; add and debounce the wired fallback only if needed.
+5. Add the wired fallback only if later reliability testing shows it is needed; the STRICH pedal is already verified.
 6. Add the emergency-stop button and visual microSD; benchmark scene load time.
 7. Freeze connectors and pin map, then assemble the intentionally rough-looking wearable safely.
 8. Load the first curated content pack and rehearse the pressure-mat story plus pedal demonstration.

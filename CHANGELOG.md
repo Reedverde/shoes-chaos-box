@@ -2,6 +2,20 @@
 
 All notable documentation and project-direction changes are recorded here.
 
+## 2026-09-25 — Wireless pedal and combined firmware proof
+
+### Verified
+
+- Connected the ESP32 directly to the STRICH SPT-10 over classic Bluetooth HID in Mode 5.
+- Captured left pedal as Space HID keycode `0x2C` and right pedal as Enter keycode `0x28`.
+- Verified the local red button and both pedal sides launch the same four-scene path on the GC9A01 display.
+- Corrected the native ESP-IDF GC9A01 SPI configuration for the breadboard pin route and added the missing K, N, and Y glyphs.
+
+### Added
+
+- Added `firmware/idf_pedal_probe/` as the known-good classic Bluetooth HID diagnostic project.
+- Added `firmware/idf_wearable/` as the combined ESP-IDF screen, local-button, and wireless-pedal baseline.
+
 ## 2026-09-24 — First physical bench proof
 
 ### Verified

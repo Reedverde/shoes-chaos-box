@@ -45,7 +45,6 @@ The DFPlayer manufacturer documents UART control, a 3W mono amplifier, FAT16/FAT
 | Item | What to verify |
 |---|---|
 | USB-C power lead/distribution | Use the owned Smatree DP20S as the source; choose a short flexible lead and a safe shared 5V distribution method after the ESP32 connector/power path is identified |
-| Bluetooth music pedal | Find the believed-owned pedal; record brand/model and whether it emits BLE MIDI, keyboard/page-turn commands, or a proprietary signal |
 | Wired momentary pedal | Buy only if the Bluetooth pedal is missing or incompatible; normally open dry-contact example: [Nektar NP-1 family](https://nektartech.com/np-1_np-2_nx-p/) |
 | 1/4-inch connection hardware | Needed only for the wired fallback; select a matching panel jack/cable or extension |
 | Strain relief and cable clips | Required if the wired fallback is used; fit the mounting and garment routing |
