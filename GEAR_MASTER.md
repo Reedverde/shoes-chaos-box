@@ -26,7 +26,7 @@ This is the authoritative configuration and status map. It prevents “recommend
 | Audio storage | Bliksem 8 GB Class 10 microSD card | ORDERED | One of two ordered cards; FAT32; dedicated to DFPlayer |
 | Visual storage card | Bliksem 8 GB Class 10 microSD card | ORDERED | One of two ordered cards; FAT32; dedicated to visuals |
 | UART series resistor | 1 kΩ, 1/4W, ±1% metal-film resistor | HAVE | Use one from confirmed Xinwei assortment between ESP32 TX and DFPlayer RX |
-| Preferred trigger | Existing Bluetooth music pedal | CONFIRM | Find exact model and determine BLE MIDI, keyboard/page-turn, or proprietary behavior |
+| Preferred trigger | STRICH SPT-10 Bluetooth music/page-turn pedal | HAVE | Five keyboard/page-turn modes; first test Mode 5 with Repeat off, then confirm the ESP32 can receive its Bluetooth HID events |
 | On-device trigger | Owned momentary pushbutton | HAVE | Required wearable backup; launches the same scene path as the pedal |
 | Wired fallback trigger | Normally open momentary foot switch | CONDITIONAL | Buy/build only if the Bluetooth pedal is unsuitable; dry contact, not expression |
 | Wired trigger connection | Detachable 1/4-inch TS/TRS path | CONDITIONAL | Panel jack/cable plus strain relief if fallback is used |

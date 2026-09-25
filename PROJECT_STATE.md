@@ -28,7 +28,7 @@ The first firmware milestone is physically verified. The replacement 38-pin ESP3
 - A small screen faces outward from the middle of the assembly and shows images, text, and tiny pre-rendered video/GIF-like loops.
 - The Adafruit Circuit Playground Express provides a circular LED halo behind/around the display and casts animated light onto the shirt.
 - The main controller is a classic 38-pin ESP32 DevKit-style board with a CP2102 USB-UART bridge and a USB-C connector physically confirmed by the owner. Its ESP32-WROOM-32-class layout has sufficient SPI, UART, Bluetooth, and GPIO resources for the planned build.
-- The Tech Week version is manually triggered by a removable pedal. First verify the reportedly owned Bluetooth music pedal; retain a detachable 1/4-inch wired switch as the fallback.
+- The Tech Week version is manually triggered by the confirmed STRICH SPT-10 Bluetooth music/page-turn pedal; retain a detachable 1/4-inch wired switch as the fallback.
 - A wired foot-switch lead must be stage-friendly, strain-relieved, and detachable.
 - The wearable must have a dedicated local manual-trigger button independent of the pedal.
 - The wearable must also have a local mute/emergency-stop control independent of the trigger button.
@@ -76,7 +76,7 @@ Those are content targets, not requirements for the first electronics test.
 
 - Compare the GC9A01 and ST7735S using real face/caption mockups.
 - Confirm the physically matched USB-C cable supports both data and power, then confirm the shared 5V distribution method, mounting materials, and any wired-fallback jack/cable.
-- Find and identify the Bluetooth music pedal; determine whether it sends BLE MIDI, keyboard/page-turn commands, or a proprietary protocol.
+- Pair-test the STRICH SPT-10 and confirm which Bluetooth HID profile/events the ESP32 receives; begin with Mode 5 (Space/Enter) and Repeat off.
 - Test whether the Circuit Playground can sit behind the selected display while leaving its ten NeoPixels visible enough to create the desired halo.
 - Choose whether the foot-switch cable runs down the inside of a pant leg or along the wearer’s side.
 - Measure practical speaker loudness in the Tech Week environment.
@@ -88,7 +88,7 @@ Those are content targets, not requirements for the first electronics test.
 |---|---|
 | Cable catches or is stepped on | Detachable jack, strain relief, slack loop, and pull test |
 | Accidental repeated triggers | Hardware/software debounce and scene lockout |
-| Bluetooth pedal is missing, incompatible, or disconnects | Keep an owned pushbutton for bench tests and build a detachable wired fallback |
+| Bluetooth pedal is incompatible, asleep, or disconnects | Wake/test it before the demo, keep the owned on-device pushbutton, and build a detachable wired fallback if needed |
 | Audio is too quiet | Bench-test speaker orientation and enclosure grille before fabrication |
 | Visual playback is slow | Pre-render 240 x 240 frames and benchmark SD reads early |
 | LED halo causes excess current draw or glare | Cap brightness, avoid sustained full-white output, and test against the actual shirt |
@@ -105,7 +105,7 @@ Those are content targets, not requirements for the first electronics test.
 2. Add the Circuit Playground LED halo and synchronize one effect using the owned hardware.
 3. On delivery, inspect and test the ordered DFPlayer, speakers, microSD modules, and both 8 GB cards before moving them to `GEAR_HAVE.md`.
 4. Add DFPlayer Mini + speaker and play one locally stored cue.
-5. Identify/test the Bluetooth pedal; add and debounce the wired fallback only if needed.
+5. Pair/test the STRICH SPT-10 Bluetooth pedal; add and debounce the wired fallback only if needed.
 6. Add the emergency-stop button and visual microSD; benchmark scene load time.
 7. Freeze connectors and pin map, then assemble the intentionally rough-looking wearable safely.
 8. Load the first curated content pack and rehearse the pressure-mat story plus pedal demonstration.

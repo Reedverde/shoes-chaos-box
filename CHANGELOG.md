@@ -11,6 +11,7 @@ All notable documentation and project-direction changes are recorded here.
 - Confirmed the local trigger button works with GPIO13 at `A5 → A36` and ground at `J38 → E32`.
 - Corrected the button wiring record after the initial row-36 pair landed on the same internal switch contact.
 - Corrected the scene timer so each diagnostic scene remains visible for the intended 2.2 seconds.
+- Identified the owned wireless foot trigger as a STRICH SPT-10 Bluetooth music/page-turn pedal with a 400mAh battery and 5V charging; selected Mode 5 with Repeat off as the first keyboard-event test.
 
 ## 2026-09-23 — First firmware milestone
 
