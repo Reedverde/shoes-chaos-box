@@ -18,7 +18,7 @@ The first firmware milestone is implemented and compile-verified. It boots the c
 - Build target: classic ESP32 Dev Module using the Arduino framework
 - Compile status: successful on 2026-09-23
 - Bench scope: ESP32 + round screen + one local trigger button only
-- Preliminary bench GPIO map: display SPI on GPIO18/23, display controls on GPIO27/25/33/32, trigger button on GPIO13
+- Confirmed Milestone 1 breadboard GPIO map: display clock/data on GPIO14/27, display controls on GPIO26/25/33/32, trigger button on GPIO13
 - The DFPlayer, speaker, visual microSD, Circuit Playground, Bluetooth pedal, and battery pack remain disconnected until this proof works.
 
 ## Locked decisions

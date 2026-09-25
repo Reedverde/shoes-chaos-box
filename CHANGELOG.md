@@ -9,6 +9,7 @@ All notable documentation and project-direction changes are recorded here.
 - Added a PlatformIO/Arduino firmware project for the confirmed classic ESP32 board and GC9A01 round display.
 - Added an idle screen and four button-triggered diagnostic scenes with debounce and automatic return to idle.
 - Added the exact Milestone 1 breadboard wiring for the ESP32, display, and one local button.
+- Revised the display pins to the ESP32's exposed breadboard side after the physical board proved too wide to expose both header rows: GPIO14/27 for clock/data and GPIO26/25/33/32 for display controls.
 - Reserved later pins for the visual microSD, DFPlayer UART, and mute button without connecting those devices yet.
 
 ### Verified
