@@ -124,6 +124,7 @@ void loop() {
   if (state == AppState::Idle && triggerWasPressed()) {
     startTestScene(nextSceneIndex);
     nextSceneIndex = (nextSceneIndex + 1) % TEST_SCENE_COUNT;
+    return;
   }
 
   if (state == AppState::PlayingTestScene &&
