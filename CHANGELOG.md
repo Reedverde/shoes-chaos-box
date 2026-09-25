@@ -2,6 +2,20 @@
 
 All notable documentation and project-direction changes are recorded here.
 
+## 2026-09-25 — Synchronized LED halo milestone
+
+### Added
+
+- Added standalone PlatformIO/Arduino firmware for the Adafruit Circuit Playground Express ten-NeoPixel halo.
+- Added a conservative two-cyan-pixel idle state, orange/purple circular chase, blue fade, and automatic idle return.
+- Added an ESP32 GPIO21 halo-trigger output to the combined ESP-IDF wearable firmware.
+- Added the exact Milestone 2 bench wiring and separate-USB power-safety rules.
+
+### Verified
+
+- Verified that the local red button and both sides of the STRICH SPT-10 pedal each change the round-screen scene and trigger the full halo effect.
+- Verified ESP32 GPIO21 to Circuit Playground A1 signaling with a shared ground while each board remained independently USB-powered.
+
 ## 2026-09-25 — Wireless pedal and combined firmware proof
 
 ### Verified

@@ -26,6 +26,7 @@
 #define PIN_TFT_RST 33
 #define PIN_TFT_BACKLIGHT 32
 #define PIN_TRIGGER_BUTTON 13
+#define PIN_HALO_TRIGGER 21
 
 #define SCREEN_W 240
 #define SCREEN_H 240
@@ -387,7 +388,9 @@ static void app_task(void *unused)
         trigger_source_t source;
         if (!scene_active && xQueueReceive(trigger_queue, &source, 0) == pdTRUE) {
             ESP_LOGI(TAG, "SCENE_%02u source=%d", (unsigned)(scene_index + 1), source);
+            gpio_set_level(PIN_HALO_TRIGGER, 1);
             draw_scene(scene_index);
+            gpio_set_level(PIN_HALO_TRIGGER, 0);
             scene_index = (scene_index + 1) % (sizeof SCENES / sizeof SCENES[0]);
             scene_started = xTaskGetTickCount();
             scene_active = true;
@@ -416,6 +419,12 @@ void app_main(void)
         .pull_up_en = GPIO_PULLUP_ENABLE,
     };
     ESP_ERROR_CHECK(gpio_config(&button));
+    gpio_config_t halo_trigger = {
+        .pin_bit_mask = 1ULL << PIN_HALO_TRIGGER,
+        .mode = GPIO_MODE_OUTPUT,
+    };
+    ESP_ERROR_CHECK(gpio_config(&halo_trigger));
+    gpio_set_level(PIN_HALO_TRIGGER, 0);
     trigger_queue = xQueueCreate(8, sizeof(trigger_source_t));
     lcd_init();
 

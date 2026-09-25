@@ -10,6 +10,7 @@ Shoes Chaos Box is a portable, wearable performance prop that responds to a remo
 - The wearable also carries the ESP32, audio board, speaker, and local visual storage.
 - The confirmed Smatree DP20S USB-C battery pack rides in an inside jacket pocket, with a short power lead routed inside the jacket. It is labeled 5V/2A output and 5000mAh / 18.5Wh.
 - The confirmed STRICH SPT-10 pedal launches scenes over classic Bluetooth HID in Mode 5: left sends Space and right sends Enter. Both sides are verified against the ESP32. A detachable wired switch remains an optional fallback.
+- The synchronized bench build is now verified: the red local button or either pedal changes the round-screen scene and triggers the Circuit Playground's orange/purple chase, blue fade, and cyan idle return.
 - The wearable includes a dedicated local scene-trigger button so the demo still works if the Bluetooth pedal is missing, disconnected, or inconvenient.
 - A separate local mute/emergency-stop control remains available during playback.
 - If the wired fallback is used, cable strain relief and a breakaway-friendly detachable connection are required so a snag does not pull the unit off the wearer.
@@ -47,6 +48,9 @@ The presentation story is: at home, a pressure pad beneath the welcome mat detec
 
 ## Documentation map
 
+- `firmware/idf_wearable/` — verified ESP-IDF screen, button, Bluetooth-pedal, and halo-trigger firmware
+- `firmware/circuit_playground_halo/` — verified Arduino/PlatformIO firmware for the Circuit Playground Express LED halo
+- `firmware/WIRING_MILESTONE_2.md` — exact synchronized halo bench wiring and power-safety notes
 - [PROJECT_STATE.md](PROJECT_STATE.md) — current decisions, scope, risks, and next actions
 - [BUILD_PLAN.md](BUILD_PLAN.md) — phased hardware and firmware plan
 - [CONTENT_PLAN.md](CONTENT_PLAN.md) — modes, assets, naming, and scene rules

@@ -26,7 +26,7 @@ The ordered speaker and microSD-module multipacks include extra units, so no add
 - Stiff but lightweight backing material, large safety pins or locking clips, and fabric-safe load spreading
 - USB microSD reader compatible with the computer
 
-Do not delay the display/LED prototype for these deliveries. The ESP32, round display, Circuit Playground, breadboard, buttons, and battery are already sufficient to build the silent trigger-and-visual path first.
+Do not delay the next build step for these deliveries. The ESP32, round display, Circuit Playground, breadboard, and buttons have already completed the synchronized silent trigger-and-visual bench proof.
 
 ## Tier 1 — ordered for the bench MVP
 

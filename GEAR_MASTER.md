@@ -19,7 +19,7 @@ This is the authoritative configuration and status map. It prevents “recommend
 | Controller | Classic ESP32 38-pin DevKit-style board with CP2102 and USB-C | HAVE | USB-C physically confirmed by owner; use visible labels and verify flash size in firmware |
 | Primary display | GC9A01 1.28-inch 240 x 240 SPI TFT | HAVE | Default, pending real-asset comparison |
 | Alternate display | ST7735S rectangular color TFT | HAVE | Better candidate for stacked captions |
-| LED halo | Adafruit Circuit Playground Express, product 3333 | HAVE | Mount behind/around center display; synchronize its ten NeoPixels with scenes |
+| LED halo | Adafruit Circuit Playground Express, product 3333 | HAVE — BENCH VERIFIED | GPIO21-to-A1 trigger and shared ground synchronize its ten NeoPixels with every accepted scene |
 | Audio player | DFPlayer Mini | ORDERED | One Amazon-listed DFRobot DFR0299; verify branding and operation on arrival |
 | Speaker | MakerHawk 4-ohm, 3W compact speakers | ORDERED | Two ordered; one installed plus one spare; confirm enclosure loudness |
 | Visual storage | HiLetgo SPI microSD modules | ORDERED | Five ordered; level-shifted module requires 5V VCC; bench-test with ESP32 |

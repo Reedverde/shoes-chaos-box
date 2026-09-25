@@ -9,7 +9,7 @@ Only confirmed equipment belongs here. Quantities are intentionally described as
 | Classic ESP32 38-pin development board, CP2102 USB-UART, USB-C | At least 1 confirmed | Main controller; connector physically confirmed by owner and matching cable |
 | GC9A01 1.28-inch 240 x 240 round RGB TFT, 4-wire SPI | 1 confirmed | Primary screen candidate; Shenzhen Esida label visible |
 | 1.8-inch 128 x 160 RGB TFT, ST7735S-class SPI board with K1/K2/K3 buttons | 1 confirmed | Alternate screen candidate |
-| Adafruit Circuit Playground Express, product 3333 | 1 confirmed | Circular NeoPixel halo behind/around the center screen |
+| Adafruit Circuit Playground Express, product 3333 | 1 confirmed and bench-verified | Circular NeoPixel halo; A1 trigger from ESP32 GPIO21 works from the local button and both pedal sides |
 | Pushbuttons | Multiple confirmed | Local mute/stop/mode controls |
 | Mini slide switches | Multiple confirmed | Optional hard power/mode control |
 | MB-102-style breadboard kit | Confirmed | Prototyping |

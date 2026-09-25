@@ -20,7 +20,7 @@ This file is the consolidated engineering view. Procurement status is normalized
 | Power | Four-AAA battery holder with switch and two-pin lead | Future use; not the Tech Week power plan |
 | Power | Smatree DP20S cylindrical USB-C battery pack, 5V/2A input/output, 5000mAh at 3.7V / 18.5Wh | Confirmed Tech Week pocket power; must pass idle and peak-load tests |
 | Interface | Logic-level converter boards | Available if a verified interface requires them |
-| Lighting | Adafruit Circuit Playground Express, product 3333 | Circular ten-NeoPixel halo behind/around center display; animated shirt backlight |
+| Lighting | Adafruit Circuit Playground Express, product 3333 | Bench-verified ten-NeoPixel halo: A1 trigger from ESP32 GPIO21, shared ground, cyan idle, circular chase and fade |
 | Other | 5V relay module | Not needed for current build |
 | Other | CC1101 radio modules | Not needed for current build |
 | Other | NRF24L01+PA+LNA 2.4 GHz module with SMA antenna | Not needed for current build |

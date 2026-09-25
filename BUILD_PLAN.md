@@ -18,7 +18,7 @@ The display and visual microSD may share the SPI bus with separate chip-select l
 
 ## Implemented bench milestone
 
-The original screen/button proof remains in `firmware/`. The combined verified build is in `firmware/idf_wearable/` and uses ESP-IDF to support the GC9A01, local button, and classic Bluetooth HID pedal together. The exact temporary wiring is in `firmware/WIRING_MILESTONE_1.md`. No audio, SD, LED halo, relay, battery holder, or external breadboard power is part of this milestone.
+The original screen/button proof remains in `firmware/`. The combined verified build is in `firmware/idf_wearable/` and uses ESP-IDF to support the GC9A01, local button, classic Bluetooth HID pedal, and GPIO21 halo trigger together. The Circuit Playground code is in `firmware/circuit_playground_halo/`. Exact temporary wiring is in `firmware/WIRING_MILESTONE_1.md` and `firmware/WIRING_MILESTONE_2.md`. No audio, visual microSD, relay, battery holder, or external breadboard power is part of the verified milestone.
 
 ## Phase 0 — Confirm and label
 
@@ -52,10 +52,12 @@ Controller pin guardrails for the first wiring draft:
 
 ## Phase 1B — LED halo proof
 
+**Bench proof completed 2026-09-25:** ESP32 GPIO21 drives Circuit Playground A1 over a shared ground. A local-button press or either STRICH pedal runs the screen scene plus an orange/purple circular chase, blue fade, and cyan idle return. Each board remained on its own USB supply for this test, with no joined power rails.
+
 - Place the Circuit Playground Express behind the selected center display without permanent attachment.
 - Confirm that enough of its ten NeoPixels remain visible to produce a ring and shirt backlight.
 - Prototype idle, trigger, alert, spin/chase, and fade patterns at conservative brightness.
-- Decide whether the ESP32 sends a simple trigger line or serial scene/color data to the Circuit Playground.
+- The first implementation uses a simple trigger line; defer serial scene/color data until the basic wearable is reliable.
 - Power-test the display, audio, and LED halo together from the DP20S; stay below its labeled 5V/2A output and avoid sustained full-white NeoPixel output.
 
 **Exit:** One scene synchronizes the screen with a visible LED sweep without brownouts, uncomfortable glare, or excessive heat.

@@ -5,9 +5,12 @@ This is the verified ESP-IDF bench baseline for the Shoes Chaos Box. It combines
 - GC9A01 240 x 240 round display
 - local GPIO13 trigger button
 - STRICH SPT-10 classic Bluetooth HID pedal in Mode 5
+- GPIO21 halo-trigger output for the Circuit Playground
 - four temporary text/color scenes
 
 Left pedal (Space, HID `0x2C`), right pedal (Enter, HID `0x28`), and the local button all feed the same scene queue. The firmware scans again when the pedal is unavailable or disconnected, while the local button remains usable.
+
+For the halo bench test, GPIO21 goes to Circuit Playground pad A1 and the two boards share GND. Keep each board on its own USB power and do not join their 3.3V or 5V rails.
 
 Build and upload from a filesystem path without spaces:
 
