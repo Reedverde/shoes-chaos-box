@@ -25,6 +25,10 @@ All notable documentation and project-direction changes are recorded here.
 
 ### Fixed
 
+- Reworked the Wizard of Oz halo into a dedicated Emerald City glow with a
+  ruby-red three-pixel highlight making one slow circuit during the scene.
+- Reworked SpongeBob into a dedicated light-blue water glow with two separated
+  yellow bubble highlights, preserving clear blue/yellow color in the diffuser.
 - Extended the S001 Damn Daniel source audio through 13.00 seconds so the full
   “back at it again with the white Vans” line and laugh play before the padded
   six-second scene ends. Updated the master preview, DFPlayer export, and both

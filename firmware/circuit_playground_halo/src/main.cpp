@@ -26,7 +26,7 @@ struct Color {
 // scene exports rather than rotating through unrelated generic colors.
 constexpr Color SCENE_PALETTES[SCENE_COUNT][3] = {
     {{236, 244, 255}, {160, 205, 255}, {112, 112, 112}},  // S001 Damn Daniel
-    {{249,  56,  84}, {255, 208,  91}, {255, 255, 255}},  // S002 Wizard of Oz
+    {{224,   0,  48}, {  0, 170,  80}, {  0,  70,  36}},  // S002 Wizard of Oz
     {{255, 208,  91}, {144, 112,  80}, {255, 244, 210}},  // S003 Curb
     {{ 87, 170, 255}, {255, 255, 255}, {255, 195,  67}},  // S004 Austin Powers
     {{177, 156, 255}, {144,  80, 112}, {255, 255, 255}},  // S005 Silence/Lambs
@@ -40,7 +40,7 @@ constexpr Color SCENE_PALETTES[SCENE_COUNT][3] = {
     {{226, 101, 103}, {255, 232, 192}, { 72, 112, 176}},  // S013 Mister Rogers
     {{255, 124, 213}, {255, 190, 230}, {255, 255, 255}},  // S014 Barbie
     {{127, 228, 179}, { 32, 128,  80}, {255, 255, 255}},  // S015 Get Smart
-    {{255, 235, 100}, { 80, 176, 208}, {112,  72,  32}},  // S016 SpongeBob
+    {{255, 225,  40}, { 72, 190, 255}, {210, 245, 255}},  // S016 SpongeBob
     {{238, 231, 213}, {176, 144,  96}, {255, 208,  91}},  // S017 Chaplin
     {{255,  71, 170}, {255, 255, 255}, {224, 112,  48}},  // S018 Oh my God
     {{255,  71, 170}, {255, 255, 255}, {240, 144, 112}},  // S019 Get some shoes
@@ -93,6 +93,14 @@ bool isShoesSongScene() {
   return scenePalette >= 17 && scenePalette <= 26;
 }
 
+bool isWizardOfOzScene() {
+  return scenePalette == 1;
+}
+
+bool isSpongeBobScene() {
+  return scenePalette == 15;
+}
+
 Color scaleColor(const Color &color, uint8_t amount) {
   return {
       static_cast<uint8_t>((static_cast<uint16_t>(color.red) * amount) / 255),
@@ -125,6 +133,51 @@ void drawCalmSceneFrame(uint8_t brightness) {
   }
   CircuitPlayground.strip.show();
   animationStep = (animationStep + 1) % 30;
+}
+
+void drawWizardOfOzFrame(uint8_t brightness) {
+  // Emerald City glow under a single ruby-slipper highlight. Advancing one
+  // LED every seven calm frames makes one full circuit take about 6.3 seconds,
+  // matching the clip instead of reading as a fast party chase.
+  const Color ruby = SCENE_PALETTES[scenePalette][0];
+  const Color emerald = SCENE_PALETTES[scenePalette][1];
+  CircuitPlayground.setBrightness(brightness);
+  fillPixels(scaleColor(emerald, 92));
+
+  const uint8_t runner = (animationStep / 7) % PIXEL_COUNT;
+  const Color rubyTail = scaleColor(ruby, 70);
+  const Color rubyGlow = scaleColor(ruby, 150);
+  CircuitPlayground.setPixelColor((runner + PIXEL_COUNT - 1) % PIXEL_COUNT,
+                                  rubyTail.red, rubyTail.green, rubyTail.blue);
+  CircuitPlayground.setPixelColor(runner, ruby.red, ruby.green, ruby.blue);
+  CircuitPlayground.setPixelColor((runner + 1) % PIXEL_COUNT,
+                                  rubyGlow.red, rubyGlow.green, rubyGlow.blue);
+  CircuitPlayground.strip.show();
+  animationStep = (animationStep + 1) % 140;
+}
+
+void drawSpongeBobFrame(uint8_t brightness) {
+  // Ocean-blue field with two drifting SpongeBob-yellow bubble highlights.
+  // Keeping most of the ring blue prevents the diffuser from blending the two
+  // colors into an indistinct green wash.
+  const Color yellow = SCENE_PALETTES[scenePalette][0];
+  const Color water = SCENE_PALETTES[scenePalette][1];
+  CircuitPlayground.setBrightness(brightness);
+  fillPixels(scaleColor(water, 125));
+
+  const uint8_t first = (animationStep / 3) % PIXEL_COUNT;
+  const uint8_t second = (first + 5) % PIXEL_COUNT;
+  const Color yellowGlow = scaleColor(yellow, 120);
+  CircuitPlayground.setPixelColor(first, yellow.red, yellow.green, yellow.blue);
+  CircuitPlayground.setPixelColor((first + 1) % PIXEL_COUNT,
+                                  yellowGlow.red, yellowGlow.green,
+                                  yellowGlow.blue);
+  CircuitPlayground.setPixelColor(second, yellow.red, yellow.green, yellow.blue);
+  CircuitPlayground.setPixelColor((second + 1) % PIXEL_COUNT,
+                                  yellowGlow.red, yellowGlow.green,
+                                  yellowGlow.blue);
+  CircuitPlayground.strip.show();
+  animationStep = (animationStep + 1) % 120;
 }
 
 void drawSongSceneFrame(uint8_t brightness) {
@@ -255,7 +308,9 @@ void drawSongSceneFrame(uint8_t brightness) {
 }
 
 void drawSceneFrame(uint8_t brightness) {
-  if (isShoesSongScene()) drawSongSceneFrame(brightness);
+  if (isWizardOfOzScene()) drawWizardOfOzFrame(brightness);
+  else if (isSpongeBobScene()) drawSpongeBobFrame(brightness);
+  else if (isShoesSongScene()) drawSongSceneFrame(brightness);
   else drawCalmSceneFrame(brightness);
 }
 
