@@ -45,7 +45,7 @@ Updated: 2026-09-26
 - [ ] Left pedal in Mode 5 launches one scene; right pedal toggles QR.
 - [ ] Mode 1 Page Up/Down changes volume, displays the number, and survives reboot.
 - [ ] Local scene and QR buttons each work for 25 consecutive presses.
-- [ ] Run all 27 scenes and confirm each visual/audio pairing.
+- [ ] Run all 29 scenes and confirm each visual/audio pairing, including all three distinct Curb moments.
 - [ ] Confirm Curb/S003 repeats more often while Shoes scenes separate every
   outside-source scene.
 - [ ] Remove Card B and verify the flashed S018 visual fallback; reinstall Card B.

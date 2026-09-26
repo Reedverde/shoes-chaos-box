@@ -26,7 +26,7 @@ This is the current combined ESP-IDF build for the wearable device:
   for 1.2 seconds, and saves it in ESP32 NVS so it survives a reboot. The
   initial default remains 18. Up/Down Arrow mode is accepted as an alias.
 - Triggers during a ten-second lockout are discarded instead of banked.
-- GPIO21 sends the S001-S027 scene number to the Circuit Playground over the
+- GPIO21 sends the S001-S029 scene number to the Circuit Playground over the
   existing A1 wire, then remains high for the scene. The halo uses the matching
   three-color palette and supplies its two-second afterglow after GPIO21 drops.
 - Each scene uses eight intentionally spaced sprite-like keyframes. The next
@@ -39,11 +39,11 @@ This is the current combined ESP-IDF build for the wearable device:
 The prepared runtime images are in
 `../../staging_shoes_assets/runtime-card-v4-prefetch`.
 
-- **Card A - DFPlayer:** `mp3/0001.mp3` through `mp3/0027.mp3`
+- **Card A - DFPlayer:** `mp3/0001.mp3` through `mp3/0029.mp3`
 - **Card B - HW-125 visual reader:** `SCENES.CSV` and
   `SCENES/S001` through `SCENES/S027`
 
-Scene `S001` maps to audio `0001`, and so on through `S027`/`0027`.
+Scene `S001` maps to audio `0001`, and so on through `S029`/`0029`.
 
 ## No-visual-card fallback
 

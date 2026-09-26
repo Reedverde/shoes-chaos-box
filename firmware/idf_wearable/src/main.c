@@ -60,13 +60,15 @@
 #define SCREEN_H 240
 #define TRIGGER_LOCKOUT_MS 10000
 #define SCAN_DURATION_SECONDS 8
-#define MEDIA_SCENE_MAX 27
+#define MEDIA_SCENE_MAX 29
 #define MEDIA_FRAME_MAX 48
-#define NON_SHOES_SCENE_COUNT 17
+#define OUTSIDE_PLAY_COUNT 22
 #define SHOES_SCENE_FIRST 17
 #define SHOES_SCENE_COUNT 10
 #define CURB_SCENE_INDEX 2
-#define PLAYBACK_ORDER_MAX 36
+#define CURB_REFUSAL_INDEX 27
+#define CURB_CHILLY_INDEX 28
+#define PLAYBACK_ORDER_MAX 44
 #define RAW_FRAME_BYTES (SCREEN_W * SCREEN_H * 2)
 #define RAW_HALF_FRAME_BYTES (RAW_FRAME_BYTES / 2)
 #define RAW_ROWS_PER_CHUNK 16
@@ -1170,15 +1172,22 @@ static void shuffle_u8(uint8_t *items, size_t count)
     }
 }
 
-static bool curb_copies_are_spaced(const uint8_t *items, size_t count)
+static bool is_curb_scene_index(uint8_t index)
 {
-    size_t first = count;
+    return index == CURB_SCENE_INDEX ||
+           index == CURB_REFUSAL_INDEX ||
+           index == CURB_CHILLY_INDEX;
+}
+
+static bool curb_variants_are_spaced(const uint8_t *items, size_t count)
+{
+    bool previous_was_curb = false;
     for (size_t i = 0; i < count; ++i) {
-        if (items[i] != CURB_SCENE_INDEX) continue;
-        if (first == count) first = i;
-        else return i > first + 1;
+        bool current_is_curb = is_curb_scene_index(items[i]);
+        if (current_is_curb && previous_was_curb) return false;
+        previous_was_curb = current_is_curb;
     }
-    return false;
+    return true;
 }
 
 static void build_playback_order(void)
@@ -1197,26 +1206,31 @@ static void build_playback_order(void)
         return;
     }
 
-    // S001-S017 are movie/TV/meme or shoe-icon remix scenes. Curb (S003)
-    // appears exactly twice; every other scene in this group appears once.
-    uint8_t outside_shoes[NON_SHOES_SCENE_COUNT + 1];
-    for (size_t i = 0; i < NON_SHOES_SCENE_COUNT; ++i) {
+    // S001-S017 plus the two additional Curb variants S028-S029 are the
+    // outside-Shoes group. Add a second copy of each distinct Curb moment so
+    // all three appear exactly twice (six Curb plays) in every complete cycle.
+    uint8_t outside_shoes[OUTSIDE_PLAY_COUNT];
+    for (size_t i = 0; i < 17; ++i) {
         outside_shoes[i] = (uint8_t)i;
     }
-    outside_shoes[NON_SHOES_SCENE_COUNT] = CURB_SCENE_INDEX;
-    for (int attempt = 0; attempt < 16; ++attempt) {
-        shuffle_u8(outside_shoes, NON_SHOES_SCENE_COUNT + 1);
-        if (curb_copies_are_spaced(outside_shoes,
-                                   NON_SHOES_SCENE_COUNT + 1)) break;
+    outside_shoes[17] = CURB_REFUSAL_INDEX;
+    outside_shoes[18] = CURB_CHILLY_INDEX;
+    outside_shoes[19] = CURB_SCENE_INDEX;
+    outside_shoes[20] = CURB_REFUSAL_INDEX;
+    outside_shoes[21] = CURB_CHILLY_INDEX;
+    for (int attempt = 0; attempt < 32; ++attempt) {
+        shuffle_u8(outside_shoes, OUTSIDE_PLAY_COUNT);
+        if (curb_variants_are_spaced(outside_shoes,
+                                     OUTSIDE_PLAY_COUNT)) break;
     }
 
-    // Build enough randomized S018-S027 separators for all 18 outside scenes.
+    // Build enough randomized S018-S027 separators for all 22 outside plays.
     // A ten-scene shoe deck is exhausted before reshuffling, and the boundary
     // cannot repeat the same Kelly moment.
-    uint8_t shoes_sequence[NON_SHOES_SCENE_COUNT + 1];
+    uint8_t shoes_sequence[OUTSIDE_PLAY_COUNT];
     size_t shoes_written = 0;
     int previous_shoes = -1;
-    while (shoes_written < NON_SHOES_SCENE_COUNT + 1) {
+    while (shoes_written < OUTSIDE_PLAY_COUNT) {
         uint8_t shoes_deck[SHOES_SCENE_COUNT];
         for (size_t i = 0; i < SHOES_SCENE_COUNT; ++i) {
             shoes_deck[i] = (uint8_t)(SHOES_SCENE_FIRST + i);
@@ -1228,19 +1242,19 @@ static void build_playback_order(void)
             shoes_deck[1] = temporary;
         }
         for (size_t i = 0;
-             i < SHOES_SCENE_COUNT && shoes_written < NON_SHOES_SCENE_COUNT + 1;
+             i < SHOES_SCENE_COUNT && shoes_written < OUTSIDE_PLAY_COUNT;
              ++i) {
             shoes_sequence[shoes_written++] = shoes_deck[i];
             previous_shoes = shoes_deck[i];
         }
     }
 
-    for (size_t i = 0; i < NON_SHOES_SCENE_COUNT + 1; ++i) {
+    for (size_t i = 0; i < OUTSIDE_PLAY_COUNT; ++i) {
         playback_order[playback_order_count++] = outside_shoes[i];
         playback_order[playback_order_count++] = shoes_sequence[i];
     }
     ESP_LOGI(TAG,
-             "SCENE_DECK_ALTERNATING plays=%u outside=18 shoes=18 curb=2 first=%s",
+             "SCENE_DECK_ALTERNATING plays=%u outside=22 shoes=22 curb=6 first=%s",
              (unsigned)playback_order_count,
              media_scenes[playback_order[0]].id);
 }

@@ -2,7 +2,7 @@
 
 Shoes Off, Dirtbag! is a portable wearable performance prop that responds to a
 Bluetooth foot trigger with randomized circular visuals, synchronized dialogue,
-and a scene-aware LED halo. The current bench build plays 27 mapped scenes from
+and a scene-aware LED halo. The current bench build plays 29 mapped scenes from
 two microSD cards and has cardless opening, QR, and visual-fallback assets.
 
 ## Current target: Tech Week wearable
@@ -16,7 +16,7 @@ two microSD cards and has cardless opening, QR, and visual-fallback assets.
 - The confirmed Smatree DP20S USB-C battery pack rides in an inside jacket pocket, with a short power lead routed inside the jacket. It is labeled 5V/2A output and 5000mAh / 18.5Wh.
 - The confirmed STRICH SPT-10 pedal uses left/Space for scenes and right/Enter
   for the QR toggle. In Mode 1, Page Up/Down controls saved audio volume.
-- The synchronized firmware assigns all 27 scenes their own halo palette. The
+- The synchronized firmware assigns all 29 scenes their own halo palette. The
   ten original Shoes scenes use distinct diffuser-aware club-light profiles.
 - The wearable includes a dedicated local scene-trigger button so the demo still works if the Bluetooth pedal is missing, disconnected, or inconvenient.
 - A separate local mute/emergency-stop control remains available during playback.

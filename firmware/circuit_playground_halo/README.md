@@ -11,7 +11,7 @@ Bench wiring:
 
 At idle, two dim cyan pixels show that the halo controller is alive. Before
 holding A1 high for a scene, the ESP32 sends a short one-wire code containing
-the S001-S027 scene number. The Circuit Playground selects that scene's
+the S001-S029 scene number. The Circuit Playground selects that scene's
 three-color palette, animates it for the complete scene, fades the same palette
 for two seconds, and returns to idle.
 

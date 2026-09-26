@@ -5,7 +5,7 @@ namespace {
 
 constexpr uint8_t PIN_SCENE_TRIGGER = A1;
 constexpr uint8_t PIXEL_COUNT = 10;
-constexpr uint8_t SCENE_COUNT = 27;
+constexpr uint8_t SCENE_COUNT = 29;
 constexpr uint8_t IDLE_BRIGHTNESS = 12;
 constexpr uint8_t EFFECT_BRIGHTNESS = 48;
 constexpr uint8_t SONG_BRIGHTNESS = 88;
@@ -22,7 +22,7 @@ struct Color {
   uint8_t blue;
 };
 
-// Palettes S001-S027. They follow the dominant colors of the actual circular
+// Palettes S001-S029. They follow the dominant colors of the actual circular
 // scene exports rather than rotating through unrelated generic colors.
 constexpr Color SCENE_PALETTES[SCENE_COUNT][3] = {
     {{236, 244, 255}, {160, 205, 255}, {112, 112, 112}},  // S001 Damn Daniel
@@ -52,6 +52,8 @@ constexpr Color SCENE_PALETTES[SCENE_COUNT][3] = {
     {{255, 144,  80}, {255, 240, 112}, {208,  80,  48}},  // S025 Let's get 'em
     {{255, 240, 144}, {255, 176, 112}, {112,  80,  48}},  // S026 Runs small
     {{255, 255, 255}, {208, 240,  16}, {255,  71, 170}},  // S027 Those are mine
+    {{160, 205, 255}, {255, 255, 255}, {112, 112, 112}},  // S028 Larry refuses
+    {{255, 208,  91}, {160, 205, 255}, {255, 255, 255}},  // S029 Larry gets chilly
 };
 
 enum class DecodeState : uint8_t {
@@ -88,7 +90,7 @@ void drawIdle() {
 }
 
 bool isShoesSongScene() {
-  return scenePalette >= 17;  // S018-S027 are excerpts from the Shoes video.
+  return scenePalette >= 17 && scenePalette <= 26;
 }
 
 Color scaleColor(const Color &color, uint8_t amount) {

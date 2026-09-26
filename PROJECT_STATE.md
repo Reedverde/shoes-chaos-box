@@ -15,8 +15,8 @@ first event build.
 
 - GC9A01 240 x 240 display, local scene button, local QR button, DFPlayer,
   speaker, visual SD reader, both 8 GB cards, and Bluetooth pedal are connected.
-- Card A contains `mp3/0001.mp3` through `0027.mp3`. Card B contains the
-  optimized eight-frame exports for scenes S001-S027.
+- Card A contains `mp3/0001.mp3` through `0029.mp3`. Card B contains the
+  optimized visual exports for scenes S001-S029.
 - The left pedal launches a scene; the right pedal toggles the QR screen for
   `https://reedverde.com/sf`.
 - Pedal Mode 1 Page Up/Down changes DFPlayer volume from 0-30, shows the value
@@ -31,7 +31,7 @@ first event build.
   ESP32 flash. Fallback audio is correctly mapped to DFPlayer track 0018 and
   therefore still requires Card A.
 - GPIO21 sends a five-bit scene ID plus active-scene state to Circuit Playground
-  A1. The halo source has 27 scene palettes and ten diffuser-aware club-light
+  A1. The halo source has 29 scene palettes and ten diffuser-aware club-light
   profiles for S018-S027.
 
 ## Current exception
@@ -80,7 +80,7 @@ makes each lapel component replaceable.
   lighting profiles through the actual diffuser.
 - Verify left pedal = scene and right pedal = QR after a cold boot.
 - Verify Mode 1 volume up/down and saved volume after reboot.
-- Exercise all 27 audio/visual mappings and confirm no missing frames or tracks.
+- Exercise all 29 audio/visual mappings and confirm no missing frames or tracks.
 - Test cardless ESP fallback, then reinstall both cards.
 - Run 100 triggers, a 30-minute movement/load test, and a five-hour event-profile
   battery test.

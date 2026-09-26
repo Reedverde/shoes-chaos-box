@@ -32,13 +32,13 @@ An optional escalation sequence can replace pure randomization: gentle warning, 
 
 ## Initial content targets
 
-The initial target has been surpassed. The current validated pack contains 27
+The initial target has been surpassed. The current runtime pack contains 29
 five-to-seven-second scenes: 17 outside-source or shoe-icon scenes and ten
 moments from the original Shoes video. Runtime Card B uses eight evenly spaced
 RGB565 keyframes per scene; Card A contains the matching numbered MP3. S001
-maps to `0001.mp3` through S027/`0027.mp3`.
+maps to `0001.mp3` through S029/`0029.mp3`.
 
-Current playback alternates an S001-S017 scene with an S018-S027 Shoes scene.
+Current playback alternates 22 non-Shoes plays with S018-S027 Shoes scenes. The 19 unique non-Shoes scenes are S001-S017 plus S028-S029, and each of the three Curb clips appears twice per 44-play cycle.
 S003 Curb appears twice per 36-play deck; every other outside scene appears
 once. Shoes separators are shuffled without banking triggers.
 

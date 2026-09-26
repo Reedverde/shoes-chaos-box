@@ -78,7 +78,7 @@ system without stressing a solder joint or header.
 
 ## Phase 4 — functional test
 
-- Validate every S001-S027 visual/audio pair.
+- Validate every S001-S029 visual/audio pair.
 - Confirm left pedal scene, right pedal QR, local buttons, and Mode 1 volume.
 - Confirm the 36-play alternating deck and ten-second non-banking lockout.
 - Confirm Card B removal invokes the flashed S018 visual fallback and track 0018

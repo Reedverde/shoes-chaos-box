@@ -10,12 +10,18 @@ All notable documentation and project-direction changes are recorded here.
   columns 0–18, a dedicated column-20 ground breakout, separated 5 V/3.3 V
   rails, flat visual SD placement, DFPlayer placement, end-mounted buttons,
   and the frozen 8 + 2 + 2 detachable lead pinouts.
-- Added the current combined ESP32 firmware, 27-scene card runtime, randomized
+- Added the current combined ESP32 firmware, 29-scene card runtime, randomized
   alternating playback logic, QR control, saved pedal volume control, and
   memory-safe split-frame prefetch implementation.
 - Added scene-coded halo signaling and ten distinct diffuser-aware club-light
   profiles for the original Shoes scenes.
 - Added `TODO.md`, `PURCHASE_LIST.md`, and the frozen 8 + 2 + 2 cable plan.
+- Added two distinct Curb scenes: Larry refusing to remove his clean shoes
+  (S028/0028) and the argument ending with “Get the coats” (S029/0029).
+- Expanded the shuffled alternating deck to 44 plays: each of 22 non-Shoes
+  plays is followed by one of the ten Shoes scenes. Each of the three distinct
+  Curb clips appears exactly twice (six Curb plays total), without adjacent
+  Curb variants or a fixed sequence.
 
 ### Fixed
 
