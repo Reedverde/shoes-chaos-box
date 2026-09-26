@@ -1,1 +1,4 @@
 .pio/
+**/sdkconfig.esp32dev
+idf_wearable/src/assets/
+idf_wearable/src/local_face_asset.h

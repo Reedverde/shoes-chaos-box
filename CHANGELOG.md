@@ -2,6 +2,34 @@
 
 All notable documentation and project-direction changes are recorded here.
 
+## 2026-09-26 — Full media, controls, halo, and wearable audit
+
+### Added
+
+- Added the current combined ESP32 firmware, 27-scene card runtime, randomized
+  alternating playback logic, QR control, saved pedal volume control, and
+  memory-safe split-frame prefetch implementation.
+- Added scene-coded halo signaling and ten distinct diffuser-aware club-light
+  profiles for the original Shoes scenes.
+- Added `TODO.md`, `PURCHASE_LIST.md`, and the frozen 8 + 2 + 2 cable plan.
+
+### Fixed
+
+- Replaced the failed single 115,200-byte framebuffer allocation with two
+  57,600-byte DMA buffers, restoring boot, display, and buttons.
+- Corrected the flashed fallback audio mapping to S018/track 0018.
+- Reconciled gear records: DFPlayer, speakers, five SD readers, and two 8 GB
+  cards are received, installed/tested, and no longer listed as ordered.
+
+### Physical direction
+
+- Retained the working full-size breadboard as the first wearable's pocket
+  brain instead of forcing a premature perfboard rebuild.
+- Selected separate keyed display, speaker, and halo leads; selected a flat
+  pigtail-mounted orientation for the visual SD board.
+- Recorded that the latest halo source is built but its final physical flash
+  and diffuser review remain pending after an interrupted bootloader upload.
+
 ## 2026-09-25 — Synchronized LED halo milestone
 
 ### Added

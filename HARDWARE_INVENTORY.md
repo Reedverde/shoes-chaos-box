@@ -1,66 +1,49 @@
 # Hardware Inventory
 
-This file is the consolidated engineering view. Procurement status is normalized in `GEAR_MASTER.md`, with confirmed items in `GEAR_HAVE.md` and outstanding items in `GEAR_NEED.md`.
+The current installed system is summarized below. Detailed ownership is in
+[GEAR_HAVE.md](GEAR_HAVE.md), purchases in [PURCHASE_LIST.md](PURCHASE_LIST.md),
+and physical work in [TODO.md](TODO.md).
 
-## Confirmed owned
+## Pocket electronics
 
-| Category | Item | Planned use |
-|---|---|---|
-| Controller | Classic ESP32 38-pin DevKit-style board with CP2102 USB-UART and USB-C | Main controller; USB-C physically confirmed by owner; verify flash size during first upload |
-| Prototyping | MB-102-style breadboard kit, power module, jumper wires | Bench build |
-| Prototyping | Xinwei 1/4W metal-film resistor assortment, 30 values x 10, ±1% | Includes confirmed 1 kΩ UART series resistors |
-| Display | 1.28-inch GC9A01 240 x 240 round RGB TFT, 4-wire SPI | Default Tech Week candidate; photo label identifies Shenzhen Esida Electronics |
-| Display | 1.8-inch 128 x 160 RGB TFT, ST7735S-class SPI board with K1/K2/K3 buttons | Caption-heavy alternate; PCB labels include GND, VCC, SCL, SDA, RES, DC, CS, and BLK |
-| Display | 0.91-inch 128 x 32 white I2C OLED | Status/debug or future use |
-| Display | 0.96-inch blue OLED | Status/debug or future use |
-| Input | Pushbuttons and mini slide switches | Local trigger verified on GPIO13; remaining parts for mute, emergency stop, mode/test |
-| Input | STRICH SPT-10 Bluetooth music/page-turn pedal | Verified classic Bluetooth HID trigger in Mode 5; left=Space (`0x2C`), right=Enter (`0x28`) |
-| Sensor | Several HC-SR501 PIR motion sensors | Post-event entry confirmation |
-| Power | TP4056 lithium charging boards | Future rechargeable experiments; not Tech Week power |
-| Power | Four-AAA battery holder with switch and two-pin lead | Future use; not the Tech Week power plan |
-| Power | Smatree DP20S cylindrical USB-C battery pack, 5V/2A input/output, 5000mAh at 3.7V / 18.5Wh | Confirmed Tech Week pocket power; must pass idle and peak-load tests |
-| Interface | Logic-level converter boards | Available if a verified interface requires them |
-| Lighting | Adafruit Circuit Playground Express, product 3333 | Bench-verified ten-NeoPixel halo: A1 trigger from ESP32 GPIO21, shared ground, cyan idle, circular chase and fade |
-| Other | 5V relay module | Not needed for current build |
-| Other | CC1101 radio modules | Not needed for current build |
-| Other | NRF24L01+PA+LNA 2.4 GHz module with SMA antenna | Not needed for current build |
-| Other | BME280 environmental sensor | Not needed for current build |
-| Other | RC522 RFID/NFC reader | Not needed for current build |
+- Classic ESP32 DevKit (USB-C/CP2102)
+- Full-size breadboard
+- DFPlayer Mini and Card A audio card
+- HW-125/HiLetgo SPI reader and Card B visual card
+- GPIO13 scene button and GPIO22 QR button
+- 1 kΩ ESP32-TX-to-DFPlayer-RX resistor
+- Smatree DP20S USB power bank
 
-## Ordered for Tech Week but not yet received
+## Lapel electronics
 
-| Priority | Item | Ordered quantity | Purpose / receipt check |
-|---|---|---:|---|
-| Tier 1 | Amazon-listed DFRobot DFPlayer Mini DFR0299 | 1 | Local audio playback over UART; verify authenticity and operation |
-| Tier 1 | MakerHawk 4-ohm, 3W speaker | 2 | Audible cue; one installed and one spare |
-| Tier 1 | Bliksem 8 GB Class 10 microSD card | 2 | Separate FAT32 audio and visual libraries; capacity-test both |
-| Tier 1 | HiLetgo level-shifted SPI microSD module | 5 | Visual storage; confirm 5V VCC and ESP32 logic operation |
+- GC9A01 round display
+- Circuit Playground Express behind a diffuser
+- One 4-ohm, 3-watt speaker
+- Independent clipped Circuit Playground battery pack
 
-## Still required or unresolved for Tech Week
+## Frozen ESP32 pin map
 
-| Priority | Item | Purpose |
-|---|---|---|
-| Conditional | Normally open momentary wired foot switch | Reliable fallback only if Bluetooth pedal is missing or incompatible |
-| Confirm | Short USB-C power lead and safe 5V distribution | Connect confirmed DP20S pack to the wearable electronics |
-| Conditional | 1/4-inch panel jack, matching cable/plug, strain relief | Detachable stage connection only for the wired fallback |
-| Confirm | Compact wearable enclosure and secure mounting hardware | Finished lapel/chest unit |
-| Build supply | Perfboard or solderable prototype board, wire, headers/connectors, heat-shrink | Reliable integration after breadboard proof |
+| Function | ESP32 pin |
+|---|---:|
+| Display/SD SCLK | GPIO14 |
+| Display/SD MOSI | GPIO27 |
+| Display CS | GPIO26 |
+| Display DC | GPIO25 |
+| Display reset | GPIO33 |
+| Display backlight | GPIO32 |
+| Visual SD MISO | GPIO19 |
+| Visual SD CS | GPIO5 |
+| Local scene button | GPIO13 |
+| Local QR button | GPIO22 |
+| Halo scene code | GPIO21 |
+| DFPlayer ESP-RX | GPIO16 |
+| DFPlayer ESP-TX | GPIO17 through 1 kΩ to player RX |
 
-## Deferred entryway hardware
+## Wearable cables
 
-| Item | Status |
-|---|---|
-| Low-voltage pressure pad/mat switch | Primary future trigger beneath welcome mat |
-| Normally closed magnetic reed door/contact sensor | Optional arrival confirmation after Tech Week |
-| Quality 5V/2A USB wall adapter and cable | Confirm/need when converting to fixed installation |
-| Wall enclosure/mount | Design after trigger logic is validated |
+- 8-pin display lead: 3V3, GND, GPIO14, GPIO27, GPIO26, GPIO25, GPIO33, GPIO32
+- 2-pin halo lead: GPIO21/A1 and shared GND
+- 2-pin speaker lead: DFPlayer SPK1 and SPK2
 
-## Explicitly not needed now
-
-- Another microcontroller
-- Another PIR sensor
-- Another display
-- A relay
-- Additional radios
-- A custom lithium pack or TP4056-based charging system
-- A native phone app
+The visual reader stays in the pocket and is reoriented flat; its six existing
+connections do not need to cross to the lapel.

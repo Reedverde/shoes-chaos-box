@@ -1,148 +1,94 @@
 # Build Plan
 
-## Architecture
+Updated after the 2026-09-26 project audit.
+
+## Final first-build architecture
 
 ```text
-STRICH SPT-10 classic Bluetooth HID pedal (verified) ------+
-detachable wired foot switch (fallback) --------------------+--> ESP32
-local manual-trigger button --------------------------------+
-local mute / emergency button ------------------------------+     |-- SPI --> center TFT display
-                                                                 |-- SPI --> visual microSD
-                                                                 |-- UART -> DFPlayer Mini -> 4 ohm speaker
-                                                                 `-- trigger/sync -> Circuit Playground LED halo
+STRICH Bluetooth pedal ------------------------------+
+GPIO13 scene button / GPIO22 QR button --------------+--> ESP32 pocket brain
+                                                        |-- shared SPI -> display + Card B
+                                                        |-- UART -> DFPlayer/Card A
+                                                        |-- GPIO21 -> Circuit Playground A1
+                                                        `-- Bluetooth -> pedal
 
-Smatree DP20S USB-C pack, 5V/2A (inside jacket pocket) ----------> shared 5V power distribution
+Pocket brain -- keyed 8-wire lead ----------------------> lapel display
+DFPlayer SPK1/SPK2 -- keyed 2-wire lead ----------------> lapel/pocket speaker
+ESP32 GPIO21/GND -- keyed 2-wire lead ------------------> lapel halo controller
+
+DP20S USB pack -----------------------------------------> ESP32 pocket brain
+Clipped battery pack -----------------------------------> Circuit Playground
 ```
 
-The display and visual microSD may share the SPI bus with separate chip-select lines. Exact GPIOs must be chosen only after the specific ESP32 board and both display pinouts are verified.
+The two battery-positive rails are never joined. ESP32 and Circuit Playground
+share only signal ground and GPIO21/A1. The speaker is a bridge output and must
+use SPK1/SPK2—not system ground.
 
-## Implemented bench milestone
+## Phase 1 — recover the current bench baseline
 
-The original screen/button proof remains in `firmware/`. The combined verified build is in `firmware/idf_wearable/` and uses ESP-IDF to support the GC9A01, local button, classic Bluetooth HID pedal, and GPIO21 halo trigger together. The Circuit Playground code is in `firmware/circuit_playground_halo/`. Exact temporary wiring is in `firmware/WIRING_MILESTONE_1.md` and `firmware/WIRING_MILESTONE_2.md`. No audio, visual microSD, relay, battery holder, or external breadboard power is part of the verified milestone.
+1. Double-press Circuit Playground RESET until `CPLAYBOOT` appears.
+2. Flash `firmware/circuit_playground_halo` and verify the write.
+3. Test the ten diffuser-aware S018-S027 profiles.
+4. Photograph and label the working breadboard before reorientation.
 
-## Phase 0 — Confirm and label
+**Exit:** screen, both local buttons, both pedal functions, audio, both cards,
+and halo all work from a cold boot.
 
-- Controller identified as a classic 38-pin ESP32 DevKit-style board with CP2102 USB-UART and owner-confirmed USB-C; confirm it accepts a basic firmware upload and record detected flash size.
-- Confirm their operating voltages and pin labels.
-- The pedal is identified and verified: STRICH SPT-10, classic Bluetooth HID, Mode 5, left Space (`0x2C`) and right Enter (`0x28`).
-- Use the physically matched USB-C cable for the first upload and power test; verify it carries data, then select a safe 5V distribution method for the confirmed Smatree DP20S pack. Do not route the full system load through an unverified ESP32 regulator path.
-- Inventory cards, connectors, buttons, and rough mounting materials.
-- Label all confirmed components; do not assume similar-looking modules share a pinout.
+## Phase 2 — reorient without redesigning
 
-Controller pin guardrails for the first wiring draft:
+1. Keep the ESP32 and support electronics on the existing breadboard.
+2. Move the GC9A01 off-board to the keyed 8-wire cable.
+3. Move speaker and halo control to their separate keyed 2-wire cables.
+4. Lay the HW-125 visual reader flat beside the breadboard using a short six-pin
+   pigtail; retain the verified 4 MHz SD clock and current pin map.
+5. Put the local buttons at the accessible end of the breadboard.
+6. Use the breadboard rails only after checking whether either rail is split.
 
-- Reserve GPIO18/19/23 for the shared SPI bus unless a library constraint requires otherwise.
-- Reserve GPIO16/17 as the preferred hardware UART pair for the DFPlayer.
-- Do not use the exposed CLK/CMD/SD0/SD1/SD2/SD3 pins; they are tied to the ESP32 module's flash interface.
-- Treat GPIO34/35/36/39 as input-only.
-- Avoid GPIO0/2/5/12/15 for the first peripheral assignments because their levels can affect boot behavior.
-- Freeze chip-select, display-control, button, and Circuit Playground communication pins only after the display and microSD modules are on the bench together.
+**Exit:** the pocket unit fits its carrier, all cables detach, and every function
+still passes without moving wires by hand.
 
-**Exit:** Exact boards and missing purchases are known.
+## Phase 3 — make the two physical units
 
-## Phase 1 — Display proof
+### Pocket unit
 
-- Power the ESP32 from USB on the bench.
-- Wire the GC9A01 and run the implemented idle screen plus four button-triggered text/color scenes.
-- After that proof works, render one 240 x 240 face asset.
-- Repeat a representative caption layout on the ST7735S.
-- Choose the screen by readability, comic effect, refresh speed, wiring, and enclosure fit.
+- Shallow nonconductive tray around the breadboard
+- USB-C and both card slots accessible
+- Speaker opening if the speaker remains in the pocket
+- Cable anchors before each connector
+- Labelled DISPLAY, SPEAKER, and HALO leads
 
-**Exit:** One display is selected and can render the idle screen plus one scene reliably.
+### Lapel unit
 
-## Phase 1B — LED halo proof
+- GC9A01 facing outward
+- Thin diffuser ring
+- Circuit Playground behind the screen
+- Nylon standoffs and rigid lightweight backing
+- Pocket-edge clip plus lower stabilizer, or two locking pins
+- Service loop and strain relief inside the jacket
 
-**Bench proof completed 2026-09-25:** ESP32 GPIO21 drives Circuit Playground A1 over a shared ground. A local-button press or either STRICH pedal runs the screen scene plus an orange/purple circular chase, blue fade, and cyan idle return. Each board remained on its own USB supply for this test, with no joined power rails.
+The 3D printing pen may form cable guides, spacers, or a rough bezel after the
+electronics are removed. It is not used around powered boards, as conductor
+insulation, or as the sole load-bearing attachment.
 
-- Place the Circuit Playground Express behind the selected center display without permanent attachment.
-- Confirm that enough of its ten NeoPixels remain visible to produce a ring and shirt backlight.
-- Prototype idle, trigger, alert, spin/chase, and fade patterns at conservative brightness.
-- The first implementation uses a simple trigger line; defer serial scene/color data until the basic wearable is reliable.
-- Power-test the display, audio, and LED halo together from the DP20S; stay below its labeled 5V/2A output and avoid sustained full-white NeoPixel output.
+**Exit:** wearer can walk, sit, turn, disconnect the lapel unit, and remove the
+system without stressing a solder joint or header.
 
-**Exit:** One scene synchronizes the screen with a visible LED sweep without brownouts, uncomfortable glare, or excessive heat.
+## Phase 4 — functional test
 
-## Phase 2 — Audio proof
+- Validate every S001-S027 visual/audio pair.
+- Confirm left pedal scene, right pedal QR, local buttons, and Mode 1 volume.
+- Confirm the 36-play alternating deck and ten-second non-banking lockout.
+- Confirm Card B removal invokes the flashed S018 visual fallback and track 0018
+  still plays when Card A is present.
+- Run 100 triggers.
 
-- Format a 4–32 GB microSD card as FAT32 for DFPlayer compatibility.
-- Load a numbered test cue.
-- Connect the DFPlayer Mini to an ESP32 UART and the speaker to the module’s speaker output according to the manufacturer pinout.
-- Test startup, play, stop, volume, and repeated triggering.
-- Keep audio short and locally stored; do not stream during the demo.
+## Phase 5 — event reliability
 
-**Exit:** One command produces one clean audio cue without resetting the ESP32.
+- 30-minute maximum-use test for reset, heat, and audio distortion
+- Ten-minute wear/movement and controlled cable-pull test
+- Five-hour event-profile battery test
+- DP20S idle auto-shutoff test
+- Speaker loudness test in a noisy room
+- Pack known-good card backups, USB cable, spare speaker, and spare SD reader
 
-## Phase 3 — Controls
-
-- Use an owned pushbutton as the initial bench trigger.
-- Keep both verified pedal keys mapped to the same scene queue used by the local button; retain reconnect scanning and ignore release/empty reports.
-- Build the detachable wired dry-contact switch only as the dependable fallback; use an internal or external pull-up.
-- Add software debounce/reconnect handling and a scene-active lockout.
-- Add the wearable mute/emergency-stop button.
-- Define controls:
-  - Bluetooth or wired foot trigger: launch a scene
-  - Dedicated wearable trigger button: launch the same scene path without a pedal
-  - Mute/stop button short press: mute/unmute
-  - Mute/stop button long press: emergency stop / return to idle
-  - Mode changes may initially be performed at boot or through a second owned button if needed
-
-**Exit:** Deliberate presses trigger once; bounce, held presses, reconnects, and accidental repeats do not. At least one removable trigger works without touching the wearable.
-
-## Phase 4 — Visual storage and scene engine
-
-- Add the separate SPI microSD breakout with its own chip-select line.
-- Establish the content folders described in `CONTENT_PLAN.md`.
-- Load a manifest into memory at boot.
-- Randomize within the current mode while avoiding immediate repeats.
-- Pre-render animation frames instead of decoding complex GIFs live.
-- Fail gracefully if either card is absent: show an error screen and preserve mute/stop behavior.
-
-**Exit:** At least five scenes can be selected and played reliably from local storage.
-
-## Phase 4B — Event-host integrations (stretch)
-
-- Use Kling AI to create a small number of short reaction loops from cleared source images or original artwork.
-- Convert the results into the exact frame format and dimensions selected in Phase 1; do not decode or stream Kling output at runtime.
-- Build a minimal Cloudflare Flue “Chaos Director” that accepts a theme or tone and produces a validated scene manifest using only known local asset IDs.
-- Export/download the manifest and content pack before boarding.
-- Demonstrate the Cloudflare/Kling provenance if useful, but keep a known-good hand-curated pack as the default and fallback.
-
-**Exit:** At least one Kling-assisted local loop and one Flue-generated scene manifest run on the device without network access.
-
-## Phase 5 — Wearable integration
-
-- Mock the layout with cardboard, exposed backing, tape, clips, visible wire, and other intentionally rough materials before committing to mounting.
-- Center the outward-facing screen over/within the Circuit Playground LED ring, with the LEDs able to wash the shirt.
-- Preserve the purposefully slapped-together look; do not hide every board, fastener, or wire.
-- Mount the ESP32, DFPlayer, and SD breakout so cards and USB remain serviceable.
-- Put the cylindrical DP20S power bank in an inside pocket and restrain it from rolling; route a short USB-C power lead inside the jacket.
-- If using the wired fallback, use a panel-mounted 1/4-inch jack or equally robust detachable connector and add strain relief plus a slack loop.
-- Ensure no sharp edges, exposed conductors, hot components, or rigid loads press into the wearer.
-- Keep roughness theatrical only: insulation, load spreading, secure pins/clips, and emergency control remain non-negotiable.
-
-**Exit:** The unit can be worn, moved, muted, disconnected, and removed safely.
-
-## Phase 6 — Reliability and rehearsal
-
-- Run 100 trigger cycles and record failures.
-- Test at expected volume and ambient noise.
-- Confirm the DP20S stays awake during a 30-minute idle/run test and remains stable during worst-case screen + audio + LED peaks.
-- Run a five-hour event-profile soak test: mostly idle/low-brightness operation with repeated 1–2 minute demonstrations and no charging.
-- Walk, sit, turn, and step away while wearing the full system.
-- Perform a controlled cable snag/pull test with the wearable supported.
-- Pack spare cards, USB cable, and a fallback manual trigger button.
-- Rehearse Clean Demo mode first; enable Chaos/Roast only when appropriate.
-- Rehearse the Hack Alcatraz format: explain the welcome-mat premise, trigger two or three randomized scenes, and finish inside two minutes.
-- Pack the wearable fully charged and self-contained because reception and access to power may be unreliable on the boat.
-
-**Exit:** Repeatable offline boat demo, five-hour measured battery endurance, and a documented trigger/power fallback.
-
-## Phase 7 — Home welcome-mat version
-
-- Put a suitable low-voltage pressure pad beneath the welcome mat as the primary arrival trigger.
-- Treat the wearable pedal and welcome-mat pressure pad as interchangeable inputs to the same scene engine.
-- Optionally add a normally closed magnetic door contact and one owned HC-SR501 PIR sensor to confirm an arrival.
-- Trigger only after the chosen combination of mat/door/presence events occurs within a defined window.
-- Add a 2–5 minute cooldown and retain the foot switch as manual test/trigger control.
-- Begin with USB wall power; battery charging hardware remains optional.
-- A local ESP32 web page may later expose volume, mute, sensitivity, cooldown, and test controls.
+The exact checklist is maintained in [TODO.md](TODO.md).

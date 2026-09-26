@@ -1,21 +1,29 @@
-# Shoes Chaos Box
+# Shoes Off, Dirtbag!
 
-Shoes Chaos Box is a portable, wearable performance prop that responds to a removable foot trigger with a randomized combination of face imagery, captions, tiny video/animation loops, LED effects, and short audio cues. The immediate target is a reliable Tech Week demo with an intentionally improvised, visibly handmade aesthetic; the same content system is presented as the portable stand-in for a pressure-pad welcome mat at home.
+Shoes Off, Dirtbag! is a portable wearable performance prop that responds to a
+Bluetooth foot trigger with randomized circular visuals, synchronized dialogue,
+and a scene-aware LED halo. The current bench build plays 27 mapped scenes from
+two microSD cards and has cardless opening, QR, and visual-fallback assets.
 
 ## Current target: Tech Week wearable
 
 - The whole assembly pins or clips to a lapel or suit pocket and should look purposefully slapped together rather than productized.
 - A small outward-facing screen sits in the middle and shows images, text, and short pre-rendered GIF-like loops.
 - The owned Adafruit Circuit Playground Express sits behind or around the screen as a circular LED halo, washing light onto the shirt and emphasizing each scene.
-- The wearable also carries the ESP32, audio board, speaker, and local visual storage.
+- The ESP32, audio board, two cards, buttons, and full breadboard stay together
+  as a serviceable pocket unit. The screen, halo, and speaker connect through
+  separate 8-, 2-, and 2-conductor leads.
 - The confirmed Smatree DP20S USB-C battery pack rides in an inside jacket pocket, with a short power lead routed inside the jacket. It is labeled 5V/2A output and 5000mAh / 18.5Wh.
-- The confirmed STRICH SPT-10 pedal launches scenes over classic Bluetooth HID in Mode 5: left sends Space and right sends Enter. Both sides are verified against the ESP32. A detachable wired switch remains an optional fallback.
-- The synchronized bench build is now verified: the red local button or either pedal changes the round-screen scene and triggers the Circuit Playground's orange/purple chase, blue fade, and cyan idle return.
+- The confirmed STRICH SPT-10 pedal uses left/Space for scenes and right/Enter
+  for the QR toggle. In Mode 1, Page Up/Down controls saved audio volume.
+- The synchronized firmware assigns all 27 scenes their own halo palette. The
+  ten original Shoes scenes use distinct diffuser-aware club-light profiles.
 - The wearable includes a dedicated local scene-trigger button so the demo still works if the Bluetooth pedal is missing, disconnected, or inconvenient.
 - A separate local mute/emergency-stop control remains available during playback.
 - If the wired fallback is used, cable strain relief and a breakaway-friendly detachable connection are required so a snag does not pull the unit off the wearer.
 
-The selected display is the owned 1.28-inch, 240 x 240 GC9A01 round TFT. The combined bench firmware now supports the screen, local button, and STRICH pedal together. The owned ST7735S rectangular TFT remains an alternate for caption-heavy layouts.
+The selected display is the owned 1.28-inch, 240 x 240 GC9A01 round TFT. The
+ST7735S is no longer part of the active wearable design.
 
 ## Deployment target: Hack Alcatraz
 
@@ -58,6 +66,8 @@ The presentation story is: at home, a pressure pad beneath the welcome mat detec
 - [GEAR_MASTER.md](GEAR_MASTER.md) — authoritative gear taxonomy and configuration
 - [GEAR_HAVE.md](GEAR_HAVE.md) — confirmed owned equipment
 - [GEAR_NEED.md](GEAR_NEED.md) — purchases and unresolved checks, with links
+- [TODO.md](TODO.md) — ordered physical-build and validation checklist
+- [PURCHASE_LIST.md](PURCHASE_LIST.md) — reduced connector/mounting order list
 - [CHANGELOG.md](CHANGELOG.md) — documentation history
 
 ## Project rules
