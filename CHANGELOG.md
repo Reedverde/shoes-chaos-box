@@ -19,6 +19,9 @@ All notable documentation and project-direction changes are recorded here.
 
 ### Fixed
 
+- Completed the previously interrupted Circuit Playground upload: the
+  diffuser-aware halo firmware wrote all 53,604 bytes, passed checksum
+  verification, and performed its final CPU reset.
 - Replaced the failed single 115,200-byte framebuffer allocation with two
   57,600-byte DMA buffers, restoring boot, display, and buttons.
 - Corrected the flashed fallback audio mapping to S018/track 0018.

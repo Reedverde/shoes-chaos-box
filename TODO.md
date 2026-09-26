@@ -4,8 +4,8 @@ Updated: 2026-09-26
 
 ## Do next — preserve the working electronics
 
-- [ ] Double-press Circuit Playground RESET until `CPLAYBOOT` appears.
-- [ ] Flash the built diffuser-optimized halo firmware and verify checksum.
+- [x] Double-press Circuit Playground RESET until `CPLAYBOOT` appears.
+- [x] Flash the built diffuser-optimized halo firmware and verify checksum.
 - [ ] Trigger S018-S027 and approve each profile through the real diffuser.
 - [ ] Photograph and label every current breadboard connection before moving a
   single wire.
