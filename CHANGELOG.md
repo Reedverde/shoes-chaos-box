@@ -19,6 +19,10 @@ All notable documentation and project-direction changes are recorded here.
 
 ### Fixed
 
+- Extended the S001 Damn Daniel source audio through 13.00 seconds so the full
+  “back at it again with the white Vans” line and laugh play before the padded
+  six-second scene ends. Updated the master preview, DFPlayer export, and both
+  current runtime-card staging copies without changing the S001/0001 mapping.
 - Completed the previously interrupted Circuit Playground upload: the
   diffuser-aware halo firmware wrote all 53,604 bytes, passed checksum
   verification, and performed its final CPU reset.

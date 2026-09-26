@@ -4,6 +4,8 @@ Updated: 2026-09-26
 
 ## Do next — preserve the working electronics
 
+- [ ] Mount Card A on the computer and replace `mp3/0001.mp3` with the corrected
+  complete Damn Daniel catchphrase/laugh export from runtime-card-v4-prefetch.
 - [x] Double-press Circuit Playground RESET until `CPLAYBOOT` appears.
 - [x] Flash the built diffuser-optimized halo firmware and verify checksum.
 - [ ] Trigger S018-S027 and approve each profile through the real diffuser.
