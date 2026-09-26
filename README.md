@@ -59,6 +59,7 @@ The presentation story is: at home, a pressure pad beneath the welcome mat detec
 - `firmware/idf_wearable/` — verified ESP-IDF screen, button, Bluetooth-pedal, and halo-trigger firmware
 - `firmware/circuit_playground_halo/` — verified Arduino/PlatformIO firmware for the Circuit Playground Express LED halo
 - `firmware/WIRING_MILESTONE_2.md` — exact synchronized halo bench wiring and power-safety notes
+- `firmware/WIRING_FINAL_POCKET_BREADBOARD.md` — numbered final breadboard layout, power rails, ground breakout, modules, buttons, and detachable leads
 - [PROJECT_STATE.md](PROJECT_STATE.md) — current decisions, scope, risks, and next actions
 - [BUILD_PLAN.md](BUILD_PLAN.md) — phased hardware and firmware plan
 - [CONTENT_PLAN.md](CONTENT_PLAN.md) — modes, assets, naming, and scene rules

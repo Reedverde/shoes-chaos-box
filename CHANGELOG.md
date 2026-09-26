@@ -6,6 +6,10 @@ All notable documentation and project-direction changes are recorded here.
 
 ### Added
 
+- Added a complete numbered final pocket-breadboard schematic with the ESP32 at
+  columns 0–18, a dedicated column-20 ground breakout, separated 5 V/3.3 V
+  rails, flat visual SD placement, DFPlayer placement, end-mounted buttons,
+  and the frozen 8 + 2 + 2 detachable lead pinouts.
 - Added the current combined ESP32 firmware, 27-scene card runtime, randomized
   alternating playback logic, QR control, saved pedal volume control, and
   memory-safe split-frame prefetch implementation.

@@ -43,6 +43,9 @@ and halo all work from a cold boot.
    pigtail; retain the verified 4 MHz SD clock and current pin map.
 5. Put the local buttons at the accessible end of the breadboard.
 6. Use the breadboard rails only after checking whether either rail is split.
+7. Follow `firmware/WIRING_FINAL_POCKET_BREADBOARD.md`: ESP32 at columns 0–18,
+   ground breakout at column 20, flat visual reader at 23–28, DFPlayer at
+   32–39, and the scene/QR buttons at the accessible far end.
 
 **Exit:** the pocket unit fits its carrier, all cables detach, and every function
 still passes without moving wires by hand.

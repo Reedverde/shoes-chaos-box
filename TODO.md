@@ -16,6 +16,11 @@ Updated: 2026-09-26
 
 ## Convert the bench build into the wearable
 
+- [ ] Rebuild to the numbered layout in
+  `firmware/WIRING_FINAL_POCKET_BREADBOARD.md`: ESP32 0–18, ground channel 20,
+  visual SD 23–28, DFPlayer 32–39, then the two buttons.
+- [ ] Establish separate +5 V and +3.3 V red rails and common blue ground rails;
+  meter-test them before attaching any module.
 - [ ] Move the display off the breadboard onto one keyed 8-conductor lead:
   3V3, GND, GPIO14, GPIO27, GPIO26, GPIO25, GPIO33, GPIO32.
 - [ ] Put the speaker on its own keyed 2-conductor lead from DFPlayer SPK1/SPK2.
