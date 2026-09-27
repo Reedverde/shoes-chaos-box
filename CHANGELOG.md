@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-09-26 — Cloudflare Chaos Director
+
+- Added a deployable Cloudflare Worker that generates deterministic event,
+  clean-demo, and Wizard-led diagnostic packs from the validated 29-scene
+  catalog.
+- Preserved the 44-play alternation rule and two appearances apiece for all
+  three Curb scenes.
+- Added JSON and firmware-compatible `SCENES.CSV` endpoints, a small download
+  UI, and automated pack-validation tests.
+- Kept copyrighted media out of the Worker and GitHub; runtime media remains
+  on the ESP32 and DFPlayer microSD cards.
+
 All notable documentation and project-direction changes are recorded here.
 
 ## 2026-09-26 — Full media, controls, halo, and wearable audit

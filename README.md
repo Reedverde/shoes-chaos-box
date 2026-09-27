@@ -37,6 +37,11 @@ The wearable therefore needs at least five hours of ready-to-demo battery life, 
 - Use Cloudflare Flue as a hosted “Chaos Director” that creates scene manifests by combining captions, media IDs, audio IDs, timing, and LED patterns.
 - Keep the generated pack local on the wearable. Flue and Kling enhance what is prepared before the cruise; neither may become a live network dependency.
 
+The first working Cloudflare implementation is in
+[`cloudflare/chaos-director`](cloudflare/chaos-director). It publishes the
+validated scene catalog and generates deterministic JSON/CSV packs while all
+copyrighted media remains on the two device cards.
+
 ## Trigger behavior
 
 Each pedal or local-button press launches one short, reusable scene selected within the current mode. The same interaction can be repeated for the wearer or any nearby participant; every press can produce a different combination. A scene may combine:
