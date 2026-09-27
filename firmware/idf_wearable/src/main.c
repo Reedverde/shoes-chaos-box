@@ -1063,11 +1063,14 @@ static void draw_scene(size_t index)
 
 static void request_trigger(trigger_source_t source)
 {
-    // The right pedal is the QR control and must remain available while a
-    // scene is locked out or while the QR code is already being displayed.
+    // The two local buttons are deliberate navigation controls, so they remain
+    // responsive after playback even if the foot-pedal anti-repeat cooldown is
+    // still active. The right pedal remains available as the QR control.
     if (trigger_queue && (source == TRIGGER_PEDAL_RIGHT ||
                           source == TRIGGER_VOLUME_UP ||
                           source == TRIGGER_VOLUME_DOWN ||
+                          source == TRIGGER_LOCAL_BUTTON ||
+                          source == TRIGGER_LOCAL_PREVIOUS ||
                           !trigger_locked)) {
         xQueueOverwrite(trigger_queue, &source);
     }
@@ -1314,7 +1317,14 @@ static void app_task(void *unused)
                                        pdMS_TO_TICKS(VOLUME_OVERLAY_MS);
             } else if (source == TRIGGER_PEDAL_RIGHT) {
                 qr_toggle_requested = true;
-            } else if (!qr_mode && !lockout_active) {
+            } else if (!qr_mode &&
+                       (!lockout_active ||
+                        source == TRIGGER_LOCAL_BUTTON ||
+                        source == TRIGGER_LOCAL_PREVIOUS)) {
+                // Manual navigation wins over the remaining pedal cooldown.
+                // Nothing is banked: this is the single physical edge that
+                // was just observed after the previous scene returned.
+                lockout_active = false;
                 scene_requested = true;
             }
         }

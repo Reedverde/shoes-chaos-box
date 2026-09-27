@@ -45,7 +45,7 @@ Updated: 2026-09-26
 - [ ] Left pedal in Mode 5 launches one scene; right pedal toggles QR.
 - [ ] Mode 1 Page Up/Down changes volume, displays the number, and survives reboot.
 - [ ] Local forward and previous buttons each work for 25 consecutive presses;
-  verify forward, forward, previous, forward returns to the same second scene.
+  verify blue, blue, green, blue returns to the same second scene.
 - [ ] Run all 29 scenes and confirm each visual/audio pairing, including all three distinct Curb moments.
 - [ ] Confirm Curb/S003 repeats more often while Shoes scenes separate every
   outside-source scene.

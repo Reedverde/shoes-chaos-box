@@ -19,9 +19,9 @@ This is the current combined ESP-IDF build for the wearable device:
   Kelly/*Shoes* moments from S018-S027. Curb Your Enthusiasm (S003) runs twice
   per 36-play cycle; each other outside-source scene runs once. The ten Kelly
   moments are shuffled as separator decks so they stay varied.
-- The red local button and left pedal step forward through the randomized scene
+- The blue local button and left pedal step forward through the randomized scene
   order. The green local button steps backward through that exact history; a
-  following red-button or left-pedal press returns forward to the scene just
+  following blue-button or left-pedal press returns forward to the scene just
   left behind.
 - The right pedal toggles the QR screen. QR has priority and can interrupt a
   playing scene.
@@ -29,7 +29,9 @@ This is the current combined ESP-IDF build for the wearable device:
   lowers it. Each press moves one step on the 0-30 scale, shows the new number
   for 1.2 seconds, and saves it in ESP32 NVS so it survives a reboot. The
   initial default remains 18. Up/Down Arrow mode is accepted as an alias.
-- Triggers during a ten-second lockout are discarded instead of banked.
+- Left-pedal triggers during a ten-second lockout are discarded instead of
+  banked. The blue and green board buttons bypass the remaining cooldown after
+  playback so manual forward/back navigation stays responsive.
 - GPIO21 sends the S001-S029 scene number to the Circuit Playground over the
   existing A1 wire, then remains high for the scene. The halo uses the matching
   three-color palette and supplies its two-second afterglow after GPIO21 drops.

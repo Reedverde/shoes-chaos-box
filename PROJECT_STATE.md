@@ -19,9 +19,11 @@ first event build.
   optimized visual exports for scenes S001-S029.
 - The left pedal launches a scene; the right pedal toggles the QR screen for
   `https://reedverde.com/sf`.
-- The red local button advances through the current randomized order. The green
+- The blue local button advances through the current randomized order. The green
   local button walks backward through that same history, so stepping back and
-  then pressing red replays the scene that followed it.
+  then pressing blue replays the scene that followed it. Both board buttons
+  bypass the remaining pedal cooldown after playback; pedal presses are still
+  discarded during the ten-second anti-repeat window.
 - Pedal Mode 1 Page Up/Down changes DFPlayer volume from 0-30, shows the value
   for 1.2 seconds, and saves it in NVS. Default volume is 18.
 - Scene order alternates an outside-source scene with a Kelly/Shoes scene.

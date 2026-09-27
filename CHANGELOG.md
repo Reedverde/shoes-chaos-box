@@ -9,6 +9,10 @@
   remains the QR control.
 - Compiled and flashed the updated ESP32 firmware successfully to the connected
   38-pin board on `/dev/cu.usbserial-0001`.
+- Corrected the manual-navigation behavior after the first physical test: the
+  blue forward and green previous buttons now bypass the remaining pedal
+  cooldown once playback has returned, while foot-pedal presses retain the
+  ten-second anti-repeat protection.
 
 ## 2026-09-26 — Cloudflare Chaos Director
 
