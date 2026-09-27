@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-09-26
+
+- Repurposed the green GPIO22 breadboard button from QR display to a
+  history-aware previous-scene control. Repeated presses walk backward through
+  the established randomized order, and a subsequent red-button or left-pedal
+  press moves forward through that same history. The right Bluetooth pedal
+  remains the QR control.
+- Compiled and flashed the updated ESP32 firmware successfully to the connected
+  38-pin board on `/dev/cu.usbserial-0001`.
+
 ## 2026-09-26 — Cloudflare Chaos Director
 
 - Added a deployable Cloudflare Worker that generates deterministic event,

@@ -7,7 +7,7 @@ This is the current combined ESP-IDF build for the wearable device:
 - HW-125 visual microSD reader on the shared SPI bus
 - DFPlayer Mini plus speaker over UART
 - STRICH SPT-10 Bluetooth pedal in Mode 5
-- local scene and QR buttons
+- local forward-scene and previous-scene buttons
 - GPIO21 halo trigger to the Circuit Playground
 
 ## Runtime behavior
@@ -19,8 +19,12 @@ This is the current combined ESP-IDF build for the wearable device:
   Kelly/*Shoes* moments from S018-S027. Curb Your Enthusiasm (S003) runs twice
   per 36-play cycle; each other outside-source scene runs once. The ten Kelly
   moments are shuffled as separator decks so they stay varied.
-- The right pedal or local QR button toggles the QR screen. QR has priority and
-  can interrupt a playing scene.
+- The red local button and left pedal step forward through the randomized scene
+  order. The green local button steps backward through that exact history; a
+  following red-button or left-pedal press returns forward to the scene just
+  left behind.
+- The right pedal toggles the QR screen. QR has priority and can interrupt a
+  playing scene.
 - In pedal Mode 1, Page Up/left raises DFPlayer volume and Page Down/right
   lowers it. Each press moves one step on the 0-30 scale, shows the new number
   for 1.2 seconds, and saves it in ESP32 NVS so it survives a reboot. The

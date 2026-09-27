@@ -10,7 +10,7 @@ and physical work in [TODO.md](TODO.md).
 - Full-size breadboard
 - DFPlayer Mini and Card A audio card
 - HW-125/HiLetgo SPI reader and Card B visual card
-- GPIO13 scene button and GPIO22 QR button
+- GPIO13 forward-scene button and GPIO22 previous-scene button
 - 1 kΩ ESP32-TX-to-DFPlayer-RX resistor
 - Smatree DP20S USB power bank
 
@@ -33,8 +33,8 @@ and physical work in [TODO.md](TODO.md).
 | Display backlight | GPIO32 |
 | Visual SD MISO | GPIO19 |
 | Visual SD CS | GPIO5 |
-| Local scene button | GPIO13 |
-| Local QR button | GPIO22 |
+| Local forward-scene button | GPIO13 |
+| Local previous-scene button | GPIO22 |
 | Halo scene code | GPIO21 |
 | DFPlayer ESP-RX | GPIO16 |
 | DFPlayer ESP-TX | GPIO17 through 1 kΩ to player RX |

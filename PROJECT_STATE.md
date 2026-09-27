@@ -5,7 +5,7 @@ Last audited: 2026-09-26
 ## Current result
 
 **Shoes Off, Dirtbag!** is a working two-controller bench prototype. The ESP32
-drives the round display, two local buttons, visual microSD, DFPlayer/speaker,
+drives the round display, local forward/previous buttons, visual microSD, DFPlayer/speaker,
 and STRICH Bluetooth pedal. The Circuit Playground Express supplies the lapel
 halo. The next milestone is mechanical conversion from the working breadboard
 into a secure two-unit wearable; a perfboard conversion is not required for the
@@ -13,12 +13,15 @@ first event build.
 
 ## Verified or implemented
 
-- GC9A01 240 x 240 display, local scene button, local QR button, DFPlayer,
+- GC9A01 240 x 240 display, local forward and previous-scene buttons, DFPlayer,
   speaker, visual SD reader, both 8 GB cards, and Bluetooth pedal are connected.
 - Card A contains `mp3/0001.mp3` through `0029.mp3`. Card B contains the
   optimized visual exports for scenes S001-S029.
 - The left pedal launches a scene; the right pedal toggles the QR screen for
   `https://reedverde.com/sf`.
+- The red local button advances through the current randomized order. The green
+  local button walks backward through that same history, so stepping back and
+  then pressing red replays the scene that followed it.
 - Pedal Mode 1 Page Up/Down changes DFPlayer volume from 0-30, shows the value
   for 1.2 seconds, and saves it in NVS. Default volume is 18.
 - Scene order alternates an outside-source scene with a Kelly/Shoes scene.

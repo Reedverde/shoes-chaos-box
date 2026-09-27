@@ -67,7 +67,7 @@ All unlisted upper-header pins remain unused by this build.
 | 11 | GPIO19 | Visual SD MISO |
 | 12 | GND | Alternate ground source |
 | 13 | GPIO21 | Circuit Playground halo signal |
-| 16 | GPIO22 | QR button |
+| 16 | GPIO22 | Previous-scene button |
 | 18 | GND | Alternate ground source |
 
 Do not use the ESP32 flash pins marked `CLK`, `D0`, `D1`, `D2`, `D3`, or
@@ -144,7 +144,7 @@ cannot be confused.
 
 - **SCENE button:** around columns 44/46. One side to GPIO13 at B4; the
   opposite side to ground.
-- **QR button:** around columns 51/53. One side to GPIO22 at I16; the opposite
+- **Previous-scene button:** around columns 51/53. One side to GPIO22 at I16; the opposite
   side to ground.
 
 The firmware uses internal pull-ups, so the buttons need no external resistor.

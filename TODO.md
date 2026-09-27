@@ -31,7 +31,7 @@ Updated: 2026-09-26
 - [ ] Lay the six-pin HW-125 visual SD board flat on a short secured pigtail.
   Preserve VCC, GND, GPIO14/SCLK, GPIO27/MOSI, GPIO19/MISO, and GPIO5/CS.
 - [ ] Move the red/green local buttons to the accessible end of the breadboard
-  without changing GPIO13 scene and GPIO22 QR assignments.
+  without changing GPIO13 forward and GPIO22 previous-scene assignments.
 - [ ] Use the breadboard power rails for organized distribution only after their
   split points and continuity are checked with a meter.
 - [ ] Secure the breadboard in a shallow nonconductive pocket tray; keep USB-C,
@@ -44,7 +44,8 @@ Updated: 2026-09-26
 
 - [ ] Left pedal in Mode 5 launches one scene; right pedal toggles QR.
 - [ ] Mode 1 Page Up/Down changes volume, displays the number, and survives reboot.
-- [ ] Local scene and QR buttons each work for 25 consecutive presses.
+- [ ] Local forward and previous buttons each work for 25 consecutive presses;
+  verify forward, forward, previous, forward returns to the same second scene.
 - [ ] Run all 29 scenes and confirm each visual/audio pairing, including all three distinct Curb moments.
 - [ ] Confirm Curb/S003 repeats more often while Shoes scenes separate every
   outside-source scene.

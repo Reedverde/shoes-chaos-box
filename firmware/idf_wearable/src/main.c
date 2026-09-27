@@ -48,7 +48,7 @@
 #define PIN_TFT_RST 33
 #define PIN_TFT_BACKLIGHT 32
 #define PIN_TRIGGER_BUTTON 13
-#define PIN_QR_BUTTON 22
+#define PIN_PREVIOUS_BUTTON 22
 #define PIN_HALO_TRIGGER 21
 #define PIN_DFPLAYER_RX 16
 #define PIN_DFPLAYER_TX 17
@@ -100,6 +100,7 @@
 
 typedef enum {
     TRIGGER_LOCAL_BUTTON,
+    TRIGGER_LOCAL_PREVIOUS,
     TRIGGER_PEDAL_LEFT,
     TRIGGER_PEDAL_RIGHT,
     TRIGGER_VOLUME_UP,
@@ -914,7 +915,6 @@ static bool load_media_frame_raw(const media_scene_t *scene,
 
 static bool qr_interrupt_pending(void)
 {
-    if (gpio_get_level(PIN_QR_BUTTON) == 0) return true;
     trigger_source_t source;
     while (xQueueReceive(trigger_queue, &source, 0) == pdTRUE) {
         if (source == TRIGGER_PEDAL_RIGHT) return true;
@@ -1265,10 +1265,24 @@ static size_t next_random_scene_index(void)
     return playback_order[playback_order_cursor++];
 }
 
+static size_t previous_scene_index(void)
+{
+    if (!playback_order_count) build_playback_order();
+
+    // The cursor normally points one slot beyond the last scene played. Move
+    // back two slots, play that earlier scene, and leave the cursor one slot
+    // beyond it. A normal forward trigger will then return to the scene the
+    // wearer just backed away from.
+    if (playback_order_cursor >= 2) playback_order_cursor -= 2;
+    else playback_order_cursor = 0;
+
+    return playback_order[playback_order_cursor++];
+}
+
 static void app_task(void *unused)
 {
     bool button_was_down = false;
-    bool qr_button_was_down = false;
+    bool previous_button_was_down = false;
     bool qr_mode = false;
     bool volume_overlay = false;
     TickType_t volume_overlay_until = 0;
@@ -1280,12 +1294,11 @@ static void app_task(void *unused)
 
     while (true) {
         bool qr_toggle_requested = false;
-        bool qr_button_down = gpio_get_level(PIN_QR_BUTTON) == 0;
-        if (qr_button_down && !qr_button_was_down &&
-            (xTaskGetTickCount() - qr_last_toggled) >= pdMS_TO_TICKS(250)) {
-            qr_toggle_requested = true;
+        bool previous_button_down = gpio_get_level(PIN_PREVIOUS_BUTTON) == 0;
+        if (!qr_mode && previous_button_down && !previous_button_was_down) {
+            request_trigger(TRIGGER_LOCAL_PREVIOUS);
         }
-        qr_button_was_down = qr_button_down;
+        previous_button_was_down = previous_button_down;
 
         bool button_down = gpio_get_level(PIN_TRIGGER_BUTTON) == 0;
         if (!qr_mode && button_down && !button_was_down) request_trigger(TRIGGER_LOCAL_BUTTON);
@@ -1327,11 +1340,15 @@ static void app_task(void *unused)
             bool qr_interrupted = false;
 
             if (media_scene_count) {
-                size_t scene_index = next_random_scene_index();
+                bool stepping_back = source == TRIGGER_LOCAL_PREVIOUS;
+                size_t scene_index = stepping_back
+                    ? previous_scene_index()
+                    : next_random_scene_index();
                 const media_scene_t *scene = &media_scenes[scene_index];
                 lockout_ms = scene->lockout_ms;
-                ESP_LOGI(TAG, "SCENE_%s audio=%u source=%d deck=%u/%u",
+                ESP_LOGI(TAG, "SCENE_%s audio=%u source=%d direction=%s deck=%u/%u",
                          scene->id, (unsigned)scene->audio_id, source,
+                         stepping_back ? "previous" : "forward",
                          (unsigned)playback_order_cursor,
                          (unsigned)playback_order_count);
                 qr_interrupted = play_media_scene(scene);
@@ -1346,7 +1363,6 @@ static void app_task(void *unused)
 
             if (qr_interrupted) {
                 qr_mode = true;
-                qr_button_was_down = gpio_get_level(PIN_QR_BUTTON) == 0;
                 qr_last_toggled = xTaskGetTickCount();
                 draw_qr_code();
             } else {
@@ -1402,7 +1418,7 @@ void app_main(void)
              (unsigned)heap_caps_get_free_size(MALLOC_CAP_8BIT));
 
     gpio_config_t button = {
-        .pin_bit_mask = (1ULL << PIN_TRIGGER_BUTTON) | (1ULL << PIN_QR_BUTTON),
+        .pin_bit_mask = (1ULL << PIN_TRIGGER_BUTTON) | (1ULL << PIN_PREVIOUS_BUTTON),
         .mode = GPIO_MODE_INPUT,
         .pull_up_en = GPIO_PULLUP_ENABLE,
     };

@@ -15,7 +15,7 @@ Audited: 2026-09-26. Only confirmed hardware is listed here.
 | HiLetgo/HW-125-style SPI microSD modules | Five received; one used as visual Card B reader |
 | Two Bliksem 8 GB Class 10 microSD cards | Card A audio and Card B visual; formatted, loaded, and tested |
 | Full-size MB-102-style breadboard | Selected pocket carrier for the first wearable |
-| Two local pushbuttons | GPIO13 scene and GPIO22 QR |
+| Two local pushbuttons | GPIO13 forward scene and GPIO22 previous scene |
 | Xinwei 1/4-watt resistor assortment | Includes installed/available 1 kΩ UART resistor |
 | Smatree DP20S USB-C power bank | ESP32 pocket power; 5V/2A, 5000mAh/18.5Wh |
 | Clipped external battery pack | Selected independent Circuit Playground lapel power |

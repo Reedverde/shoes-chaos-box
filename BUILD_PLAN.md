@@ -6,7 +6,7 @@ Updated after the 2026-09-26 project audit.
 
 ```text
 STRICH Bluetooth pedal ------------------------------+
-GPIO13 scene button / GPIO22 QR button --------------+--> ESP32 pocket brain
+GPIO13 forward button / GPIO22 previous button ------+--> ESP32 pocket brain
                                                         |-- shared SPI -> display + Card B
                                                         |-- UART -> DFPlayer/Card A
                                                         |-- GPIO21 -> Circuit Playground A1
@@ -45,7 +45,7 @@ and halo all work from a cold boot.
 6. Use the breadboard rails only after checking whether either rail is split.
 7. Follow `firmware/WIRING_FINAL_POCKET_BREADBOARD.md`: ESP32 at columns 0–18,
    ground breakout at column 20, flat visual reader at 23–28, DFPlayer at
-   32–39, and the scene/QR buttons at the accessible far end.
+   32–39, and the forward/previous buttons at the accessible far end.
 
 **Exit:** the pocket unit fits its carrier, all cables detach, and every function
 still passes without moving wires by hand.
@@ -79,7 +79,8 @@ system without stressing a solder joint or header.
 ## Phase 4 — functional test
 
 - Validate every S001-S029 visual/audio pair.
-- Confirm left pedal scene, right pedal QR, local buttons, and Mode 1 volume.
+- Confirm left pedal forward, right pedal QR, local forward/previous buttons,
+  and Mode 1 volume.
 - Confirm the 36-play alternating deck and ten-second non-banking lockout.
 - Confirm Card B removal invokes the flashed S018 visual fallback and track 0018
   still plays when Card A is present.
