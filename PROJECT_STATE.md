@@ -15,9 +15,10 @@ first event build.
 
 - GC9A01 240 x 240 display, local forward and previous-scene buttons, DFPlayer,
   speaker, visual SD reader, both 8 GB cards, and Bluetooth pedal are connected.
-- Card A contains `mp3/0001.mp3` through `0029.mp3`. Runtime-card-v5 stages
-  optimized Card B visual exports for scenes S001-S032; S030-S032 reuse audio
-  0003, 0020, and 0023, so Card A needs no additional tracks.
+- Card A contains `mp3/0001.mp3` through `0029.mp3`. Card B now contains the
+  runtime-card-v5 visual exports for scenes S001-S032. Both mounted cards were
+  checksum-compared to the v5 staging source after synchronization. S030-S032
+  reuse audio 0003, 0020, and 0023, so Card A needs no additional tracks.
 - The left pedal launches a scene; the right pedal toggles the QR screen for
   `https://reedverde.com/sf`.
 - The blue local button advances through the current randomized order. The green
@@ -42,10 +43,10 @@ first event build.
 
 ## Current exception
 
-The 32-scene firmware and runtime-card-v5 media are staged and locally
-validated but not yet flashed or copied to the physical devices. Card B must be
-mounted and replaced with the v5 `visual/` contents; the halo firmware must be
-uploaded and S030-S032 tested through the diffuser. Card A can remain unchanged.
+The runtime-card-v5 media is installed on both physical cards and locally
+validated. The 32-scene ESP32 firmware and matching halo firmware are compiled
+but not yet flashed. After flashing, S030-S032 still require an actual-device
+audio, frame-timing, and diffuser test.
 
 ## Frozen wearable architecture
 
