@@ -28,7 +28,10 @@ const rows = [
   ["S026", 26, "Kelly — This style runs small", "shoes", 6700, false, false, ["#00f5ff", "#7cff00"], "size-roll"],
   ["S027", 27, "Kelly — Those shoes are mine", "shoes", 6000, false, true, ["#ff3b30", "#7b2cff"], "claim-flash"],
   ["S028", 28, "Curb — Larry Refuses", "outside", 7000, false, false, ["#f6d32d", "#111111"], "awkward-pulse"],
-  ["S029", 29, "Curb — Get the Coats", "outside", 13010, false, false, ["#f6d32d", "#111111"], "awkward-pulse"]
+  ["S029", 29, "Curb — Get the Coats", "outside", 13010, false, false, ["#f6d32d", "#111111"], "awkward-pulse"],
+  ["S030", 3, "Kling Curb — Shoes-Off Confrontation", "outside", 6000, false, true, ["#f6d32d", "#00d5f5", "#ee00a8"], "argument-split"],
+  ["S031", 20, "Kling Kelly — Rule / Suck / Rule", "shoes", 6000, false, false, ["#00d5f5", "#ee00a8", "#c9ff00"], "verdict-pulse"],
+  ["S032", 23, "Kling Bacteria Rave", "shoes", 6000, false, false, ["#a4ff00", "#ee00a8", "#00d5f5"], "germ-rave"]
 ];
 
 export const catalog = rows.map(([id, audioId, title, family, durationMs, mildLanguage, explicit, haloPalette, haloPattern]) => ({
@@ -44,7 +47,7 @@ export const catalog = rows.map(([id, audioId, title, family, durationMs, mildLa
   framesCsv: `SCENES/${id}/FRAMES.CSV`,
   lockoutMs: 10000,
   haloTailMs: 2000,
-  provenance: "OMG-Shoes-Circle-240-v2"
+  provenance: Number(id.slice(1)) >= 30 ? "Kling AI runtime-v5" : "OMG-Shoes-Circle-240-v2"
 }));
 
 export const catalogById = new Map(catalog.map((scene) => [scene.id, scene]));

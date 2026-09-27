@@ -2,7 +2,7 @@
 
 Shoes Off, Dirtbag! is a portable wearable performance prop that responds to a
 Bluetooth foot trigger with randomized circular visuals, synchronized dialogue,
-and a scene-aware LED halo. The current bench build plays 29 mapped scenes from
+and a scene-aware LED halo. The current runtime stages 32 mapped scenes from
 two microSD cards and has cardless opening, QR, and visual-fallback assets.
 
 ## Current target: Tech Week wearable
@@ -16,8 +16,9 @@ two microSD cards and has cardless opening, QR, and visual-fallback assets.
 - The confirmed Smatree DP20S USB-C battery pack rides in an inside jacket pocket, with a short power lead routed inside the jacket. It is labeled 5V/2A output and 5000mAh / 18.5Wh.
 - The confirmed STRICH SPT-10 pedal uses left/Space for scenes and right/Enter
   for the QR toggle. In Mode 1, Page Up/Down controls saved audio volume.
-- The synchronized firmware assigns all 29 scenes their own halo palette. The
-  ten original Shoes scenes use distinct diffuser-aware club-light profiles.
+- The synchronized firmware assigns all 32 scenes their own halo palette. The
+  ten original Shoes scenes and two Kling-generated Shoes-family scenes use
+  diffuser-aware club-light profiles.
 - The wearable includes a dedicated local scene-trigger button so the demo still works if the Bluetooth pedal is missing, disconnected, or inconvenient.
 - A separate local mute/emergency-stop control remains available during playback.
 - If the wired fallback is used, cable strain relief and a breakaway-friendly detachable connection are required so a snag does not pull the unit off the wearer.
@@ -31,9 +32,12 @@ The first real outing is **Hack Alcatraz with Cloudflare and Kling AI** on Monda
 
 The wearable therefore needs at least five hours of ready-to-demo battery life, reliable offline operation, a fast reset between short demonstrations, and a physical design that tolerates movement and unreliable reception on the Bay.
 
-### Optional event-host integrations
+### Hackathon platform integrations
 
-- Use Kling AI during content production to turn selected stills or original artwork into tiny reaction loops, then export display-sized frames to the visual microSD card.
+- Kling AI produced three completed, integrated six-second reaction loops:
+  a shoes-off confrontation, Kelly rule/suck/rule, and a bacteria rave. They
+  are runtime scenes S030-S032 and explicitly satisfy the hackathon's Kling AI
+  requirement. See [KLING_AI_INTEGRATION.md](KLING_AI_INTEGRATION.md).
 - Use Cloudflare Flue as a hosted “Chaos Director” that creates scene manifests by combining captions, media IDs, audio IDs, timing, and LED patterns.
 - Keep the generated pack local on the wearable. Flue and Kling enhance what is prepared before the cruise; neither may become a live network dependency.
 
@@ -63,6 +67,7 @@ The presentation story is: at home, a pressure pad beneath the welcome mat detec
 
 - `firmware/idf_wearable/` — verified ESP-IDF screen, button, Bluetooth-pedal, and halo-trigger firmware
 - `firmware/circuit_playground_halo/` — verified Arduino/PlatformIO firmware for the Circuit Playground Express LED halo
+- [KLING_AI_INTEGRATION.md](KLING_AI_INTEGRATION.md) — generated-scene provenance, runtime IDs, audio mappings, and validation status
 - `firmware/WIRING_MILESTONE_2.md` — exact synchronized halo bench wiring and power-safety notes
 - `firmware/WIRING_FINAL_POCKET_BREADBOARD.md` — numbered final breadboard layout, power rails, ground breakout, modules, buttons, and detachable leads
 - [PROJECT_STATE.md](PROJECT_STATE.md) — current decisions, scope, risks, and next actions

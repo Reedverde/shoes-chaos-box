@@ -78,7 +78,7 @@ system without stressing a solder joint or header.
 
 ## Phase 4 — functional test
 
-- Validate every S001-S029 visual/audio pair.
+- Validate every S001-S032 visual/audio pair, including the reused Kling audio mappings.
 - Confirm left pedal forward, right pedal QR, local forward/previous buttons,
   and Mode 1 volume.
 - Confirm the 36-play alternating deck and ten-second non-banking lockout.

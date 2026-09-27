@@ -14,7 +14,7 @@ Each scene follows the same reusable rhythm: trigger, reveal a face or shoe shot
 
 ## Production tools
 
-- **Kling AI:** optional source for very short image-to-video reaction loops. Export the result into optimized local frame sequences; record the source, prompt, permission, and export settings in the manifest.
+- **Kling AI:** used for three integrated six-second reaction loops (S030-S032). The optimized local frame sequences, prompts, source records, and export settings are preserved in the staging manifests.
 - **Cloudflare Flue / Chaos Director:** optional hosted agent that proposes captions and assembles valid combinations of existing image, audio, look, and LED IDs. It must output the same deterministic `scenes.csv` format used by hand-authored packs.
 - AI-generated assets and manifests always pass a human review before being copied to the device.
 
@@ -36,9 +36,13 @@ The initial target has been surpassed. The current runtime pack contains 29
 five-to-seven-second scenes: 17 outside-source or shoe-icon scenes and ten
 moments from the original Shoes video. Runtime Card B uses eight evenly spaced
 RGB565 keyframes per scene; Card A contains the matching numbered MP3. S001
-maps to `0001.mp3` through S029/`0029.mp3`.
+maps to `0001.mp3` through S029/`0029.mp3`. The Kling additions reuse existing
+audio: S030/`0003.mp3`, S031/`0020.mp3`, and S032/`0023.mp3`.
 
-Current playback alternates 22 non-Shoes plays with S018-S027 Shoes scenes. The 19 unique non-Shoes scenes are S001-S017 plus S028-S029, and each of the three Curb clips appears twice per 44-play cycle.
+Current playback alternates 24 outside plays with 24 Shoes-family separators.
+The 20 unique outside scenes are S001-S017 plus S028-S030, and each of the four
+Curb variants appears twice per 48-play cycle. The separator pool is S018-S027
+plus Kling Kelly S031 and Kling bacteria rave S032.
 S003 Curb appears twice per 36-play deck; every other outside scene appears
 once. Shoes separators are shuffled without banking triggers.
 

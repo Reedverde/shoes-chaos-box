@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-09-26 — Kling AI runtime integration
+
+- Added three completed Kling AI-generated visuals as S030-S032 while
+  preserving all 29 existing scenes and reusing audio 0003, 0020, and 0023.
+- Expanded the randomized alternating deck to 48 plays: 24 outside scenes and
+  24 Shoes-family separators, with all four Curb variants appearing twice.
+- Extended the five-bit halo implementation to its full 32-scene capacity and
+  added dedicated confrontation, verdict, and bacteria-rave lighting effects.
+- Added a reproducible runtime-card-v5 build and explicit Kling provenance for
+  the Hack Alcatraz requirement. Hardware installation remains pending.
+
 ## 2026-09-26 — complete Curb cold-feet exchange
 
 - Extended S029/0029 from 6.6 seconds to 13.01 seconds so "my feet tend to

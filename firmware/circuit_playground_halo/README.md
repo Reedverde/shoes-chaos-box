@@ -11,12 +11,12 @@ Bench wiring:
 
 At idle, two dim cyan pixels show that the halo controller is alive. Before
 holding A1 high for a scene, the ESP32 sends a short one-wire code containing
-the S001-S029 scene number. The Circuit Playground selects that scene's
+the S001-S032 scene number. The Circuit Playground selects that scene's
 three-color palette, animates it for the complete scene, fades the same palette
 for two seconds, and returns to idle.
 
 The scene-code protocol uses the existing GPIO21/A1 and shared-ground wires;
-no additional data wire is required. The 27 palettes are curated to the
+no additional data wire is required. The 32 palettes are curated to the
 dominant colors in the circular media exports.
 
 Movie, television, and meme scenes use a restrained moving palette. The ten
@@ -25,6 +25,8 @@ club profile rather than sharing one continuous chase. Across those clips the
 profiles include wide chasing wedges, five-pixel color halves, full-ring blinks,
 breathing fades, rainbow rolls, theatrical gold trails, and fast solid cuts.
 Brightness is capped at 88/255 and the existing two-second afterglow remains.
+Kling scenes S030-S032 add an argument split, phrase-colored verdict pulses,
+and a lime/cyan bacteria rave with magenta club hits.
 
 **Physical status:** this source builds successfully. The final diffuser-aware
 revision still needs to be reflashed after an interrupted SAM-BA upload: put the

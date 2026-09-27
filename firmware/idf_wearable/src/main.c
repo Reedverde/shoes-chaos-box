@@ -60,15 +60,18 @@
 #define SCREEN_H 240
 #define TRIGGER_LOCKOUT_MS 10000
 #define SCAN_DURATION_SECONDS 8
-#define MEDIA_SCENE_MAX 29
+#define MEDIA_SCENE_MAX 32
 #define MEDIA_FRAME_MAX 48
-#define OUTSIDE_PLAY_COUNT 22
+#define OUTSIDE_PLAY_COUNT 24
 #define SHOES_SCENE_FIRST 17
-#define SHOES_SCENE_COUNT 10
+#define SHOES_SCENE_COUNT 12
 #define CURB_SCENE_INDEX 2
 #define CURB_REFUSAL_INDEX 27
 #define CURB_CHILLY_INDEX 28
-#define PLAYBACK_ORDER_MAX 44
+#define CURB_KLING_INDEX 29
+#define KLING_KELLY_INDEX 30
+#define KLING_BACTERIA_INDEX 31
+#define PLAYBACK_ORDER_MAX 48
 #define RAW_FRAME_BYTES (SCREEN_W * SCREEN_H * 2)
 #define RAW_HALF_FRAME_BYTES (RAW_FRAME_BYTES / 2)
 #define RAW_ROWS_PER_CHUNK 16
@@ -1179,7 +1182,8 @@ static bool is_curb_scene_index(uint8_t index)
 {
     return index == CURB_SCENE_INDEX ||
            index == CURB_REFUSAL_INDEX ||
-           index == CURB_CHILLY_INDEX;
+           index == CURB_CHILLY_INDEX ||
+           index == CURB_KLING_INDEX;
 }
 
 static bool curb_variants_are_spaced(const uint8_t *items, size_t count)
@@ -1209,34 +1213,40 @@ static void build_playback_order(void)
         return;
     }
 
-    // S001-S017 plus the two additional Curb variants S028-S029 are the
-    // outside-Shoes group. Add a second copy of each distinct Curb moment so
-    // all three appear exactly twice (six Curb plays) in every complete cycle.
+    // S001-S017 plus Curb variants S028-S030 are the outside-Shoes group. Add
+    // a second copy of each distinct Curb moment so all four appear exactly
+    // twice (eight Curb plays) in every complete cycle.
     uint8_t outside_shoes[OUTSIDE_PLAY_COUNT];
     for (size_t i = 0; i < 17; ++i) {
         outside_shoes[i] = (uint8_t)i;
     }
     outside_shoes[17] = CURB_REFUSAL_INDEX;
     outside_shoes[18] = CURB_CHILLY_INDEX;
-    outside_shoes[19] = CURB_SCENE_INDEX;
-    outside_shoes[20] = CURB_REFUSAL_INDEX;
-    outside_shoes[21] = CURB_CHILLY_INDEX;
+    outside_shoes[19] = CURB_KLING_INDEX;
+    outside_shoes[20] = CURB_SCENE_INDEX;
+    outside_shoes[21] = CURB_REFUSAL_INDEX;
+    outside_shoes[22] = CURB_CHILLY_INDEX;
+    outside_shoes[23] = CURB_KLING_INDEX;
     for (int attempt = 0; attempt < 32; ++attempt) {
         shuffle_u8(outside_shoes, OUTSIDE_PLAY_COUNT);
         if (curb_variants_are_spaced(outside_shoes,
                                      OUTSIDE_PLAY_COUNT)) break;
     }
 
-    // Build enough randomized S018-S027 separators for all 22 outside plays.
-    // A ten-scene shoe deck is exhausted before reshuffling, and the boundary
-    // cannot repeat the same Kelly moment.
+    // Build two randomized rounds of the ten original Shoes scenes plus the
+    // Kling Kelly and bacteria-rave additions. The boundary cannot repeat the
+    // same moment.
+    static const uint8_t shoes_scene_indices[SHOES_SCENE_COUNT] = {
+        17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+        KLING_KELLY_INDEX, KLING_BACTERIA_INDEX,
+    };
     uint8_t shoes_sequence[OUTSIDE_PLAY_COUNT];
     size_t shoes_written = 0;
     int previous_shoes = -1;
     while (shoes_written < OUTSIDE_PLAY_COUNT) {
         uint8_t shoes_deck[SHOES_SCENE_COUNT];
         for (size_t i = 0; i < SHOES_SCENE_COUNT; ++i) {
-            shoes_deck[i] = (uint8_t)(SHOES_SCENE_FIRST + i);
+            shoes_deck[i] = shoes_scene_indices[i];
         }
         shuffle_u8(shoes_deck, SHOES_SCENE_COUNT);
         if (previous_shoes >= 0 && shoes_deck[0] == (uint8_t)previous_shoes) {
@@ -1257,7 +1267,7 @@ static void build_playback_order(void)
         playback_order[playback_order_count++] = shoes_sequence[i];
     }
     ESP_LOGI(TAG,
-             "SCENE_DECK_ALTERNATING plays=%u outside=22 shoes=22 curb=6 first=%s",
+             "SCENE_DECK_ALTERNATING plays=%u outside=24 shoes=24 curb=8 first=%s",
              (unsigned)playback_order_count,
              media_scenes[playback_order[0]].id);
 }

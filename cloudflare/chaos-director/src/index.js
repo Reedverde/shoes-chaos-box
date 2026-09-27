@@ -30,7 +30,7 @@ h1{font-size:clamp(2.4rem,8vw,5rem);line-height:.88;margin:0 0 20px;text-transfo
 article{background:#211033;border:2px solid #ff167d;border-radius:18px;padding:20px;box-shadow:7px 7px 0 #2de2e6}h2{margin-top:0}a{display:inline-block;margin:8px 8px 0 0;color:#10051c;background:#ffef35;padding:8px 11px;border-radius:999px;font-weight:800;text-decoration:none}
 footer{margin-top:40px;color:#cdbfe0}code{color:#2de2e6}</style></head>
 <body><h1>Chaos<br>Director</h1><p class="lede">Cloudflare-generated, deterministic scene packs for the offline ESP32 wearable. Media stays on the two microSD cards; this service arranges validated scene IDs, audio mappings, timing, and halo metadata.</p>
-<section>${cards}</section><footer>Catalog: <a href="/api/catalog">29 scenes</a> · API: <code>${origin}/api/packs/event-chaos?seed=demo-night</code></footer></body></html>`, {
+<section>${cards}</section><footer>Catalog: <a href="/api/catalog">32 scenes</a> · API: <code>${origin}/api/packs/event-chaos?seed=demo-night</code></footer></body></html>`, {
     headers: { "content-type": "text/html; charset=utf-8" }
   });
 }

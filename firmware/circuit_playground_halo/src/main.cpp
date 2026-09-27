@@ -5,7 +5,7 @@ namespace {
 
 constexpr uint8_t PIN_SCENE_TRIGGER = A1;
 constexpr uint8_t PIXEL_COUNT = 10;
-constexpr uint8_t SCENE_COUNT = 29;
+constexpr uint8_t SCENE_COUNT = 32;
 constexpr uint8_t IDLE_BRIGHTNESS = 12;
 constexpr uint8_t EFFECT_BRIGHTNESS = 48;
 constexpr uint8_t SONG_BRIGHTNESS = 88;
@@ -22,7 +22,7 @@ struct Color {
   uint8_t blue;
 };
 
-// Palettes S001-S029. They follow the dominant colors of the actual circular
+// Palettes S001-S032. They follow the dominant colors of the actual circular
 // scene exports rather than rotating through unrelated generic colors.
 constexpr Color SCENE_PALETTES[SCENE_COUNT][3] = {
     {{236, 244, 255}, {160, 205, 255}, {112, 112, 112}},  // S001 Damn Daniel
@@ -54,6 +54,9 @@ constexpr Color SCENE_PALETTES[SCENE_COUNT][3] = {
     {{255, 255, 255}, {208, 240,  16}, {255,  71, 170}},  // S027 Those are mine
     {{160, 205, 255}, {255, 255, 255}, {112, 112, 112}},  // S028 Larry refuses
     {{255, 208,  91}, {160, 205, 255}, {255, 255, 255}},  // S029 Larry gets chilly
+    {{246, 211,  45}, {  0, 213, 245}, {238,   0, 168}},  // S030 Kling Curb
+    {{  0, 213, 245}, {238,   0, 168}, {201, 255,   0}},  // S031 Kling Kelly
+    {{164, 255,   0}, {238,   0, 168}, {  0, 213, 245}},  // S032 bacteria rave
 };
 
 enum class DecodeState : uint8_t {
@@ -90,7 +93,12 @@ void drawIdle() {
 }
 
 bool isShoesSongScene() {
-  return scenePalette >= 17 && scenePalette <= 26;
+  return (scenePalette >= 17 && scenePalette <= 26) ||
+         scenePalette == 30 || scenePalette == 31;
+}
+
+bool isKlingScene() {
+  return scenePalette >= 29 && scenePalette <= 31;
 }
 
 bool isWizardOfOzScene() {
@@ -307,9 +315,52 @@ void drawSongSceneFrame(uint8_t brightness) {
   animationStep = (animationStep + 1) % 120;
 }
 
+void drawKlingSceneFrame(uint8_t brightness) {
+  const uint8_t step = animationStep % 144;
+  const Color first = SCENE_PALETTES[scenePalette][0];
+  const Color second = SCENE_PALETTES[scenePalette][1];
+  const Color third = SCENE_PALETTES[scenePalette][2];
+  clearPixels();
+  CircuitPlayground.setBrightness(brightness);
+
+  if (scenePalette == 29) {
+    // S030 confrontation: tense yellow/cyan halves with sharp magenta retorts.
+    if (step % 24 < 3) {
+      fillPixels(third);
+    } else {
+      const uint8_t shift = (step / 5) % PIXEL_COUNT;
+      for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
+        const Color color = ((pixel + shift) % PIXEL_COUNT < 5) ? first : second;
+        CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+      }
+    }
+  } else if (scenePalette == 30) {
+    // S031 rule/suck/rule: cyan approval, magenta rejection, lime comeback.
+    const uint8_t phrase = step < 54 ? 0 : (step < 108 ? 1 : 2);
+    const Color phraseColor = phrase == 0 ? first : (phrase == 1 ? second : third);
+    const uint8_t pulse = step % 12;
+    fillPixels(scaleColor(phraseColor, pulse < 3 ? 255 : 125));
+  } else {
+    // S032 bacteria rave: rotating lime/cyan halves with full magenta club hits.
+    if (step % 18 < 3) {
+      fillPixels(second);
+    } else {
+      const uint8_t shift = (step / 2) % PIXEL_COUNT;
+      for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
+        const Color color = ((pixel + shift) % PIXEL_COUNT < 5) ? first : third;
+        CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+      }
+    }
+  }
+
+  CircuitPlayground.strip.show();
+  animationStep = (animationStep + 1) % 144;
+}
+
 void drawSceneFrame(uint8_t brightness) {
   if (isWizardOfOzScene()) drawWizardOfOzFrame(brightness);
   else if (isSpongeBobScene()) drawSpongeBobFrame(brightness);
+  else if (isKlingScene()) drawKlingSceneFrame(brightness);
   else if (isShoesSongScene()) drawSongSceneFrame(brightness);
   else drawCalmSceneFrame(brightness);
 }

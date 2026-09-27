@@ -15,6 +15,10 @@ Updated: 2026-09-26
   **B VISUAL / HW-125**.
 - [ ] Cold-boot with both cards installed and verify screen, buttons, speaker,
   pedal, QR, and halo.
+- [ ] Replace Card B with `staging_shoes_assets/runtime-card-v5-kling/visual`;
+  Card A stays unchanged because the Kling scenes reuse existing tracks.
+- [ ] Flash the 32-scene ESP32 and Circuit Playground firmware, then verify
+  S030/0003, S031/0020, and S032/0023 on the actual hardware.
 
 ## Convert the bench build into the wearable
 
@@ -46,7 +50,8 @@ Updated: 2026-09-26
 - [ ] Mode 1 Page Up/Down changes volume, displays the number, and survives reboot.
 - [ ] Local forward and previous buttons each work for 25 consecutive presses;
   verify blue, blue, green, blue returns to the same second scene.
-- [ ] Run all 29 scenes and confirm each visual/audio pairing, including all three distinct Curb moments.
+- [ ] Run all 32 scenes and confirm each visual/audio pairing, including all
+  four Curb variants and all three Kling AI-generated visuals.
 - [ ] Confirm Curb/S003 repeats more often while Shoes scenes separate every
   outside-source scene.
 - [ ] Remove Card B and verify the flashed S018 visual fallback; reinstall Card B.

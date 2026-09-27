@@ -1,6 +1,6 @@
 import { catalog, catalogById } from "./catalog.js";
 
-const curbIds = new Set(["S003", "S028", "S029"]);
+const curbIds = new Set(["S003", "S028", "S029", "S030"]);
 const shoes = catalog.filter((scene) => scene.family === "shoes");
 const outside = catalog.filter((scene) => scene.family === "outside");
 
@@ -8,7 +8,7 @@ export const packDefinitions = [
   {
     id: "event-chaos",
     name: "Event Chaos",
-    description: "Full 44-play alternating run. Every outside scene is followed by Shoes; each Curb scene appears twice."
+    description: "Full 48-play alternating run. Every outside scene is followed by Shoes; each Curb scene appears twice."
   },
   {
     id: "clean-demo",
@@ -108,7 +108,7 @@ export function buildPack(packId, seed = "shoes-off-dirtbag") {
       offline: true,
       visualCard: "Card B",
       audioCard: "Card A",
-      mapping: "S001=0001.mp3 through S029=0029.mp3"
+      mapping: "S001-S029 map to matching tracks; S030=0003, S031=0020, S032=0023"
     },
     sceneCount: scenes.length,
     scenes

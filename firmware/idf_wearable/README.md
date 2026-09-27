@@ -15,10 +15,10 @@ This is the current combined ESP-IDF build for the wearable device:
 - The rest screen and QR screen (`https://reedverde.com/sf`) are compiled into
   ESP32 flash and do not depend on either SD card.
 - The left pedal or local scene button selects from a randomized alternating
-  deck. Every S001-S017 outside-source scene is followed by one of the actual
-  Kelly/*Shoes* moments from S018-S027. Curb Your Enthusiasm (S003) runs twice
-  per 36-play cycle; each other outside-source scene runs once. The ten Kelly
-  moments are shuffled as separator decks so they stay varied.
+  deck. Every outside-source scene is followed by a Shoes-family moment. The
+  four Curb variants S003/S028/S029/S030 run twice per 48-play cycle; each
+  other outside-source scene runs once. The 12 separators include the ten
+  original Kelly moments plus Kling Kelly and bacteria-rave scenes.
 - The blue local button and left pedal step forward through the randomized scene
   order. The green local button steps backward through that exact history; a
   following blue-button or left-pedal press returns forward to the scene just
@@ -32,7 +32,7 @@ This is the current combined ESP-IDF build for the wearable device:
 - Left-pedal triggers during a ten-second lockout are discarded instead of
   banked. The blue and green board buttons bypass the remaining cooldown after
   playback so manual forward/back navigation stays responsive.
-- GPIO21 sends the S001-S029 scene number to the Circuit Playground over the
+- GPIO21 sends the S001-S032 scene number to the Circuit Playground over the
   existing A1 wire, then remains high for the scene. The halo uses the matching
   three-color palette and supplies its two-second afterglow after GPIO21 drops.
 - Each scene uses eight intentionally spaced sprite-like keyframes. The next
@@ -43,13 +43,14 @@ This is the current combined ESP-IDF build for the wearable device:
 ## Card assignments
 
 The prepared runtime images are in
-`../../staging_shoes_assets/runtime-card-v4-prefetch`.
+`../../staging_shoes_assets/runtime-card-v5-kling`.
 
 - **Card A - DFPlayer:** `mp3/0001.mp3` through `mp3/0029.mp3`
 - **Card B - HW-125 visual reader:** `SCENES.CSV` and
-  `SCENES/S001` through `SCENES/S027`
+  `SCENES/S001` through `SCENES/S032`
 
-Scene `S001` maps to audio `0001`, and so on through `S029`/`0029`.
+Scene `S001` maps to audio `0001`, and so on through `S029`/`0029`. Kling
+scenes S030, S031, and S032 reuse audio 0003, 0020, and 0023 respectively.
 
 ## No-visual-card fallback
 
