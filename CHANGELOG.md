@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-09-26 — complete Curb cold-feet exchange
+
+- Extended S029/0029 from 6.6 seconds to 13.01 seconds so "my feet tend to
+  get a little chilly," "Get the coats," the dry reply, and the final
+  "psychotic" punch line all play without being cut off.
+- Rebuilt S029 as 43 synchronized 300–410 ms frames, remaining below the
+  firmware's 48-frame scene limit and compatible with the 4 MHz visual-SD
+  prefetch path.
+
 ## 2026-09-26
 
 - Repurposed the green GPIO22 breadboard button from QR display to a

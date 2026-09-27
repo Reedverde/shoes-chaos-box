@@ -28,7 +28,7 @@ const rows = [
   ["S026", 26, "Kelly — This style runs small", "shoes", 6700, false, false, ["#00f5ff", "#7cff00"], "size-roll"],
   ["S027", 27, "Kelly — Those shoes are mine", "shoes", 6000, false, true, ["#ff3b30", "#7b2cff"], "claim-flash"],
   ["S028", 28, "Curb — Larry Refuses", "outside", 7000, false, false, ["#f6d32d", "#111111"], "awkward-pulse"],
-  ["S029", 29, "Curb — Get the Coats", "outside", 6600, false, false, ["#f6d32d", "#111111"], "awkward-pulse"]
+  ["S029", 29, "Curb — Get the Coats", "outside", 13010, false, false, ["#f6d32d", "#111111"], "awkward-pulse"]
 ];
 
 export const catalog = rows.map(([id, audioId, title, family, durationMs, mildLanguage, explicit, haloPalette, haloPattern]) => ({
