@@ -1,3 +1,9 @@
+# Cloudflare publication — 2026-09-28
+
+- Published the [content library](https://shoes-chaos-director.reed-5c2.workers.dev/) and versioned starter download through the official Cloudflare MCP/API connection.
+- Verified the production catalog, playlist previews, retired export response, download headers, ZIP and checksum manifest.
+- Added live links and a deployment record; gave the service checker an identifying User-Agent for production checks.
+
 # Publication package — 2026-09-27
 
 - Reworked the project entry point around Reed’s proof of concept, measured results, build instructions, and remaining wearable checks.

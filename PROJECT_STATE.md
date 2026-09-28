@@ -106,9 +106,9 @@ Assets for downloads and deterministic playlist previews; Flue is not a running
 dependency. Playlist previews are not imported by the firmware. The canonical
 32-entry catalog and new starter validator preserve the positional halo IDs.
 Public-site deployment status is recorded in [the publication handoff](docs/PUBLICATION.md).
-The GitHub package and project story are published. Cloudflare production
-deployment is awaiting account sign-in; its local service and downloads pass
-checks.
+The GitHub package and project story are published. The [Cloudflare library](https://shoes-chaos-director.reed-5c2.workers.dev/)
+was published September 28, 2026 through the official MCP/API connection.
+Live API, catalog, playlist, ZIP, download headers, and checksum checks passed.
 
 ## Frozen wearable architecture
 

@@ -2,7 +2,9 @@
 
 A Cloudflare Worker with Static Assets that lets people download an original two-card starter pack and explore the project's performance catalog. The wearable plays offline; this service runs before a demo, not during it.
 
-The project is awaiting Cloudflare sign-in for publication of this revision. Run locally below; the versioned [starter ZIP](public/downloads/shoes-starter-v1.zip) is also available directly in GitHub.
+**Live:** [Content library](https://shoes-chaos-director.reed-5c2.workers.dev/) · [Starter ZIP](https://shoes-chaos-director.reed-5c2.workers.dev/downloads/shoes-starter-v1.zip) · [Service status](https://shoes-chaos-director.reed-5c2.workers.dev/api/health).
+
+Published September 28, 2026 through Cloudflare's official MCP/API connection. The live catalog, playlist routes, download headers, ZIP checksum, and manifest passed `tools/check_service.py`. The versioned [starter ZIP](public/downloads/shoes-starter-v1.zip) is also available in GitHub. Physical playback of the new synthetic starter remains untested.
 
 ## What you get
 

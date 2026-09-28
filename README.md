@@ -6,7 +6,7 @@ A foot pedal starts a short scene on a round screen. A speaker supplies the line
 
 This repository records the decisions, mistakes, measurements, and code behind that proof of concept. Reed directed the build and tested the physical behavior while working with coding agents on firmware, media preparation, and debugging. The goal is to make the reasoning inspectable and useful to someone building a similar device.
 
-[Proof-of-concept release](https://github.com/Reedverde/shoes-chaos-box/releases/tag/poc-2026-09-27) · [Read the story](https://reedverde.com/shoes-off-dirtbag/) · [Start a similar build](docs/GETTING_STARTED.md) · [Content pack service](cloudflare/chaos-director/README.md) · [Audit findings](docs/AUDIT.md)
+[Proof-of-concept release](https://github.com/Reedverde/shoes-chaos-box/releases/tag/poc-2026-09-27) · [Read the story](https://reedverde.com/shoes-off-dirtbag/) · [Start a similar build](docs/GETTING_STARTED.md) · [Live content library](https://shoes-chaos-director.reed-5c2.workers.dev/) · [Audit findings](docs/AUDIT.md)
 
 ![An early bench test of the round screen, breadboard and Circuit Playground](docs/images/early-bench.jpg)
 
@@ -47,7 +47,9 @@ Cloudflare handles preparation and distribution. The performance runs locally. T
 
 ## Try it without hardware
 
-Use Node.js 22 or newer:
+Open the [live Cloudflare library](https://shoes-chaos-director.reed-5c2.workers.dev/) to download the starter or explore a playlist. No account or hardware is needed.
+
+To run your own copy locally, use Node.js 22 or newer:
 
 ```sh
 git clone https://github.com/Reedverde/shoes-chaos-box.git

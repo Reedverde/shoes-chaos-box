@@ -3,7 +3,8 @@
 import argparse, hashlib, json, urllib.request, urllib.error
 p=argparse.ArgumentParser();p.add_argument('url');base=p.parse_args().url.rstrip('/')
 def get(path):
-    with urllib.request.urlopen(base+path,timeout=30) as response:
+    request=urllib.request.Request(base+path,headers={'User-Agent':'Mozilla/5.0 (compatible; ShoesChaosBoxServiceCheck/1.0)'})
+    with urllib.request.urlopen(request,timeout=30) as response:
         return response.read(),response.headers
 health=json.loads(get('/api/health')[0]);assert health['sceneCount']==32 and health['schemaVersion']==2
 manifest=json.loads(get('/api/downloads')[0])['packs'][0]
