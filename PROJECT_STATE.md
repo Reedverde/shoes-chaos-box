@@ -105,7 +105,10 @@ and a synthetic two-card starter pack. Cloudflare uses Workers with Static
 Assets for downloads and deterministic playlist previews; Flue is not a running
 dependency. Playlist previews are not imported by the firmware. The canonical
 32-entry catalog and new starter validator preserve the positional halo IDs.
-Public-site deployment status is recorded in the service README.
+Public-site deployment status is recorded in [the publication handoff](docs/PUBLICATION.md).
+The GitHub package and project story are published. Cloudflare production
+deployment is awaiting account sign-in; its local service and downloads pass
+checks.
 
 ## Frozen wearable architecture
 

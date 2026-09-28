@@ -6,7 +6,7 @@ A foot pedal starts a short scene on a round screen. A speaker supplies the line
 
 This repository records the decisions, mistakes, measurements, and code behind that proof of concept. Reed directed the build and tested the physical behavior while working with coding agents on firmware, media preparation, and debugging. The goal is to make the reasoning inspectable and useful to someone building a similar device.
 
-[Read the story](https://reedverde.com/shoes-off-dirtbag/) · [Start a similar build](docs/GETTING_STARTED.md) · [Content pack service](cloudflare/chaos-director/README.md) · [Audit findings](docs/AUDIT.md)
+[Proof-of-concept release](https://github.com/Reedverde/shoes-chaos-box/releases/tag/poc-2026-09-27) · [Read the story](https://reedverde.com/shoes-off-dirtbag/) · [Start a similar build](docs/GETTING_STARTED.md) · [Content pack service](cloudflare/chaos-director/README.md) · [Audit findings](docs/AUDIT.md)
 
 ![An early bench test of the round screen, breadboard and Circuit Playground](docs/images/early-bench.jpg)
 
@@ -71,6 +71,7 @@ The repair preserved the media and checked the actual hardware. [Read the measur
 
 | Looking for… | Start here |
 |---|---|
+| Live links and publication status | [Publication handoff](docs/PUBLICATION.md) |
 | Build instructions and active firmware | [Getting started](docs/GETTING_STARTED.md) |
 | System decisions and current state | [PROJECT_STATE.md](PROJECT_STATE.md) |
 | Cloudflare hosting, downloads, API, and where Flue fits | [Cloudflare guide](docs/CLOUDFLARE.md) |
