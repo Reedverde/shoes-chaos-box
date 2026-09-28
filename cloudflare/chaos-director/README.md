@@ -1,40 +1,47 @@
-# Shoes Chaos Director
+# Chaos Director: content packs for Shoes Off, Dirtbag!
 
-Cloudflare Worker that generates deterministic scene packs for the **Shoes
-Off, Dirtbag!** ESP32 wearable. It arranges known scene IDs, preserves the
-visual/audio mapping, and exports a firmware-compatible `SCENES.CSV`.
+A Cloudflare Worker with Static Assets that lets people download an original two-card starter pack and explore the project's performance catalog. The wearable plays offline; this service runs before a demo, not during it.
 
-The service does **not** host or redistribute the movie, TV, meme, or Shoes
-media. Those validated files remain on the two device microSD cards.
+The project is awaiting Cloudflare sign-in for publication of this revision. Run locally below; the versioned [starter ZIP](public/downloads/shoes-starter-v1.zip) is also available directly in GitHub.
 
-## Pack endpoints
+## What you get
 
-- `/api/packs` — available pack definitions
-- `/api/packs/event-chaos?seed=demo-night` — 48-play JSON pack
-- `/api/packs/event-chaos/scenes.csv?seed=demo-night` — CSV download
-- `/api/packs/clean-demo` — ten-play clean demonstration pack
-- `/api/packs/emerald-preview` — Wizard-led halo diagnostic pack
-- `/api/catalog` — the 32-scene metadata catalog
-- `/api/health` — deployment health
+- A ~473 KB ZIP with 32 original geometric test screens, 29 quiet MP3 tone tracks, card indexes, instructions and checksums.
+- A 32-scene performance catalog, including Kling scene provenance and audio reuse mappings. Performance clips are not hosted here.
+- Seeded playlist previews: Event Chaos (48 plays), Clean Demo (10), Emerald Preview (6). “Clean” is a selection label, not a content rating; review actual media for the audience.
+- Clear separation between a device catalog and a playlist. The current firmware creates its own order and does not import cloud playlists.
 
-`event-chaos` preserves the current performance rule: every outside-source
-scene is followed by a Shoes-family scene, and S003, S028, S029, and S030 each
-appear twice in the complete run.
+Flue is **not** used in this implementation. See [Cloudflare and Flue explained](../../docs/CLOUDFLARE.md) for deployment and an optional future integration path.
 
-## Local use
+## Run it
+
+Node.js 22 or later:
 
 ```sh
-npm install
+npm ci
 npm test
 npm run dev
 ```
 
-Deploy with `npm run deploy` after authenticating Wrangler. Cloudflare is the
-pack-production layer; the wearable remains fully offline during playback.
+Open the local URL Wrangler prints. For your own deployment, log in with `npx wrangler login`, check `npx wrangler deploy --dry-run`, then `npm run deploy`.
 
-## Kling AI integration
+## API
 
-Three validated Kling AI loops are catalogued as S030-S032. Their generated
-media stays on Card B; the Worker exposes metadata, provenance, mappings, and
-deterministic packs without hosting source media. They reuse audio 0003, 0020,
-and 0023 from Card A.
+| Route | Response |
+|---|---|
+| `/api/health` | Version and catalog count |
+| `/api/downloads` | Starter manifest, download URL, SHA-256 and validation status |
+| `/downloads/shoes-starter-v1.zip` | Actual two-card synthetic media pack |
+| `/downloads/starter-manifest.json` | Download checksum and metadata |
+| `/api/catalog` | 32 performance scene metadata entries |
+| `/api/catalog/scenes.csv` | Ordered performance device catalog; requires matching private media |
+| `/api/packs` | Available preview arrangements |
+| `/api/packs/event-chaos?seed=demo-night` | Schema v2 planning JSON; `deviceImport: false` |
+| `/api/packs/event-chaos/playlist.csv?seed=demo-night` | Position/scene ID planning CSV |
+| `/api/packs/:id/scenes.csv` | HTTP 410, retired unsafe export with migration links |
+
+API routes accept GET only. Seeds are limited to 128 characters. Public API responses allow cross-origin reads; there are no public writes, uploads, credentials, or model calls. Preview palettes are illustrative metadata, not the actual firmware's light configuration.
+
+## Maintain it
+
+`npm ci` uses the committed lockfile. Static downloads and their manifest ship with the Worker through the `assets` configuration in `wrangler.jsonc`. There is no R2 dependency. See [the deployment guide](../../docs/CLOUDFLARE.md) for live verification and rollback, and [media formats](../../docs/MEDIA.md) for adding a pack.

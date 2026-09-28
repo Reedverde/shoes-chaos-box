@@ -1,3 +1,5 @@
+> **Historical layout — superseded for the current assembly.** The ESP32 now starts at A1 and column 20 carries SCK/MOSI, not ground. Use [the current bench record](BENCH_REWIRE_PROGRESS.md). The plan below is retained only as historical reference.
+
 # Final Pocket Breadboard Wiring
 
 This is the target layout for the first wearable build. It keeps the working

@@ -1,0 +1,26 @@
+name: Project checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: cloudflare/chaos-director/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci && npm test
+        working-directory: cloudflare/chaos-director
+      - run: npx wrangler deploy --dry-run
+        working-directory: cloudflare/chaos-director
+      - run: python3 tools/validate_starter_pack.py
+      - run: python3 firmware/idf_wearable/tests/host/test_display_cycle.py
+      - run: c++ -std=c++17 -Ifirmware/circuit_playground_halo/tests/host firmware/circuit_playground_halo/tests/host/test.cpp -o /tmp/shoes-halo-test && /tmp/shoes-halo-test

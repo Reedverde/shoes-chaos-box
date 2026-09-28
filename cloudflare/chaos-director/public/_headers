@@ -1,0 +1,6 @@
+/downloads/*
+  X-Content-Type-Options: nosniff
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+/downloads/shoes-starter-v1.zip
+  Content-Disposition: attachment; filename="shoes-starter-v1.zip"

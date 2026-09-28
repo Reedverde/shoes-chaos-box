@@ -42,8 +42,11 @@ export const catalog = rows.map(([id, audioId, title, family, durationMs, mildLa
   durationMs,
   mildLanguage,
   explicit,
-  haloPalette,
-  haloPattern,
+  // Creative preview notes, not executable halo settings. The firmware owns
+  // the actual per-scene palettes and timing; never import these into it.
+  previewPalette: haloPalette,
+  previewPattern: haloPattern,
+  haloSource: "firmware/circuit_playground_halo/src/main.cpp",
   framesCsv: `SCENES/${id}/FRAMES.CSV`,
   lockoutMs: 10000,
   haloTailMs: 2000,

@@ -13,7 +13,7 @@ export const packDefinitions = [
   {
     id: "clean-demo",
     name: "Clean Demo",
-    description: "Ten safe, recognizable plays for quick demonstrations."
+    description: "Ten selected plays for quick demonstrations. Review the actual media for your audience."
   },
   {
     id: "emerald-preview",
@@ -98,7 +98,10 @@ export function buildPack(packId, seed = "shoes-off-dirtbag") {
   if (!definition) throw new Error(`Unknown pack: ${packId}`);
   const scenes = scenesFor(packId, randomFrom(seed));
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
+    kind: "playlist-preview",
+    deviceImport: false,
+    instructions: "Planning metadata only. Firmware creates its own randomized deck. Do not replace SCENES.CSV with a playlist.",
     id: packId,
     name: definition.name,
     description: definition.description,
@@ -115,9 +118,9 @@ export function buildPack(packId, seed = "shoes-off-dirtbag") {
   };
 }
 
-export function packToCsv(pack) {
+export function catalogToCsv() {
   const header = "id,audio_id,duration_ms,frames_csv,lockout_ms,halo_tail_ms";
-  const rows = pack.scenes.map((scene) => [
+  const rows = catalog.map((scene) => [
     scene.id,
     scene.audioId,
     scene.durationMs,
@@ -126,4 +129,8 @@ export function packToCsv(pack) {
     scene.haloTailMs
   ].join(","));
   return `${[header, ...rows].join("\n")}\n`;
+}
+
+export function playlistToCsv(pack) {
+  return "position,scene_id\n" + pack.scenes.map((scene, index) => `${index + 1},${scene.id}`).join("\n") + "\n";
 }

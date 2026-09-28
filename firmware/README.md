@@ -4,9 +4,9 @@ This directory contains the full Shoes Off, Dirtbag! firmware. The original
 Arduino display proof remains in `src/`; the active ESP32 build is
 `idf_wearable/`, and the active halo build is `circuit_playground_halo/`.
 
-The active build now includes the GC9A01 display, two local buttons, 29-scene
+The active build now includes the GC9A01 display, two local buttons, 32-scene
 visual SD runtime, DFPlayer/speaker, classic Bluetooth pedal, saved volume,
-right-pedal QR mode, randomized alternating playback, embedded fallback, and
+right-pedal QR/Arc Core/home cycle, randomized alternating playback, embedded fallback, and
 scene-coded halo output. See each subproject README for build commands.
 
 ## Historical Milestone 1 behavior

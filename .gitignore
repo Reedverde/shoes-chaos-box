@@ -1,3 +1,9 @@
 node_modules/
 .wrangler/
 .DS_Store
+.env
+.env.*
+!.env.example
+.dev.vars*
+__pycache__/
+*.pyc

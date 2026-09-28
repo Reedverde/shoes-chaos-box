@@ -2,7 +2,7 @@
 
 Three six-second scenes generated with Kling AI are integrated into the
 32-scene Shoes Off, Dirtbag! runtime. This is the project's explicit use of
-Kling AI for the Hack Alcatraz hackathon requirement.
+Kling AI for Hack Alcatraz's optional platform bonus criteria.
 
 | Runtime | Kling package | Device role | Existing audio | Halo treatment |
 | --- | --- | --- | --- | --- |
@@ -21,9 +21,9 @@ The reproducible card build is
 `staging_shoes_assets/kling-meme-scenes/build_runtime_v5.py`. Its output,
 `staging_shoes_assets/runtime-card-v5-kling`, preserves S001-S029, adds S030-S032,
 and reuses existing Card A tracks instead of duplicating audio IDs. The staged
-export passed frame-size, BMP-format, duration, and audio-hash checks. Physical
-SD throughput, synchronization, and diffuser behavior still require hardware
-verification.
+export passed frame-size, BMP-format, duration, and audio-hash checks. All 32 normal scenes subsequently ran on the bench with every frame shown;
+see [the timing validation](firmware/TIMING_REPAIR_2026-09-27.md). Diffuser
+approval and final wearable verification remain pending.
 
 K001 remains a cartoon pilot with generic characters. K002 is a stylized
 caricature rather than a precise likeness. Those creative limitations are

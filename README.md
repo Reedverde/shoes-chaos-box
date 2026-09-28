@@ -1,90 +1,96 @@
 # Shoes Off, Dirtbag!
 
-Shoes Off, Dirtbag! is a portable wearable performance prop that responds to a
-Bluetooth foot trigger with randomized circular visuals, synchronized dialogue,
-and a scene-aware LED halo. The current runtime stages 32 mapped scenes from
-two microSD cards and has cardless opening, QR, and visual-fallback assets.
+**A funny shoe-removal reminder, and a working experiment in making hardware, media, and software agree.** Built by [Reed Verdesoto](https://reedverde.com/shoes-off-dirtbag/).
 
-## Current target: Tech Week wearable
+A foot pedal starts a short scene on a round screen. A speaker supplies the line. A ring of LEDs gives it some attitude. The idea began as a reminder to leave dirty shoes at the door; the current build is a manually triggered bench prototype being turned into a wearable for Tech Week.
 
-- The whole assembly pins or clips to a lapel or suit pocket and should look purposefully slapped together rather than productized.
-- A small outward-facing screen sits in the middle and shows images, text, and short pre-rendered GIF-like loops.
-- The owned Adafruit Circuit Playground Express sits behind or around the screen as a circular LED halo, washing light onto the shirt and emphasizing each scene.
-- The ESP32, audio board, two cards, buttons, and full breadboard stay together
-  as a serviceable pocket unit. The screen, halo, and speaker connect through
-  separate 8-, 2-, and 2-conductor leads.
-- The confirmed Smatree DP20S USB-C battery pack rides in an inside jacket pocket, with a short power lead routed inside the jacket. It is labeled 5V/2A output and 5000mAh / 18.5Wh.
-- The confirmed STRICH SPT-10 pedal uses left/Space for scenes and right/Enter
-  for the QR toggle. In Mode 1, Page Up/Down controls saved audio volume.
-- The synchronized firmware assigns all 32 scenes their own halo palette. The
-  ten original Shoes scenes and two Kling-generated Shoes-family scenes use
-  diffuser-aware club-light profiles.
-- The wearable includes a dedicated local scene-trigger button so the demo still works if the Bluetooth pedal is missing, disconnected, or inconvenient.
-- A separate local mute/emergency-stop control remains available during playback.
-- If the wired fallback is used, cable strain relief and a breakaway-friendly detachable connection are required so a snag does not pull the unit off the wearer.
+This repository records the decisions, mistakes, measurements, and code behind that proof of concept. Reed directed the build and tested the physical behavior while working with coding agents on firmware, media preparation, and debugging. The goal is to make the reasoning inspectable and useful to someone building a similar device.
 
-The selected display is the owned 1.28-inch, 240 x 240 GC9A01 round TFT. The
-ST7735S is no longer part of the active wearable design.
+[Read the story](https://reedverde.com/shoes-off-dirtbag/) · [Start a similar build](docs/GETTING_STARTED.md) · [Content pack service](cloudflare/chaos-director/README.md) · [Audit findings](docs/AUDIT.md)
 
-## Deployment target: Hack Alcatraz
+![An early bench test of the round screen, breadboard and Circuit Playground](docs/images/early-bench.jpg)
 
-The first real outing is **Hack Alcatraz with Cloudflare and Kling AI** on Monday, October 5, 2026. The event runs 5:00–9:00 p.m.; requested arrival is 5:30 p.m., boarding is 5:45 p.m., and the cruise is 6:00–9:00 p.m. The event calls for fun, simple hacks rather than pitch decks and uses rapid 1–2 minute demos before networking on the boat.
+*An early September 2026 bench test, before the final wiring and timing repair.*
 
-The wearable therefore needs at least five hours of ready-to-demo battery life, reliable offline operation, a fast reset between short demonstrations, and a physical design that tolerates movement and unreliable reception on the Bay.
+## What works today
 
-### Hackathon platform integrations
+| Part | Current result |
+|---|---|
+| Playback | 32 scenes, including three six-second Kling AI loops; two microSD cards; no Wi-Fi required |
+| Inputs | Bluetooth pedal and local forward/previous buttons; scene order survives restarts |
+| Lights | Circuit Playground Express with scene-specific patterns and continuous chases |
+| Special display | Right pedal in Mode 5 cycles QR → silent Arc Core → home; Mode 4 directly toggles Arc Core |
+| Timing | All 1,055 normal frames displayed in the full-catalog bench test; 31 scenes ended 10 ms over target and one 58 ms over |
+| Cloudflare | Content-pack downloads, canonical catalog, and deterministic playlist previews |
+| Still ahead | Wearable mounting, diffuser approval, repeated physical control checks, and a five-hour battery test |
 
-- Kling AI produced three completed, integrated six-second reaction loops:
-  a shoes-off confrontation, Kelly rule/suck/rule, and a bacteria rave. They
-  are runtime scenes S030-S032 and explicitly satisfy the hackathon's Kling AI
-  requirement. See [KLING_AI_INTEGRATION.md](KLING_AI_INTEGRATION.md).
-- Use Cloudflare Flue as a hosted “Chaos Director” that creates scene manifests by combining captions, media IDs, audio IDs, timing, and LED patterns.
-- Keep the generated pack local on the wearable. Flue and Kling enhance what is prepared before the cruise; neither may become a live network dependency.
+The latest pedal cycle passes control-loop tests and was installed. Its full physical two-cycle acceptance test remains on the checklist. The timing results are measured scene completion, not sample-accurate audiovisual sync; frame starts still had up to 64.362 ms jitter.
 
-The first working Cloudflare implementation is in
-[`cloudflare/chaos-director`](cloudflare/chaos-director). It publishes the
-validated scene catalog and generates deterministic JSON/CSV packs while all
-copyrighted media remains on the two device cards.
+## How it fits together
 
-## Trigger behavior
+```mermaid
+flowchart LR
+    CF[Cloudflare pack library] -->|Download before use| PC[Computer / card preparation]
+    PC --> A[Card A: audio]
+    PC --> B[Card B: visuals]
+    Pedal[Bluetooth pedal / local buttons] --> ESP[ESP32]
+    B --> ESP
+    ESP --> Screen[Round GC9A01 screen]
+    ESP --> DF[DFPlayer Mini]
+    A --> DF
+    DF --> Speaker[Speaker]
+    ESP -->|Scene signal + common ground| CP[Circuit Playground Express]
+    CP --> Halo[LED halo]
+```
 
-Each pedal or local-button press launches one short, reusable scene selected within the current mode. The same interaction can be repeated for the wearer or any nearby participant; every press can produce a different combination. A scene may combine:
+Cloudflare handles preparation and distribution. The performance runs locally. The new public starter download contains original test shapes and tones; the performance clips are not bundled with it. Playlist previews are planning tools, not a replacement for the firmware's ordered 32-scene catalog.
 
-1. A still image, shoe close-up, or pre-rendered animation frames
-2. A visual treatment such as alert, glitch, monochrome, neon, or VHS
-3. A caption rendered on top of or alongside the image
-4. A short audio cue
-5. A Circuit Playground LED pattern or color chase
-6. An optional follow-up frame
+## Try it without hardware
 
-Planned modes are Classic, Chaos, Roast, Clean Demo, and Silent. The first reliable milestone is one press producing one image, one caption, and one audio cue; randomization comes after that path is stable.
+Use Node.js 22 or newer:
 
-## Demo premise and later home version
+```sh
+git clone https://github.com/Reedverde/shoes-chaos-box.git
+cd shoes-chaos-box/cloudflare/chaos-director
+npm ci
+npm test
+npm run dev
+```
 
-The presentation story is: at home, a pressure pad beneath the welcome mat detects the step into the house and chooses a fresh reminder; during the traveling demo, the removable pedal stands in for that mat. A future home build can implement the mat pressure sensor directly, optionally supported by a door contact and an owned HC-SR501 PIR sensor to distinguish a real arrival from other activity.
+Open the local address Wrangler prints. Download the starter ZIP or choose a playlist and seed. The same seed reproduces the same preview order. See [Cloudflare setup and deployment](docs/CLOUDFLARE.md).
 
-## Documentation map
+For the physical device, begin with [Getting started](docs/GETTING_STARTED.md). It identifies the two active firmware projects, GPIO wiring, card formats, and checks to perform before flashing. Older experiments remain in the repository as history and are clearly separated from the active build.
 
-- `firmware/idf_wearable/` — verified ESP-IDF screen, button, Bluetooth-pedal, and halo-trigger firmware
-- `firmware/circuit_playground_halo/` — verified Arduino/PlatformIO firmware for the Circuit Playground Express LED halo
-- [KLING_AI_INTEGRATION.md](KLING_AI_INTEGRATION.md) — generated-scene provenance, runtime IDs, audio mappings, and validation status
-- `firmware/WIRING_MILESTONE_2.md` — exact synchronized halo bench wiring and power-safety notes
-- `firmware/WIRING_FINAL_POCKET_BREADBOARD.md` — numbered final breadboard layout, power rails, ground breakout, modules, buttons, and detachable leads
-- [PROJECT_STATE.md](PROJECT_STATE.md) — current decisions, scope, risks, and next actions
-- [BUILD_PLAN.md](BUILD_PLAN.md) — phased hardware and firmware plan
-- [CONTENT_PLAN.md](CONTENT_PLAN.md) — modes, assets, naming, and scene rules
-- [HARDWARE_INVENTORY.md](HARDWARE_INVENTORY.md) — consolidated hardware record
-- [GEAR_MASTER.md](GEAR_MASTER.md) — authoritative gear taxonomy and configuration
-- [GEAR_HAVE.md](GEAR_HAVE.md) — confirmed owned equipment
-- [GEAR_NEED.md](GEAR_NEED.md) — purchases and unresolved checks, with links
-- [TODO.md](TODO.md) — ordered physical-build and validation checklist
-- [PURCHASE_LIST.md](PURCHASE_LIST.md) — reduced connector/mounting order list
-- [CHANGELOG.md](CHANGELOG.md) — documentation history
+## What I learned from the slow playback
 
-## Project rules
+The screen looked as if it was playing each frame too long. Measurements showed the card reader taking about 372 ms to read an image whose scheduled hold could be only 100–300 ms. Direct reads at a tested 16 MHz brought the average to 95 ms. A faster 20 MHz setting failed, so it was rejected. The LED code also needed to send complete patterns once per frame and calculate chase position from elapsed time.
 
-- GitHub is the source of truth for plans and inventory.
-- “Have” means confirmed by the owner or visible in the supplied photos; assumptions remain in “Need / confirm.”
-- Build the smallest reliable demo first, then add variety.
-- Do not depend on Wi-Fi or streaming during a performance.
-- Use only audio and visual assets that the project is permitted to reproduce and perform.
+The repair preserved the media and checked the actual hardware. [Read the measurements and limits](firmware/TIMING_REPAIR_2026-09-27.md), or inspect the [32-scene results](docs/validation/scene-results.csv).
+
+## Find your way around
+
+| Looking for… | Start here |
+|---|---|
+| Build instructions and active firmware | [Getting started](docs/GETTING_STARTED.md) |
+| System decisions and current state | [PROJECT_STATE.md](PROJECT_STATE.md) |
+| Cloudflare hosting, downloads, API, and where Flue fits | [Cloudflare guide](docs/CLOUDFLARE.md) |
+| Controls and short demo sequence | [Demo guide](docs/DEMO.md) |
+| Current GPIO and breadboard notes | [Bench rewire record](firmware/BENCH_REWIRE_PROGRESS.md) |
+| Media preparation and reuse boundaries | [Media guide](docs/MEDIA.md) |
+| Kling AI provenance | [Kling integration](KLING_AI_INTEGRATION.md) |
+| Arc Core animation and lighting | [Special scenes](SPECIAL_SCENES.md) |
+| Audit findings and remaining risks | [Audit](docs/AUDIT.md) |
+| Physical build and acceptance checklist | [TODO.md](TODO.md) |
+| Parts already owned and still needed | [Gear master](GEAR_MASTER.md), [purchase list](PURCHASE_LIST.md) |
+
+## Hack Alcatraz
+
+Built for [Hack Alcatraz with Cloudflare and Kling AI](https://www.tech-week.com/calendar/sf/events/hack-alcatraz-with-cloudflare-and-kling-ai-85ba1851-ec51-40cf-904f-edfd4f9a66a8), October 5, 2026. The organizer asks for fun builds and short demos; Cloudflare or Kling AI use earns optional bonus consideration. This project uses a Cloudflare Worker with Static Assets and three Kling-generated normal scenes, plus the separate Arc Core special. **Flue is not a runtime dependency.** The [integration guide](docs/CLOUDFLARE.md) explains a possible future Flue extension without claiming it is implemented.
+
+The five-hour battery target and wearable fit are requirements to test, not completed results. Automatic doorway detection is a future home version. A dedicated emergency-stop/mute input is not implemented.
+
+## Reuse and contribution
+
+Questions and small, reproducible improvements are welcome through GitHub issues and pull requests. Include your board variant, firmware version, media pack, and expected versus observed behavior. Keep credentials, serial device identifiers, and private source media out of reports.
+
+This is publicly viewable source, not a licensed open-source release. No repository-wide license grant has been selected. Existing embedded fallback artwork and third-party performance references have separate rights; do not assume visibility grants redistribution permission. See [media and reuse notes](docs/MEDIA.md).

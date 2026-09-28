@@ -32,4 +32,5 @@ python3 tests/host/test_display_cycle.py
 ```
 
 The pre-change application and new binary are saved in
-`../../right-pedal-cycle-2026-09-27/` with SHA-256 checksums and the source diff.
+the owner’s local `right-pedal-cycle-2026-09-27` archive with SHA-256
+checksums and the source diff. That archive is not included in this repository.

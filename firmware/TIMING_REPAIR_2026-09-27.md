@@ -1,7 +1,7 @@
 # Timing repair — September 27, 2026
 
 The repair passed the full-catalog test on the connected hardware. The source audit is in
-[the original report](../../audit-2026-09-27/REPORT.md). This addendum distinguishes
+the earlier local audit (summarized in [the publication audit](../docs/AUDIT.md)). This addendum distinguishes
 measured repair results from that earlier audit's hypotheses and estimates.
 
 ## Measured cause and repair
@@ -151,7 +151,7 @@ in 13.020. Reed reported during the test that the scenes were ending correctly.
 | S031 | 8/8 | 6000 | 6010 | 0.000 |
 | S032 | 8/8 | 6000 | 6010 | 0.000 |
 
-Raw evidence: `validation.log`, `halo-validation.log`, and `scene-results.csv` / `.json`.
+Public per-scene evidence: [CSV](../docs/validation/scene-results.csv) and [JSON](../docs/validation/scene-results.json). Raw serial logs and recovery binaries remain in the owner’s local workspace.
 
 ## Final installed state and recovery
 
@@ -173,4 +173,4 @@ Only the optional startup test and its fixture are excluded from the normal
 build. Source changes remain in the existing working checkout, preserving
 pre-existing Arc Core and media work.
 
-Full evidence and recovery binaries are in `../../repair-2026-09-27/`.
+The owner’s local `repair-2026-09-27` archive holds full logs and recovery binaries; it is not a folder in this Git repository. Later Arc Core and control changes are recorded separately in PROJECT_STATE.md and CHANGELOG.md.

@@ -1,4 +1,79 @@
+# Publication package — 2026-09-27
+
+- Reworked the project entry point around Reed’s proof of concept, measured results, build instructions, and remaining wearable checks.
+- Added a synthetic two-card starter download and reproducible generator, file validator, checksums, and GitHub checks.
+- Fixed Cloudflare catalog versus playlist export semantics; added a public pack library and Static Assets distribution.
+- Documented Cloudflare deployment, rollback, API, and optional Flue integration without claiming an agent is already running.
+- Preserved the timing, Arc Core, and control changes; corrected stale scene counts, emergency-stop claims, media paths, and hackathon requirement wording.
+
 # Changelog
+
+## 2026-09-27 — extended Arc Core media and synchronized halo installed
+
+- Added persistent scene memory. The full randomized 48-play deck and its
+  next-scene position are saved in ESP32 NVS after every scene. QR and Arc Core
+  no longer disturb progression, and a restart resumes the saved deck rather
+  than beginning again. The overlay cursor regression test passed and the
+  firmware was installed with flash-content verification.
+- Fixed a missed one-time Arc lighting start that could leave the Circuit
+  Playground showing its two-pixel idle pattern while the display loop was
+  active. The ESP32 now re-sends the Arc command at every 35.04-second loop,
+  and the halo can recover if it boots while Arc is already active. Both
+  firmwares were installed and a live trace confirmed start, sustained active
+  state, and stop.
+- Kept the existing 5.04-second startup and added 30 seconds of calm blue
+  powered-on breathing before the full sequence repeats.
+- Expanded the special to the firmware limit of 48 frames: 16 startup frames
+  plus 32 long-hold pulse frames forming four slow pulse cycles.
+- Preserved the silent `ARCCORE` name and both Mode 4 and Mode 5 controls.
+- Added a collision-free long-sync command on the existing GPIO21/A1 wire. Its
+  Circuit Playground sequence accelerates a gold chase through seven
+  revolutions, closes into a bright gold ring, transitions directly to blue,
+  and then performs four high-contrast blue breathing pulses across the
+  powered-on section. The revised firmware was installed by UF2 after a
+  partial serial upload, and the board rebooted normally.
+- Replaced the display's synthetic brightness adjustment with actual moving
+  Kling frames matched to the user's screenshots: bright at 3.10 seconds and
+  calm at 3.68 seconds. The 30-second section now travels calm → bright → calm
+  four times, preserving the moving electricity and haze. The updated Card B
+  files were installed and all 97 scene files plus `SPECIAL.CSV` were verified
+  against staging by SHA-256 content comparison.
+- Installed and checksum-verified the 97-file special on Card B. Compiled and
+  installed both controller firmwares; the ESP32 passed read-back digest checks
+  and the Circuit Playground accepted the UF2 and rebooted.
+
+## 2026-09-27 — smoother Arc Core loop and Mode 4 pedal control
+
+- Rebuilt `ARCCORE` as 16 evenly sampled 240 x 240 RGB565 frames at 315 ms,
+  doubling the installed motion rate while retaining the hardware-safe 4 MHz
+  visual-card prefetch margin.
+- Bound both Bluetooth pedal buttons in Mode 4 (mouse-click mode) to the named
+  special: either button starts the silent loop and either stops it.
+- Rebuilt Card B, checksum-matched all 2,178 staged files, compiled the ESP32
+  firmware, flashed it, and digest-verified all three written flash regions.
+- Actual screen/pedal playback remains to be tested after both cards are put
+  back in the wearable.
+
+## 2026-09-27 — named Arc Core special installed
+
+- Added the silent energy-core loop to Card B as `ARCCORE`, stored at
+  `SPECIAL/ARCCORE/FRAMES.CSV` and indexed by root-level `SPECIAL.CSV`.
+- Kept it outside `SCENES.CSV` so it cannot enter the normal randomized
+  S001–S032 rotation; a future dedicated button will target the stable name.
+- Rebuilt the v5 staging source and checksum-verified all 2,162 non-hidden Card B
+  files after synchronization. Hardware playback is still pending.
+
+## 2026-09-27 — corrected runtime copy of Curb “Get the coats”
+
+- Replaced the stale 6.5-second `0029.mp3` in runtime-card-v3, v4, and v5
+  staging with the existing 13.01-second master, then synchronized Card A so
+  it includes “Gail, get the coats,” the dry reply, and the final punch line.
+- Added a v4 build override and validation guard so rebuilding the current
+  runtime cannot silently restore the truncated track.
+- Replaced Card B S008 with the bright, unobstructed eight-frame Woody scene
+  and added that override to the reproducible v5 builder.
+- Checksum-compared every non-hidden file on both mounted cards to runtime-card-v5:
+  Card A matched 29 of 29 files and Card B matched 2,144 of 2,144 files.
 
 ## 2026-09-26 — Kling AI runtime integration
 

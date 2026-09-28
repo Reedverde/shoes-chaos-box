@@ -1,3 +1,6 @@
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -16,6 +19,7 @@
 #include "esp_heap_caps.h"
 #include "esp_log.h"
 #include "esp_random.h"
+#include "esp_timer.h"
 #include "esp_rom_sys.h"
 #include "esp_vfs_fat.h"
 #include "freertos/FreeRTOS.h"
@@ -72,6 +76,7 @@
 #define KLING_KELLY_INDEX 30
 #define KLING_BACTERIA_INDEX 31
 #define PLAYBACK_ORDER_MAX 48
+#define PLAYBACK_STATE_VERSION 1
 #define RAW_FRAME_BYTES (SCREEN_W * SCREEN_H * 2)
 #define RAW_HALF_FRAME_BYTES (RAW_FRAME_BYTES / 2)
 #define RAW_ROWS_PER_CHUNK 16
@@ -80,11 +85,14 @@
 #define DFPLAYER_STARTUP_MS 120
 #define MASTER_SCENE_AUDIO_ID 18
 #define MASTER_SCENE_DURATION_MS 6000
+#define ARC_CORE_FRAMES_CSV "/visual/SPECIAL/ARCCORE/FRAMES.CSV"
+#define ARC_CORE_FRAME_DIR "/visual/SPECIAL/ARCCORE"
 #define VOLUME_DEFAULT 18
 #define VOLUME_MIN 0
 #define VOLUME_MAX 30
 #define VOLUME_OVERLAY_MS 1200
 #define HALO_SYNC_HIGH_US 60000
+#define HALO_ARC_SYNC_HIGH_US 120000
 #define HALO_SYNC_LOW_US 30000
 #define HALO_BIT_ZERO_US 10000
 #define HALO_BIT_ONE_US 30000
@@ -108,6 +116,7 @@ typedef enum {
     TRIGGER_PEDAL_RIGHT,
     TRIGGER_VOLUME_UP,
     TRIGGER_VOLUME_DOWN,
+    TRIGGER_ARC_CORE,
 } trigger_source_t;
 
 typedef struct {
@@ -145,7 +154,9 @@ static const scene_t SCENES[] = {
 static spi_device_handle_t display_spi;
 static QueueHandle_t trigger_queue;
 static volatile bool trigger_locked;
+static volatile bool arc_core_active;
 static volatile bool pedal_connected;
+static uint8_t mouse_buttons;
 static volatile bool scan_running;
 static bool visual_sd_ready;
 static sdmmc_card_t *visual_sd_card;
@@ -160,6 +171,14 @@ static uint8_t playback_order[PLAYBACK_ORDER_MAX];
 static size_t playback_order_count;
 static size_t playback_order_cursor;
 static uint8_t current_volume = VOLUME_DEFAULT;
+
+typedef struct {
+    uint8_t version;
+    uint8_t media_scene_count;
+    uint8_t order_count;
+    uint8_t cursor;
+    uint8_t order[PLAYBACK_ORDER_MAX];
+} playback_state_t;
 
 typedef struct {
     const uint8_t *start;
@@ -178,6 +197,8 @@ static const embedded_raw_frame_t MASTER_SCENE_FRAMES[] = {
 static bool draw_sd_bmp(const char *path);
 static bool draw_embedded_bmp(const uint8_t *start, const uint8_t *end);
 static size_t load_media_scene_index(void);
+static size_t load_frame_index(const char *path, const char *label,
+                               media_frame_t *frames);
 
 static void halo_start_scene(uint8_t scene_index)
 {
@@ -205,6 +226,20 @@ static void halo_start_scene(uint8_t scene_index)
 static void halo_stop(void)
 {
     gpio_set_level(PIN_HALO_TRIGGER, 0);
+}
+
+static void halo_start_arc_core(void)
+{
+    // A distinct 120 ms sync pulse selects the named Arc Core effect without
+    // consuming one of the fully allocated five-bit S001-S032 scene codes.
+    gpio_set_level(PIN_HALO_TRIGGER, 0);
+    esp_rom_delay_us(HALO_BIT_GAP_US);
+    gpio_set_level(PIN_HALO_TRIGGER, 1);
+    esp_rom_delay_us(HALO_ARC_SYNC_HIGH_US);
+    gpio_set_level(PIN_HALO_TRIGGER, 0);
+    esp_rom_delay_us(HALO_SYNC_LOW_US);
+    gpio_set_level(PIN_HALO_TRIGGER, 1);
+    ESP_LOGI(TAG, "HALO_SPECIAL_CODE ARCCORE");
 }
 
 static void dfplayer_command(uint8_t command, uint16_t parameter)
@@ -267,6 +302,58 @@ static void volume_save(void)
     nvs_close(handle);
 }
 
+static void playback_state_save(void)
+{
+    if (!playback_order_count || playback_order_count > PLAYBACK_ORDER_MAX ||
+        playback_order_cursor > playback_order_count ||
+        media_scene_count > UINT8_MAX) return;
+
+    playback_state_t state = {
+        .version = PLAYBACK_STATE_VERSION,
+        .media_scene_count = (uint8_t)media_scene_count,
+        .order_count = (uint8_t)playback_order_count,
+        .cursor = (uint8_t)playback_order_cursor,
+    };
+    memcpy(state.order, playback_order, playback_order_count);
+
+    nvs_handle_t handle;
+    if (nvs_open("shoes", NVS_READWRITE, &handle) != ESP_OK) return;
+    if (nvs_set_blob(handle, "playback", &state, sizeof state) == ESP_OK) {
+        nvs_commit(handle);
+    }
+    nvs_close(handle);
+}
+
+static bool playback_state_load(void)
+{
+    playback_state_t state = {0};
+    size_t length = sizeof state;
+    nvs_handle_t handle;
+    if (nvs_open("shoes", NVS_READONLY, &handle) != ESP_OK) return false;
+    esp_err_t result = nvs_get_blob(handle, "playback", &state, &length);
+    nvs_close(handle);
+
+    if (result != ESP_OK || length != sizeof state ||
+        state.version != PLAYBACK_STATE_VERSION ||
+        state.media_scene_count != media_scene_count ||
+        !state.order_count || state.order_count > PLAYBACK_ORDER_MAX ||
+        state.cursor > state.order_count) return false;
+
+    for (size_t i = 0; i < state.order_count; ++i) {
+        if (state.order[i] >= media_scene_count) return false;
+    }
+    memcpy(playback_order, state.order, state.order_count);
+    playback_order_count = state.order_count;
+    playback_order_cursor = state.cursor;
+    ESP_LOGI(TAG, "SCENE_DECK_RESTORED position=%u/%u next=%s",
+             (unsigned)playback_order_cursor,
+             (unsigned)playback_order_count,
+             playback_order_cursor < playback_order_count
+                 ? media_scenes[playback_order[playback_order_cursor]].id
+                 : "new-deck");
+    return true;
+}
+
 static void dfplayer_play_track(uint16_t audio_id)
 {
     // 0x12 selects /mp3/NNNN.mp3 using the four-digit folder convention.
@@ -299,7 +386,13 @@ static void visual_sd_init(void)
                                                &visual_sd_card);
     visual_sd_ready = result == ESP_OK;
     if (visual_sd_ready) {
-        ESP_LOGI(TAG, "VISUAL_SD_READY");
+        // Enumerate at 4 MHz, then use the 16 MHz rate verified by the repair
+        // benchmark. 20 MHz produced read errors on this physical reader.
+        result = visual_sd_card->host.set_card_clk(visual_sd_card->host.slot, 16000);
+        if (result != ESP_OK) ESP_LOGW(TAG, "SD_RATE_FAILED %s", esp_err_to_name(result));
+        int actual_khz = 0;
+        sdspi_host_get_real_freq(visual_sd_card->host.slot, &actual_khz);
+        ESP_LOGI(TAG, "VISUAL_SD_READY khz=%d", actual_khz);
     } else {
         ESP_LOGE(TAG, "VISUAL_SD_FAILED: %s", esp_err_to_name(result));
     }
@@ -801,6 +894,12 @@ static size_t load_media_frames(const media_scene_t *scene,
 {
     char path[64];
     snprintf(path, sizeof path, "/visual/%s", scene->frames_csv);
+    return load_frame_index(path, scene->id, frames);
+}
+
+static size_t load_frame_index(const char *path, const char *label,
+                               media_frame_t *frames)
+{
     FILE *file = fopen(path, "r");
     if (!file) {
         ESP_LOGE(TAG, "FRAME_INDEX_MISSING %s", path);
@@ -826,29 +925,30 @@ static size_t load_media_frames(const media_scene_t *scene,
     }
     fclose(file);
     ESP_LOGI(TAG, "FRAME_INDEX_READY %s frames=%u timeline=%ums",
-             scene->id, (unsigned)count, (unsigned)cumulative_ms);
+             label, (unsigned)count, (unsigned)cumulative_ms);
     return count;
 }
 
 static bool load_sd_raw(const char *path)
 {
-    FILE *file = fopen(path, "rb");
-    if (!file) return false;
-
-    size_t first_read = fread(raw_frame_buffers[0], 1,
-                              RAW_HALF_FRAME_BYTES, file);
-    size_t second_read = fread(raw_frame_buffers[1], 1,
-                               RAW_HALF_FRAME_BYTES, file);
-    int extra = fgetc(file);
-    fclose(file);
-    if (first_read != RAW_HALF_FRAME_BYTES ||
-        second_read != RAW_HALF_FRAME_BYTES || extra != EOF) {
-        ESP_LOGE(TAG, "RAW_READ_FAILED %s bytes=%u expected=%u",
-                 path, (unsigned)(first_read + second_read),
-                 (unsigned)RAW_FRAME_BYTES);
-        return false;
+    // Direct reads allow FatFs to transfer many sectors per request. Buffered
+    // stdio split these into small transactions (~372 ms vs ~277 ms at 4 MHz).
+    int fd = open(path, O_RDONLY);
+    if (fd < 0) return false;
+    struct stat st;
+    bool ok = fstat(fd, &st) == 0 && st.st_size == RAW_FRAME_BYTES;
+    for (size_t half = 0; ok && half < 2; ++half) {
+        size_t pos = 0;
+        while (pos < RAW_HALF_FRAME_BYTES) {
+            ssize_t n = read(fd, raw_frame_buffers[half] + pos,
+                             RAW_HALF_FRAME_BYTES - pos);
+            if (n <= 0) { ok = false; break; }
+            pos += (size_t)n;
+        }
     }
-    return true;
+    close(fd);
+    if (!ok) ESP_LOGE(TAG, "RAW_READ_FAILED %s", path);
+    return ok;
 }
 
 static void draw_raw_buffer(void)
@@ -916,6 +1016,69 @@ static bool load_media_frame_raw(const media_scene_t *scene,
     return load_sd_raw(path);
 }
 
+static bool load_arc_core_frame_raw(const media_frame_t *frame)
+{
+    char path[80];
+    snprintf(path, sizeof path, "%s/%s", ARC_CORE_FRAME_DIR, frame->raw);
+    return load_sd_raw(path);
+}
+
+static bool play_arc_core_loop(trigger_source_t *exit_source)
+{
+    media_frame_t frames[MEDIA_FRAME_MAX];
+    size_t frame_count = load_frame_index(
+        ARC_CORE_FRAMES_CSV, "ARCCORE", frames);
+    if (!frame_count || !load_arc_core_frame_raw(&frames[0])) {
+        ESP_LOGE(TAG, "ARCCORE_LOAD_FAILED");
+        return false;
+    }
+
+    // This special is intentionally silent. Its startup and long powered-on
+    // pulse repeat until a Bluetooth pedal event is received.
+    dfplayer_stop();
+    halo_stop();
+    halo_start_arc_core();
+    draw_raw_buffer();
+    ESP_LOGI(TAG, "ARCCORE_LOOP_STARTED frames=%u", (unsigned)frame_count);
+
+    TickType_t cycle_started = xTaskGetTickCount();
+    size_t current_frame = 0;
+    while (true) {
+        size_t next_frame = (current_frame + 1) % frame_count;
+        if (!load_arc_core_frame_raw(&frames[next_frame])) {
+            ESP_LOGE(TAG, "ARCCORE_PREFETCH_FAILED frame=%u",
+                     (unsigned)(next_frame + 1));
+            halo_stop();
+            return false;
+        }
+
+        uint32_t next_frame_at_ms = frames[current_frame].end_ms;
+        while (pdTICKS_TO_MS(xTaskGetTickCount() - cycle_started) <
+               next_frame_at_ms) {
+            trigger_source_t source;
+            if (xQueueReceive(trigger_queue, &source, 0) == pdTRUE) {
+                *exit_source = source;
+                ESP_LOGI(TAG, "ARCCORE_LOOP_STOPPED source=%d", source);
+                halo_stop();
+                return true;
+            }
+            vTaskDelay(pdMS_TO_TICKS(5));
+        }
+
+        draw_raw_buffer();
+        current_frame = next_frame;
+        if (current_frame == 0) {
+            cycle_started = xTaskGetTickCount();
+            // Re-send the named lighting command at every full visual loop.
+            // This keeps the halo locked to the display and automatically
+            // recovers if the Circuit Playground missed the initial start.
+            halo_stop();
+            halo_start_arc_core();
+            ESP_LOGI(TAG, "ARCCORE_HALO_RESYNC");
+        }
+    }
+}
+
 static bool qr_interrupt_pending(void)
 {
     trigger_source_t source;
@@ -952,9 +1115,12 @@ static bool play_media_scene(const media_scene_t *scene)
     }
 
     TickType_t scene_started = xTaskGetTickCount();
+    int64_t started_us = esp_timer_get_time();
+    uint32_t max_read_us = 0, max_draw_us = 0, max_late_us = 0;
     size_t current_frame = 0;
     while (current_frame + 1 < frame_count) {
         size_t next_frame = current_frame + 1;
+        int64_t read_started = esp_timer_get_time();
 
         // Read the next complete image while the LCD continues showing the
         // current one. SD latency is therefore hidden inside the hold time.
@@ -965,6 +1131,8 @@ static bool play_media_scene(const media_scene_t *scene)
         }
 
         uint32_t next_frame_at_ms = frames[current_frame].end_ms;
+        uint32_t read_us = (uint32_t)(esp_timer_get_time() - read_started);
+        if (read_us > max_read_us) max_read_us = read_us;
         while (pdTICKS_TO_MS(xTaskGetTickCount() - scene_started) < next_frame_at_ms) {
             if (qr_interrupt_pending()) {
                 dfplayer_stop();
@@ -975,7 +1143,12 @@ static bool play_media_scene(const media_scene_t *scene)
             vTaskDelay(pdMS_TO_TICKS(10));
         }
 
+        int64_t draw_started = esp_timer_get_time();
+        int64_t late = draw_started - started_us - (int64_t)next_frame_at_ms * 1000;
+        if (late > (int64_t)max_late_us) max_late_us = (uint32_t)late;
         draw_raw_buffer();
+        uint32_t draw_us = (uint32_t)(esp_timer_get_time() - draw_started);
+        if (draw_us > max_draw_us) max_draw_us = draw_us;
         current_frame = next_frame;
     }
 
@@ -993,8 +1166,12 @@ static bool play_media_scene(const media_scene_t *scene)
     // The Circuit Playground supplies the configured afterglow after this
     // line drops; keeping it high here as well would double the tail.
     halo_stop();
-    ESP_LOGI(TAG, "SCENE_COMPLETE %s shown=%u prefetched=yes halo_tail=%ums",
-             scene->id, (unsigned)(current_frame + 1),
+    // Summarize after playback; serial logging must not delay every frame.
+    ESP_LOGI(TAG, "SCENE_COMPLETE %s shown=%u/%u elapsed_ms=%lu expected_ms=%lu max_read_us=%lu max_draw_us=%lu max_late_us=%lu halo_tail=%u",
+             scene->id, (unsigned)(current_frame + 1), (unsigned)frame_count,
+             (unsigned long)((esp_timer_get_time() - started_us) / 1000),
+             (unsigned long)scene->duration_ms, (unsigned long)max_read_us,
+             (unsigned long)max_draw_us, (unsigned long)max_late_us,
              (unsigned)scene->halo_tail_ms);
     return false;
 }
@@ -1068,8 +1245,10 @@ static void request_trigger(trigger_source_t source)
 {
     // The two local buttons are deliberate navigation controls, so they remain
     // responsive after playback even if the foot-pedal anti-repeat cooldown is
-    // still active. The right pedal remains available as the QR control.
-    if (trigger_queue && (source == TRIGGER_PEDAL_RIGHT ||
+    // still active. The right pedal remains available for the display cycle.
+    if (trigger_queue && (arc_core_active ||
+                          source == TRIGGER_ARC_CORE ||
+                          source == TRIGGER_PEDAL_RIGHT ||
                           source == TRIGGER_VOLUME_UP ||
                           source == TRIGGER_VOLUME_DOWN ||
                           source == TRIGGER_LOCAL_BUTTON ||
@@ -1118,10 +1297,23 @@ static void hidh_callback(void *handler_args, esp_event_base_t base, int32_t id,
                     ESP_LOGI(TAG, "TRIGGER volume-down key=0x%02x", key);
                     request_trigger(TRIGGER_VOLUME_DOWN);
                 }
+            } else if (param->input.usage == ESP_HID_USAGE_MOUSE &&
+                       param->input.length >= 1) {
+                // Pedal Mode 4 reports left/right mouse buttons. Either edge
+                // uses the same named silent special; a second click stops it.
+                uint8_t buttons = param->input.data[0] & 0x03;
+                uint8_t newly_pressed = buttons & (uint8_t)~mouse_buttons;
+                mouse_buttons = buttons;
+                if (newly_pressed) {
+                    ESP_LOGI(TAG, "TRIGGER arc-core/mouse buttons=0x%02x",
+                             newly_pressed);
+                    request_trigger(TRIGGER_ARC_CORE);
+                }
             }
             break;
         case ESP_HIDH_CLOSE_EVENT:
             pedal_connected = false;
+            mouse_buttons = 0;
             ESP_LOGW(TAG, "PEDAL_DISCONNECTED");
             break;
         default:
@@ -1210,6 +1402,7 @@ static void build_playback_order(void)
         shuffle_u8(playback_order, playback_order_count);
         ESP_LOGW(TAG, "SCENE_DECK_PARTIAL count=%u",
                  (unsigned)playback_order_count);
+        playback_state_save();
         return;
     }
 
@@ -1270,12 +1463,15 @@ static void build_playback_order(void)
              "SCENE_DECK_ALTERNATING plays=%u outside=24 shoes=24 curb=8 first=%s",
              (unsigned)playback_order_count,
              media_scenes[playback_order[0]].id);
+    playback_state_save();
 }
 
 static size_t next_random_scene_index(void)
 {
     if (playback_order_cursor >= playback_order_count) build_playback_order();
-    return playback_order[playback_order_cursor++];
+    size_t scene_index = playback_order[playback_order_cursor++];
+    playback_state_save();
+    return scene_index;
 }
 
 static size_t previous_scene_index(void)
@@ -1289,8 +1485,14 @@ static size_t previous_scene_index(void)
     if (playback_order_cursor >= 2) playback_order_cursor -= 2;
     else playback_order_cursor = 0;
 
-    return playback_order[playback_order_cursor++];
+    size_t scene_index = playback_order[playback_order_cursor++];
+    playback_state_save();
+    return scene_index;
 }
+
+#ifdef SHOES_TIMING_BENCH
+#include "../tests/timing_bench.h"
+#endif
 
 static void app_task(void *unused)
 {
@@ -1305,8 +1507,25 @@ static void app_task(void *unused)
     TickType_t qr_last_toggled = 0;
     draw_idle();
 
+#ifdef SHOES_TIMING_BENCH
+    timing_bench();
+#endif
+
+#ifdef BOOT_PREVIEW_SCENE_INDEX
+    // Optional bench-only preview. Normal release builds do not define this
+    // symbol, so production boot behavior remains unchanged.
+    vTaskDelay(pdMS_TO_TICKS(600));
+    if (media_scene_count > BOOT_PREVIEW_SCENE_INDEX) {
+        ESP_LOGI(TAG, "BOOT_PREVIEW %s",
+                 media_scenes[BOOT_PREVIEW_SCENE_INDEX].id);
+        play_media_scene(&media_scenes[BOOT_PREVIEW_SCENE_INDEX]);
+        draw_idle();
+    }
+#endif
+
     while (true) {
         bool qr_toggle_requested = false;
+        bool arc_core_requested = false;
         bool previous_button_down = gpio_get_level(PIN_PREVIOUS_BUTTON) == 0;
         if (!qr_mode && previous_button_down && !previous_button_was_down) {
             request_trigger(TRIGGER_LOCAL_PREVIOUS);
@@ -1320,7 +1539,11 @@ static void app_task(void *unused)
         trigger_source_t source;
         bool scene_requested = false;
         if (xQueueReceive(trigger_queue, &source, 0) == pdTRUE) {
-            if (source == TRIGGER_VOLUME_UP || source == TRIGGER_VOLUME_DOWN) {
+            if (source == TRIGGER_ARC_CORE) {
+                arc_core_requested = true;
+                qr_mode = false;
+                lockout_active = false;
+            } else if (source == TRIGGER_VOLUME_UP || source == TRIGGER_VOLUME_DOWN) {
                 volume_adjust(source == TRIGGER_VOLUME_UP ? 1 : -1);
                 volume_overlay = true;
                 volume_overlay_until = xTaskGetTickCount() +
@@ -1342,14 +1565,50 @@ static void app_task(void *unused)
         if (qr_toggle_requested &&
             (xTaskGetTickCount() - qr_last_toggled) >= pdMS_TO_TICKS(250)) {
             qr_last_toggled = xTaskGetTickCount();
-            qr_mode = !qr_mode;
+            volume_overlay = false;
+            lockout_active = false;
+            dfplayer_stop();
+            halo_stop();
+            xQueueReset(trigger_queue);
+            if (qr_mode) {
+                // Right pedal: home -> QR -> Arc Core -> home. The looping
+                // special consumes the third press below without requeueing it.
+                qr_mode = false;
+                arc_core_requested = true;
+            } else {
+                qr_mode = true;
+                trigger_locked = true;
+                draw_qr_code();
+                ESP_LOGI(TAG, "DISPLAY_MODE QR");
+            }
+        }
+
+        if (arc_core_requested) {
             volume_overlay = false;
             dfplayer_stop();
             halo_stop();
             xQueueReset(trigger_queue);
-            trigger_locked = qr_mode || lockout_active;
-            if (qr_mode) draw_qr_code();
-            else draw_idle();
+            trigger_locked = true;
+            arc_core_active = true;
+            ESP_LOGI(TAG, "DISPLAY_MODE ARCCORE");
+
+            trigger_source_t exit_source = TRIGGER_ARC_CORE;
+            bool input_received = play_arc_core_loop(&exit_source);
+
+            arc_core_active = false;
+            qr_mode = false;
+            lockout_active = false;
+            trigger_locked = false;
+            qr_last_toggled = xTaskGetTickCount();
+            draw_idle();
+            ESP_LOGI(TAG, "DISPLAY_MODE HOME");
+            if (input_received && exit_source != TRIGGER_ARC_CORE &&
+                exit_source != TRIGGER_PEDAL_RIGHT) {
+                // Left pedal/local navigation can leave the loop and play a
+                // scene. A right press has already completed the cycle to home.
+                xQueueOverwrite(trigger_queue, &exit_source);
+            }
+            continue;
         }
 
         if (scene_requested) {
@@ -1385,6 +1644,7 @@ static void app_task(void *unused)
                 qr_mode = true;
                 qr_last_toggled = xTaskGetTickCount();
                 draw_qr_code();
+                ESP_LOGI(TAG, "DISPLAY_MODE QR interrupted_scene=yes");
             } else {
                 draw_idle();
             }
@@ -1453,6 +1713,9 @@ void app_main(void)
     lcd_init();
     visual_sd_init();
     media_scene_count = load_media_scene_index();
+    if (!playback_state_load()) {
+        ESP_LOGI(TAG, "SCENE_DECK_NEW no compatible saved position");
+    }
     dfplayer_init();
 
     ESP_ERROR_CHECK(esp_hid_gap_init(HID_HOST_MODE));

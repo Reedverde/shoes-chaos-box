@@ -1,0 +1,14 @@
+{
+  "id": "synthetic-starter-v1",
+  "version": 1,
+  "title": "Start with shapes and sound",
+  "kind": "device-media",
+  "filename": "shoes-starter-v1.zip",
+  "download": "/downloads/shoes-starter-v1.zip",
+  "bytes": 484262,
+  "sha256": "b67794c93de4e7dd25db0da0818b5ce0436ce748b34ba6c0dd3037fc304db129",
+  "sceneCount": 32,
+  "audioTracks": 29,
+  "media": "Original geometric test screens and synthesized tones. No performance clips.",
+  "hardwareValidation": "File structure, dimensions, mappings and hashes checked; this new starter pack has not been played on the physical device."
+}

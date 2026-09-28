@@ -10,11 +10,20 @@ constexpr uint8_t IDLE_BRIGHTNESS = 12;
 constexpr uint8_t EFFECT_BRIGHTNESS = 48;
 constexpr uint8_t SONG_BRIGHTNESS = 88;
 constexpr uint16_t AFTERGLOW_MS = 2000;
-constexpr uint16_t CALM_FRAME_INTERVAL_MS = 90;
-constexpr uint16_t SONG_FRAME_INTERVAL_MS = 42;
+// Effect tempos retained from the pre-repair firmware; rendering has its own
+// faster cadence below so a missed render does not slow the animation clock.
+constexpr uint16_t CALM_FRAME_INTERVAL_MS = 45;
+constexpr uint16_t SONG_FRAME_INTERVAL_MS = 25;
 constexpr uint16_t SYNC_MIN_MS = 45;
 constexpr uint16_t SYNC_MAX_MS = 85;
+constexpr uint16_t ARC_SYNC_MIN_MS = 105;
+constexpr uint16_t ARC_SYNC_MAX_MS = 145;
 constexpr uint16_t BIT_ONE_THRESHOLD_MS = 19;
+constexpr uint32_t ARC_STARTUP_MS = 5040;
+constexpr uint32_t ARC_PULSE_MS = 30000;
+constexpr uint32_t ARC_CYCLE_MS = ARC_STARTUP_MS + ARC_PULSE_MS;
+constexpr uint16_t ARC_BOOT_RECOVERY_MS = 750;
+constexpr uint16_t STATUS_INTERVAL_MS = 5000;
 
 struct Color {
   uint8_t red;
@@ -63,33 +72,50 @@ enum class DecodeState : uint8_t {
   WaitForSync,
   ReadBits,
   Armed,
+  ArcArmed,
   Active,
 };
 
 DecodeState decodeState = DecodeState::WaitForSync;
 bool previousInput = false;
 bool sceneActive = false;
+bool arcCoreActive = false;
 bool effectVisible = false;
+bool bootArcRecoveryPending = false;
 uint8_t scenePalette = 17;
 uint8_t decodedScene = 0;
 uint8_t decodedBitCount = 0;
-uint8_t animationStep = 0;
+// Phrase timing starts at each scene; spatial rotation survives scene changes.
+uint32_t animationStep = 0;
+uint32_t sceneStartedAt = 0;
+uint32_t rotationUpdatedAt = 0;
+uint32_t rotationQ16 = 0;
+Color framePixels[PIXEL_COUNT] = {};
+
+void setFramePixel(uint8_t pixel, uint8_t red, uint8_t green, uint8_t blue) {
+  if (pixel < PIXEL_COUNT) framePixels[pixel] = {red, green, blue};
+}
+
+void presentFrame(bool rotate);
 uint32_t pulseStartedAt = 0;
 uint32_t lastFrameAt = 0;
 uint32_t afterglowUntil = 0;
+uint32_t bootHighStartedAt = 0;
+uint32_t lastStatusAt = 0;
 
 void clearPixels() {
   for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
-    CircuitPlayground.setPixelColor(pixel, 0, 0, 0);
+    setFramePixel(pixel, 0, 0, 0);
   }
 }
 
 void drawIdle() {
   CircuitPlayground.setBrightness(IDLE_BRIGHTNESS);
   clearPixels();
-  CircuitPlayground.setPixelColor(0, 0, 120, 255);
-  CircuitPlayground.setPixelColor(5, 0, 120, 255);
-  CircuitPlayground.strip.show();
+  setFramePixel(0, 0, 120, 255);
+  setFramePixel(5, 0, 120, 255);
+  presentFrame(false);
+
 }
 
 bool isShoesSongScene() {
@@ -128,7 +154,7 @@ Color blendColor(const Color &from, const Color &to, uint8_t amount) {
 
 void fillPixels(const Color &color) {
   for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
-    CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+    setFramePixel(pixel, color.red, color.green, color.blue);
   }
 }
 
@@ -136,32 +162,29 @@ void drawCalmSceneFrame(uint8_t brightness) {
   CircuitPlayground.setBrightness(brightness);
   for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
     const Color color = SCENE_PALETTES[scenePalette]
-                                      [(pixel + animationStep) % 3];
-    CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+                                      [pixel % 3];
+    setFramePixel(pixel, color.red, color.green, color.blue);
   }
-  CircuitPlayground.strip.show();
-  animationStep = (animationStep + 1) % 30;
+
 }
 
 void drawWizardOfOzFrame(uint8_t brightness) {
-  // Emerald City glow under a single ruby-slipper highlight. Advancing one
-  // LED every seven calm frames makes one full circuit take about 6.3 seconds,
-  // matching the clip instead of reading as a fast party chase.
+  // Emerald City glow under a ruby-slipper highlight. Spatial movement is
+  // applied once in presentFrame using elapsed time.
   const Color ruby = SCENE_PALETTES[scenePalette][0];
   const Color emerald = SCENE_PALETTES[scenePalette][1];
   CircuitPlayground.setBrightness(brightness);
   fillPixels(scaleColor(emerald, 92));
 
-  const uint8_t runner = (animationStep / 7) % PIXEL_COUNT;
+  const uint8_t runner = 0;
   const Color rubyTail = scaleColor(ruby, 70);
   const Color rubyGlow = scaleColor(ruby, 150);
-  CircuitPlayground.setPixelColor((runner + PIXEL_COUNT - 1) % PIXEL_COUNT,
+  setFramePixel((runner + PIXEL_COUNT - 1) % PIXEL_COUNT,
                                   rubyTail.red, rubyTail.green, rubyTail.blue);
-  CircuitPlayground.setPixelColor(runner, ruby.red, ruby.green, ruby.blue);
-  CircuitPlayground.setPixelColor((runner + 1) % PIXEL_COUNT,
+  setFramePixel(runner, ruby.red, ruby.green, ruby.blue);
+  setFramePixel((runner + 1) % PIXEL_COUNT,
                                   rubyGlow.red, rubyGlow.green, rubyGlow.blue);
-  CircuitPlayground.strip.show();
-  animationStep = (animationStep + 1) % 140;
+
 }
 
 void drawSpongeBobFrame(uint8_t brightness) {
@@ -173,19 +196,18 @@ void drawSpongeBobFrame(uint8_t brightness) {
   CircuitPlayground.setBrightness(brightness);
   fillPixels(scaleColor(water, 125));
 
-  const uint8_t first = (animationStep / 3) % PIXEL_COUNT;
+  const uint8_t first = 0;
   const uint8_t second = (first + 5) % PIXEL_COUNT;
   const Color yellowGlow = scaleColor(yellow, 120);
-  CircuitPlayground.setPixelColor(first, yellow.red, yellow.green, yellow.blue);
-  CircuitPlayground.setPixelColor((first + 1) % PIXEL_COUNT,
+  setFramePixel(first, yellow.red, yellow.green, yellow.blue);
+  setFramePixel((first + 1) % PIXEL_COUNT,
                                   yellowGlow.red, yellowGlow.green,
                                   yellowGlow.blue);
-  CircuitPlayground.setPixelColor(second, yellow.red, yellow.green, yellow.blue);
-  CircuitPlayground.setPixelColor((second + 1) % PIXEL_COUNT,
+  setFramePixel(second, yellow.red, yellow.green, yellow.blue);
+  setFramePixel((second + 1) % PIXEL_COUNT,
                                   yellowGlow.red, yellowGlow.green,
                                   yellowGlow.blue);
-  CircuitPlayground.strip.show();
-  animationStep = (animationStep + 1) % 120;
+
 }
 
 void drawSongSceneFrame(uint8_t brightness) {
@@ -195,19 +217,19 @@ void drawSongSceneFrame(uint8_t brightness) {
   constexpr Color neonGreen = {16, 255, 72};
   constexpr Color neonMagenta = {255, 0, 190};
   constexpr Color electricBlue = {0, 96, 255};
-  const uint8_t step = animationStep % 120;
+  const uint32_t step = animationStep;
   const uint8_t profile = scenePalette - 17;
   clearPixels();
   CircuitPlayground.setBrightness(brightness);
 
   if (profile == 0) {
     // S018: a wide green wedge chases clockwise and fades at its edges.
-    const uint8_t runner = (step / 2) % PIXEL_COUNT;
+    const uint8_t runner = 0;
     for (uint8_t width = 0; width < 5; ++width) {
       const uint8_t levels[5] = {70, 170, 255, 170, 70};
       const Color color = scaleColor(neonGreen, levels[width]);
       const uint8_t pixel = (runner + width) % PIXEL_COUNT;
-      CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+      setFramePixel(pixel, color.red, color.green, color.blue);
     }
   } else if (profile == 1) {
     // S019: forceful magenta blink that falls away between hits.
@@ -218,11 +240,11 @@ void drawSongSceneFrame(uint8_t brightness) {
     fillPixels(scaleColor(neonMagenta, level));
   } else if (profile == 2) {
     // S020: clean blue and magenta half-rings rotate around each other.
-    const uint8_t shift = (step / 2) % PIXEL_COUNT;
+    const uint8_t shift = 0;
     for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
       const Color color = ((pixel + shift) % PIXEL_COUNT < 5) ? electricBlue
                                                                : neonMagenta;
-      CircuitPlayground.setPixelColor(pixel, color.red, color.green,
+      setFramePixel(pixel, color.red, color.green,
                                       color.blue);
     }
   } else if (profile == 3) {
@@ -230,11 +252,11 @@ void drawSongSceneFrame(uint8_t brightness) {
     const uint8_t breath = step % 40;
     const uint8_t triangle = breath < 20 ? breath : 39 - breath;
     const uint8_t level = static_cast<uint8_t>(55 + triangle * 10);
-    const uint8_t shift = (step / 8) % PIXEL_COUNT;
+    const uint8_t shift = 0;
     for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
       const uint8_t index = ((pixel + shift) % PIXEL_COUNT < 5) ? 0 : 2;
       const Color color = scaleColor(SCENE_PALETTES[scenePalette][index], level);
-      CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+      setFramePixel(pixel, color.red, color.green, color.blue);
     }
   } else if (profile == 4) {
     // S022: rotating green/blue halves punctuated by a full magenta hit.
@@ -242,11 +264,11 @@ void drawSongSceneFrame(uint8_t brightness) {
     if (beat < 3) {
       fillPixels(neonMagenta);
     } else {
-      const uint8_t shift = (step / 3) % PIXEL_COUNT;
+      const uint8_t shift = 0;
       for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
         const Color color = ((pixel + shift) % PIXEL_COUNT < 5) ? neonGreen
                                                                  : electricBlue;
-        CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+        setFramePixel(pixel, color.red, color.green, color.blue);
       }
     }
   } else if (profile == 5) {
@@ -258,18 +280,18 @@ void drawSongSceneFrame(uint8_t brightness) {
       else if (roll < 170) {
         color = blendColor(neonMagenta, electricBlue, (roll - 85) * 3);
       } else color = blendColor(electricBlue, neonGreen, (roll - 170) * 3);
-      CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+      setFramePixel(pixel, color.red, color.green, color.blue);
     }
     if (step % 20 < 2) fillPixels({255, 255, 255});
   } else if (profile == 6) {
     // S024: a wide warm-gold wedge circles through darkness.
     const Color gold = SCENE_PALETTES[scenePalette][2];
-    const uint8_t runner = (step / 3) % PIXEL_COUNT;
+    const uint8_t runner = 0;
     for (uint8_t width = 0; width < 5; ++width) {
       const uint8_t levels[5] = {65, 155, 255, 155, 65};
       const Color color = scaleColor(gold, levels[width]);
       const uint8_t pixel = (runner + width) % PIXEL_COUNT;
-      CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+      setFramePixel(pixel, color.red, color.green, color.blue);
     }
   } else if (profile == 7) {
     // S025: unapologetic rapid full-ring color cuts with black punctuation.
@@ -301,22 +323,21 @@ void drawSongSceneFrame(uint8_t brightness) {
     if (beat < 4) {
       fillPixels(beat < 2 ? neonMagenta : neonGreen);
     } else {
-      const uint8_t shift = (step / 2) % PIXEL_COUNT;
+      const uint8_t shift = 0;
       for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
         const Color color = ((pixel + shift) % PIXEL_COUNT < 5) ? neonMagenta
                                                                  : neonGreen;
-        CircuitPlayground.setPixelColor(pixel, color.red, color.green,
+        setFramePixel(pixel, color.red, color.green,
                                         color.blue);
       }
     }
   }
 
-  CircuitPlayground.strip.show();
-  animationStep = (animationStep + 1) % 120;
+
 }
 
 void drawKlingSceneFrame(uint8_t brightness) {
-  const uint8_t step = animationStep % 144;
+  const uint32_t step = animationStep;
   const Color first = SCENE_PALETTES[scenePalette][0];
   const Color second = SCENE_PALETTES[scenePalette][1];
   const Color third = SCENE_PALETTES[scenePalette][2];
@@ -328,15 +349,16 @@ void drawKlingSceneFrame(uint8_t brightness) {
     if (step % 24 < 3) {
       fillPixels(third);
     } else {
-      const uint8_t shift = (step / 5) % PIXEL_COUNT;
+      const uint8_t shift = 0;
       for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
         const Color color = ((pixel + shift) % PIXEL_COUNT < 5) ? first : second;
-        CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+        setFramePixel(pixel, color.red, color.green, color.blue);
       }
     }
   } else if (scenePalette == 30) {
     // S031 rule/suck/rule: cyan approval, magenta rejection, lime comeback.
-    const uint8_t phrase = step < 54 ? 0 : (step < 108 ? 1 : 2);
+    const uint32_t age = millis() - sceneStartedAt;
+    const uint8_t phrase = age < 2250 ? 0 : (age < 4500 ? 1 : 2);
     const Color phraseColor = phrase == 0 ? first : (phrase == 1 ? second : third);
     const uint8_t pulse = step % 12;
     fillPixels(scaleColor(phraseColor, pulse < 3 ? 255 : 125));
@@ -345,31 +367,152 @@ void drawKlingSceneFrame(uint8_t brightness) {
     if (step % 18 < 3) {
       fillPixels(second);
     } else {
-      const uint8_t shift = (step / 2) % PIXEL_COUNT;
+      const uint8_t shift = 0;
       for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
         const Color color = ((pixel + shift) % PIXEL_COUNT < 5) ? first : third;
-        CircuitPlayground.setPixelColor(pixel, color.red, color.green, color.blue);
+        setFramePixel(pixel, color.red, color.green, color.blue);
       }
     }
   }
 
+
+}
+
+uint8_t smoothPulseLevel(uint32_t age) {
+  // Four 7.5-second breathing cycles. Smoothstep softens both ends so the
+  // powered-on ring never looks like a blink.
+  const uint32_t cycle = age % 7500U;
+  const uint32_t distance = cycle <= 3750U ? cycle : 7500U - cycle;
+  const uint32_t linear = distance * 255U / 3750U;
+  return static_cast<uint8_t>(
+      (linear * linear * (765U - 2U * linear)) / (255U * 255U));
+}
+
+void drawArcCoreFrame() {
+  uint32_t age = (millis() - sceneStartedAt) % ARC_CYCLE_MS;
+  constexpr Color deepBlue = {0, 34, 105};
+  constexpr Color poweredBlue = {0, 112, 255};
+  constexpr Color gold = {255, 176, 32};
+  constexpr Color paleGold = {255, 226, 128};
+  clearPixels();
+
+  if (age < 4200U) {
+    // Seven accelerating revolutions build energy around a dim blue base.
+    // The faster initial speed makes the rotation obvious immediately.
+    fillPixels(scaleColor(deepBlue, 90));
+    const uint64_t baseStepsQ16 = static_cast<uint64_t>(age) * 65536U / 170U;
+    const uint64_t accelerationQ16 = static_cast<uint64_t>(age) * age *
+        65536U * 453U / (4200ULL * 4200ULL * 10ULL);
+    rotationQ16 = static_cast<uint32_t>(
+        (baseStepsQ16 + accelerationQ16) % (PIXEL_COUNT * 65536ULL));
+    const Color tail = scaleColor(gold, 65);
+    const Color shoulder = scaleColor(paleGold, 165);
+    setFramePixel(0, tail.red, tail.green, tail.blue);
+    setFramePixel(1, shoulder.red, shoulder.green, shoulder.blue);
+    setFramePixel(2, gold.red, gold.green, gold.blue);
+    setFramePixel(3, shoulder.red, shoulder.green, shoulder.blue);
+    CircuitPlayground.setBrightness(
+        static_cast<uint8_t>(68U + age * 32U / 4200U));
+    presentFrame(true);
+    return;
+  }
+
+  if (age < 4650U) {
+    // The chase closes into a complete ring and blooms from gold to pale gold.
+    const uint8_t mix = static_cast<uint8_t>((age - 4200U) * 255U / 450U);
+    fillPixels(blendColor(gold, paleGold, mix));
+    CircuitPlayground.setBrightness(
+        static_cast<uint8_t>(100U + (age - 4200U) * 25U / 450U));
+    presentFrame(false);
+    return;
+  }
+
+  if (age < 4850U) {
+    // Short, decisive gold ignition glow with no white flash.
+    fillPixels(paleGold);
+    CircuitPlayground.setBrightness(125);
+    presentFrame(false);
+    return;
+  }
+
+  if (age < ARC_STARTUP_MS) {
+    // Cool directly from gold into the blue operating state.
+    const uint8_t mix = static_cast<uint8_t>(
+        (age - 4850U) * 255U / (ARC_STARTUP_MS - 4850U));
+    fillPixels(blendColor(paleGold, poweredBlue, mix));
+    CircuitPlayground.setBrightness(105);
+    presentFrame(false);
+    return;
+  }
+
+  const uint8_t pulse = smoothPulseLevel(age - ARC_STARTUP_MS);
+  const Color lowBlue = {0, 38, 125};
+  const Color highBlue = {25, 195, 255};
+  fillPixels(blendColor(lowBlue, highBlue, pulse));
+  CircuitPlayground.setBrightness(static_cast<uint8_t>(45U + pulse * 60U / 255U));
+  presentFrame(false);
+}
+
+// Milliseconds per LED position. Zero means a non-rotating effect.
+uint16_t rotationPeriod() {
+  if (isWizardOfOzScene()) return 90;
+  if (isSpongeBobScene()) return 135;
+  if (scenePalette == 29) return 225;
+  if (scenePalette == 30) return 0;
+  if (scenePalette == 31) return 50;
+  if (isShoesSongScene()) {
+    switch (scenePalette - 17) {
+      case 0: case 2: case 9: return 50;
+      case 3: return 200;
+      case 4: case 6: return 75;
+      default: return 0;
+    }
+  }
+  return 45;
+}
+
+void presentFrame(bool rotate) {
+  const uint8_t shift = rotate ? rotationQ16 >> 16 : 0;
+  const uint8_t fraction = rotate ? (rotationQ16 & 65535U) >> 8 : 0;
+  for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
+    const uint8_t source = (pixel + PIXEL_COUNT - shift) % PIXEL_COUNT;
+    const Color color = blendColor(framePixels[source],
+        framePixels[(source + PIXEL_COUNT - 1) % PIXEL_COUNT], fraction);
+    CircuitPlayground.strip.setPixelColor(pixel, color.red, color.green, color.blue);
+  }
   CircuitPlayground.strip.show();
-  animationStep = (animationStep + 1) % 144;
 }
 
 void drawSceneFrame(uint8_t brightness) {
+  if (arcCoreActive) {
+    drawArcCoreFrame();
+    return;
+  }
+  const uint32_t now = millis();
+  const uint16_t period = rotationPeriod();
+  if (period) {
+    rotationQ16 = (rotationQ16 + (uint64_t)(now - rotationUpdatedAt) * 65536U / period)
+                   % (PIXEL_COUNT * 65536U);
+  }
+  rotationUpdatedAt = now;
+  animationStep = (now - sceneStartedAt) /
+      (isShoesSongScene() ? SONG_FRAME_INTERVAL_MS : CALM_FRAME_INTERVAL_MS);
   if (isWizardOfOzScene()) drawWizardOfOzFrame(brightness);
   else if (isSpongeBobScene()) drawSpongeBobFrame(brightness);
   else if (isKlingScene()) drawKlingSceneFrame(brightness);
   else if (isShoesSongScene()) drawSongSceneFrame(brightness);
   else drawCalmSceneFrame(brightness);
+  presentFrame(period != 0);
 }
 
 void beginScene(uint32_t now) {
+  arcCoreActive = false;
   scenePalette = decodedScene < SCENE_COUNT ? decodedScene : 17;
+  sceneStartedAt = now;
+  rotationUpdatedAt = now;
+  animationStep = 0;
   sceneActive = true;
   effectVisible = true;
-  animationStep = 0;
   lastFrameAt = 0;
   decodeState = DecodeState::Active;
   Serial.print("HALO_SCENE S");
@@ -380,17 +523,47 @@ void beginScene(uint32_t now) {
   lastFrameAt = now;
 }
 
+void beginArcCore(uint32_t now) {
+  sceneStartedAt = now;
+  rotationUpdatedAt = now;
+  animationStep = 0;
+  sceneActive = true;
+  arcCoreActive = true;
+  effectVisible = true;
+  lastFrameAt = 0;
+  decodeState = DecodeState::Active;
+  Serial.println("HALO_ARCCORE");
+  drawArcCoreFrame();
+  lastFrameAt = now;
+}
+
+void recoverArcFromHeldBootSignal(uint32_t now, bool inputHigh) {
+  if (!bootArcRecoveryPending) return;
+  if (!inputHigh) {
+    bootArcRecoveryPending = false;
+    return;
+  }
+  if (now - bootHighStartedAt < ARC_BOOT_RECOVERY_MS) return;
+  bootArcRecoveryPending = false;
+  Serial.println("HALO_ARCCORE_BOOT_RECOVERY");
+  beginArcCore(now);
+}
+
 void handleFallingEdge(uint32_t now) {
   const uint32_t pulseWidth = now - pulseStartedAt;
   if (decodeState == DecodeState::Active) {
+    const bool wasArcCore = arcCoreActive;
     sceneActive = false;
-    afterglowUntil = now + AFTERGLOW_MS;
+    arcCoreActive = false;
+    afterglowUntil = wasArcCore ? now : now + AFTERGLOW_MS;
     decodeState = DecodeState::WaitForSync;
     return;
   }
 
   if (decodeState == DecodeState::WaitForSync) {
-    if (pulseWidth >= SYNC_MIN_MS && pulseWidth <= SYNC_MAX_MS) {
+    if (pulseWidth >= ARC_SYNC_MIN_MS && pulseWidth <= ARC_SYNC_MAX_MS) {
+      decodeState = DecodeState::ArcArmed;
+    } else if (pulseWidth >= SYNC_MIN_MS && pulseWidth <= SYNC_MAX_MS) {
       decodedScene = 0;
       decodedBitCount = 0;
       decodeState = DecodeState::ReadBits;
@@ -413,28 +586,45 @@ void setup() {
   Serial.begin(115200);
   CircuitPlayground.begin();
   pinMode(PIN_SCENE_TRIGGER, INPUT_PULLDOWN);
+  previousInput = digitalRead(PIN_SCENE_TRIGGER) == HIGH;
+  if (previousInput) {
+    pulseStartedAt = millis();
+    bootHighStartedAt = pulseStartedAt;
+    bootArcRecoveryPending = true;
+  }
   drawIdle();
-  Serial.println("HALO_READY A1 scene-code v2");
+  Serial.println("HALO_READY A1 scene-code v3 + ARCCORE");
 }
 
 void loop() {
   const uint32_t now = millis();
   const bool inputHigh = digitalRead(PIN_SCENE_TRIGGER) == HIGH;
 
+  recoverArcFromHeldBootSignal(now, inputHigh);
+
   if (inputHigh != previousInput) {
     if (inputHigh) {
       pulseStartedAt = now;
       if (decodeState == DecodeState::Armed) beginScene(now);
+      else if (decodeState == DecodeState::ArcArmed) beginArcCore(now);
     } else {
       handleFallingEdge(now);
     }
     previousInput = inputHigh;
   }
 
+  if (now - lastStatusAt >= STATUS_INTERVAL_MS) {
+    lastStatusAt = now;
+    Serial.print("HALO_STATUS input=");
+    Serial.print(inputHigh ? 1 : 0);
+    Serial.print(" arc=");
+    Serial.print(arcCoreActive ? 1 : 0);
+    Serial.print(" state=");
+    Serial.println(static_cast<uint8_t>(decodeState));
+  }
+
   const int32_t afterglowRemaining = static_cast<int32_t>(afterglowUntil - now);
-  const uint16_t frameInterval = isShoesSongScene()
-                                     ? SONG_FRAME_INTERVAL_MS
-                                     : CALM_FRAME_INTERVAL_MS;
+  const uint16_t frameInterval = 16; // Smooth rendering, independent of effect tempo.
   if ((sceneActive || afterglowRemaining > 0) &&
       now - lastFrameAt >= frameInterval) {
     const uint8_t sceneBrightness = isShoesSongScene()
