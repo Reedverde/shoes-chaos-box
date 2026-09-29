@@ -23,4 +23,5 @@ jobs:
         working-directory: cloudflare/chaos-director
       - run: python3 tools/validate_starter_pack.py
       - run: python3 firmware/idf_wearable/tests/host/test_display_cycle.py
+      - run: python3 firmware/circuit_playground_halo/tests/host/test_link.py
       - run: c++ -std=c++17 -Ifirmware/circuit_playground_halo/tests/host firmware/circuit_playground_halo/tests/host/test.cpp -o /tmp/shoes-halo-test && /tmp/shoes-halo-test

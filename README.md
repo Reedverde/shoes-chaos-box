@@ -20,6 +20,7 @@ This repository records the decisions, mistakes, measurements, and code behind t
 | Inputs | Bluetooth pedal and local forward/previous buttons; scene order survives restarts |
 | Lights | Circuit Playground Express with scene-specific patterns and continuous chases |
 | Special display | Right pedal in Mode 5 cycles QR → silent Arc Core → home; Mode 4 directly toggles Arc Core |
+| Home and QR lighting | Home has a soft blue/pink/yellow rotation; QR has a dim green breathing pulse without a chase |
 | Timing | All 1,055 normal frames displayed in the full-catalog bench test; 31 scenes ended 10 ms over target and one 58 ms over |
 | Cloudflare | Content-pack downloads, canonical catalog, and deterministic playlist previews |
 | Still ahead | Wearable mounting, diffuser approval, repeated physical control checks, and a five-hour battery test |

@@ -9,15 +9,26 @@ Bench wiring:
 - Power each board from its own USB cable for this test
 - Do not connect the boards' 3.3V or 5V/VOUT pads together
 
-At idle, two dim cyan pixels show that the halo controller is alive. Before
+At the home logo, three broad blue, pink, and yellow groups rotate smoothly
+once every 24 seconds, with a gentle six-second pulse at brightness 18–32/255.
+At QR, all ten pixels breathe green together every five seconds at brightness
+8–20/255, with no chase. Both patterns render at roughly 31 frames per second.
+Before
 holding A1 high for a scene, the ESP32 sends a short one-wire code containing
 the S001-S032 scene number. The Circuit Playground selects that scene's
-three-color palette, animates it for the complete scene, fades the same palette
-for two seconds, and returns to idle.
+three-color palette and animates it for the complete scene. The explicit home
+command ends any residual scene afterglow when the logo returns.
 
 The scene-code protocol uses the existing GPIO21/A1 and shared-ground wires;
 no additional data wire is required. The 32 palettes are curated to the
 dominant colors in the circular media exports.
+
+Home and QR use reserved 340 ms and 220 ms high pulses respectively, preceded
+by 60 ms low. These commands latch at the falling edge and leave the wire low.
+They do not consume normal scene IDs. The ESP32 refreshes the QR command every
+five seconds while QR is shown, allowing a late-powered halo to recover. A
+fresh sync can replace an incomplete packet; a 100 ms low gap clears an
+unfinished packet. Normal scene and Arc active-high signaling is retained.
 
 Arc Core uses a distinct 120 ms sync pulse on that same wire, so it does not
 consume or collide with any of the 32 normal scene codes. Its 35.04-second
@@ -58,7 +69,12 @@ decode and fast-gold/blue timing:
 ```sh
 c++ -std=c++17 -I tests/host tests/host/test.cpp -o /tmp/halo-test
 /tmp/halo-test
+python3 tests/host/test_link.py
 ```
+
+The link test runs the real ESP32 pulse senders against the halo loop. It checks
+home/QR colors, brightness limits, motion, every scene ID, Arc transitions,
+interrupted packets, and QR refresh after a receiver restart.
 
 The SAM-BA uploader failed on this board. The repair was installed using a UF2
 image at application address 0x2000, preserving its bootloader. Application

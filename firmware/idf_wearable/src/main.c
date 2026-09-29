@@ -93,6 +93,8 @@
 #define VOLUME_OVERLAY_MS 1200
 #define HALO_SYNC_HIGH_US 60000
 #define HALO_ARC_SYNC_HIGH_US 120000
+#define HALO_QR_SYNC_HIGH_US 220000
+#define HALO_HOME_SYNC_HIGH_US 340000
 #define HALO_SYNC_LOW_US 30000
 #define HALO_BIT_ZERO_US 10000
 #define HALO_BIT_ONE_US 30000
@@ -226,6 +228,18 @@ static void halo_start_scene(uint8_t scene_index)
 static void halo_stop(void)
 {
     gpio_set_level(PIN_HALO_TRIGGER, 0);
+}
+
+static void halo_idle(bool qr)
+{
+    // Reserved pulses select a latched idle pattern, leaving the line LOW.
+    // The initial low gives the receiver time to exit an active scene.
+    halo_stop();
+    vTaskDelay(pdMS_TO_TICKS(60));
+    gpio_set_level(PIN_HALO_TRIGGER, 1);
+    esp_rom_delay_us(qr ? HALO_QR_SYNC_HIGH_US : HALO_HOME_SYNC_HIGH_US);
+    halo_stop();
+    ESP_LOGI(TAG, "HALO_IDLE_CODE %s", qr ? "QR" : "HOME");
 }
 
 static void halo_start_arc_core(void)
@@ -629,6 +643,7 @@ static void draw_text(const char *text, int y, int scale, uint16_t color)
 
 static void draw_qr_code(void)
 {
+    halo_idle(true);
     // Keep the QR available even when the removable visual card is absent.
     if (draw_embedded_bmp(assets_QR_BMP,
                           assets_QR_BMP + assets_QR_BMP_len)) return;
@@ -720,6 +735,7 @@ static void play_face_sprite(size_t scene)
 
 static void draw_idle(void)
 {
+    halo_idle(false);
     // The branded rest state lives in ESP32 flash; the SD card is reserved
     // for the larger scene library.
     if (draw_embedded_bmp(assets_OPENING_BMP,
@@ -1505,6 +1521,7 @@ static void app_task(void *unused)
     TickType_t lockout_started = 0;
     uint32_t lockout_ms = TRIGGER_LOCKOUT_MS;
     TickType_t qr_last_toggled = 0;
+    TickType_t qr_halo_refreshed = 0;
     draw_idle();
 
 #ifdef SHOES_TIMING_BENCH
@@ -1524,6 +1541,13 @@ static void app_task(void *unused)
 #endif
 
     while (true) {
+        // Recover the correct QR lighting if the halo powers up late. This
+        // never runs during normal playback or the Arc Core loop.
+        if (qr_mode && (xTaskGetTickCount() - qr_halo_refreshed) >=
+                          pdMS_TO_TICKS(5000)) {
+            halo_idle(true);
+            qr_halo_refreshed = xTaskGetTickCount();
+        }
         bool qr_toggle_requested = false;
         bool arc_core_requested = false;
         bool previous_button_down = gpio_get_level(PIN_PREVIOUS_BUTTON) == 0;

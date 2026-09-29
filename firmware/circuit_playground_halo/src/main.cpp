@@ -18,6 +18,11 @@ constexpr uint16_t SYNC_MIN_MS = 45;
 constexpr uint16_t SYNC_MAX_MS = 85;
 constexpr uint16_t ARC_SYNC_MIN_MS = 105;
 constexpr uint16_t ARC_SYNC_MAX_MS = 145;
+constexpr uint16_t QR_SYNC_MIN_MS = 180;
+constexpr uint16_t QR_SYNC_MAX_MS = 255;
+constexpr uint16_t HOME_SYNC_MIN_MS = 290;
+constexpr uint16_t HOME_SYNC_MAX_MS = 410;
+constexpr uint16_t PACKET_LOW_TIMEOUT_MS = 100;
 constexpr uint16_t BIT_ONE_THRESHOLD_MS = 19;
 constexpr uint32_t ARC_STARTUP_MS = 5040;
 constexpr uint32_t ARC_PULSE_MS = 30000;
@@ -77,6 +82,8 @@ enum class DecodeState : uint8_t {
 };
 
 DecodeState decodeState = DecodeState::WaitForSync;
+enum class IdleMode : uint8_t { Home, Qr };
+IdleMode idleMode = IdleMode::Home;
 bool previousInput = false;
 bool sceneActive = false;
 bool arcCoreActive = false;
@@ -102,6 +109,7 @@ uint32_t lastFrameAt = 0;
 uint32_t afterglowUntil = 0;
 uint32_t bootHighStartedAt = 0;
 uint32_t lastStatusAt = 0;
+uint32_t inputLowStartedAt = 0;
 
 void clearPixels() {
   for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
@@ -109,13 +117,50 @@ void clearPixels() {
   }
 }
 
-void drawIdle() {
-  CircuitPlayground.setBrightness(IDLE_BRIGHTNESS);
-  clearPixels();
-  setFramePixel(0, 0, 120, 255);
-  setFramePixel(5, 0, 120, 255);
-  presentFrame(false);
+uint8_t ambientPulse(uint32_t now, uint32_t period) {
+  const uint32_t phase = now % period;
+  const uint32_t half = period / 2;
+  const uint32_t distance = phase <= half ? phase : period - phase;
+  const uint32_t x = distance * 255U / half;
+  return static_cast<uint8_t>(x * x * (765U - 2U * x) / (255U * 255U));
+}
 
+void drawIdle() {
+  const uint32_t now = millis();
+  if (idleMode == IdleMode::Qr) {
+    // All ten pixels breathe together: no chase or color movement behind QR.
+    CircuitPlayground.setBrightness(8U + ambientPulse(now, 5000U) * 12U / 255U);
+    for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel)
+      setFramePixel(pixel, 0, 220, 65);
+    presentFrame(false);
+    return;
+  }
+  // Three broad color groups (3/3/4 pixels); one gentle revolution in 24 s.
+  // Subpixel blending softens the boundaries as the groups move around the ring.
+  CircuitPlayground.setBrightness(18U + ambientPulse(now, 6000U) * 14U / 255U);
+  constexpr Color colors[] = {{20, 105, 255}, {255, 25, 140}, {255, 210, 35}};
+  for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
+    const Color c = colors[pixel < 3 ? 0 : (pixel < 6 ? 1 : 2)];
+    setFramePixel(pixel, c.red, c.green, c.blue);
+  }
+  const uint32_t savedRotation = rotationQ16;
+  rotationQ16 = static_cast<uint64_t>(now % 24000U) * PIXEL_COUNT * 65536U / 24000U;
+  presentFrame(true);
+  rotationQ16 = savedRotation;
+}
+
+void beginIdle(IdleMode mode, uint32_t now) {
+  idleMode = mode;
+  sceneActive = false;
+  arcCoreActive = false;
+  effectVisible = false;
+  afterglowUntil = now;
+  decodeState = DecodeState::WaitForSync;
+  decodedBitCount = 0;
+  bootArcRecoveryPending = false;
+  Serial.println(mode == IdleMode::Qr ? "HALO_IDLE QR" : "HALO_IDLE HOME");
+  drawIdle();
+  lastFrameAt = now;
 }
 
 bool isShoesSongScene() {
@@ -506,6 +551,7 @@ void drawSceneFrame(uint8_t brightness) {
 }
 
 void beginScene(uint32_t now) {
+  idleMode = IdleMode::Home;
   arcCoreActive = false;
   scenePalette = decodedScene < SCENE_COUNT ? decodedScene : 17;
   sceneStartedAt = now;
@@ -524,6 +570,7 @@ void beginScene(uint32_t now) {
 }
 
 void beginArcCore(uint32_t now) {
+  idleMode = IdleMode::Home;
   sceneStartedAt = now;
   rotationUpdatedAt = now;
   animationStep = 0;
@@ -560,14 +607,24 @@ void handleFallingEdge(uint32_t now) {
     return;
   }
 
-  if (decodeState == DecodeState::WaitForSync) {
-    if (pulseWidth >= ARC_SYNC_MIN_MS && pulseWidth <= ARC_SYNC_MAX_MS) {
-      decodeState = DecodeState::ArcArmed;
-    } else if (pulseWidth >= SYNC_MIN_MS && pulseWidth <= SYNC_MAX_MS) {
-      decodedScene = 0;
-      decodedBitCount = 0;
-      decodeState = DecodeState::ReadBits;
-    }
+  // A new reserved pulse also recovers from an interrupted normal packet.
+  // Idle commands latch at the falling edge and leave the wire LOW.
+  if (pulseWidth >= HOME_SYNC_MIN_MS && pulseWidth <= HOME_SYNC_MAX_MS) {
+    beginIdle(IdleMode::Home, now);
+    return;
+  }
+  if (pulseWidth >= QR_SYNC_MIN_MS && pulseWidth <= QR_SYNC_MAX_MS) {
+    beginIdle(IdleMode::Qr, now);
+    return;
+  }
+  if (pulseWidth >= ARC_SYNC_MIN_MS && pulseWidth <= ARC_SYNC_MAX_MS) {
+    decodeState = DecodeState::ArcArmed;
+    return;
+  }
+  if (pulseWidth >= SYNC_MIN_MS && pulseWidth <= SYNC_MAX_MS) {
+    decodedScene = 0;
+    decodedBitCount = 0;
+    decodeState = DecodeState::ReadBits;
     return;
   }
 
@@ -593,7 +650,7 @@ void setup() {
     bootArcRecoveryPending = true;
   }
   drawIdle();
-  Serial.println("HALO_READY A1 scene-code v3 + ARCCORE");
+  Serial.println("HALO_READY A1 scene-code v4 + ARCCORE + HOME/QR");
 }
 
 void loop() {
@@ -608,9 +665,16 @@ void loop() {
       if (decodeState == DecodeState::Armed) beginScene(now);
       else if (decodeState == DecodeState::ArcArmed) beginArcCore(now);
     } else {
+      inputLowStartedAt = now;
       handleFallingEdge(now);
     }
     previousInput = inputHigh;
+  }
+
+  if (!inputHigh && decodeState != DecodeState::WaitForSync &&
+      now - inputLowStartedAt >= PACKET_LOW_TIMEOUT_MS) {
+    decodeState = DecodeState::WaitForSync;
+    decodedBitCount = 0;
   }
 
   if (now - lastStatusAt >= STATUS_INTERVAL_MS) {
@@ -637,8 +701,10 @@ void loop() {
     }
     drawSceneFrame(brightness);
     lastFrameAt = now;
-  } else if (!sceneActive && afterglowRemaining <= 0 && effectVisible) {
+  } else if (!sceneActive && afterglowRemaining <= 0 &&
+             now - lastFrameAt >= 32U) {
     drawIdle();
+    lastFrameAt = now;
     effectVisible = false;
   }
   delay(1);

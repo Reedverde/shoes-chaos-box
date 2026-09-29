@@ -47,6 +47,7 @@ static void draw_idle(){trace+='H';}
 static void draw_qr_code(){trace+='Q';}
 static void dfplayer_stop(){}
 static void halo_stop(){}
+static void halo_idle(bool){}
 static void volume_adjust(int){}
 static void start_scan_if_needed(){}
 static size_t next_random_scene_index(){return playback_order_cursor++;}

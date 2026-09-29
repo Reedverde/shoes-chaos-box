@@ -1,3 +1,16 @@
+# Home and QR lighting — 2026-09-29
+
+- Added a soft blue/pink/yellow home-logo rotation: three LED groups, a
+  24-second revolution, and six-second breathing brightness.
+- Added a dim green five-second QR pulse with no chase.
+- Added explicit home/QR light commands over the existing GPIO21/A1 wire,
+  periodic QR recovery, and decoder recovery from incomplete packets.
+- Added a host test connecting the actual ESP32 pulse senders to the halo
+  receiver and renderer, alongside the existing scene and pedal-cycle tests.
+- Reed confirms the physical assembly is in its final configuration; placement
+  in the bag remains. Intermittent loud-audio distortion is still under review;
+  a lower-volume trial sounded clean. This is not an endurance-test sign-off.
+
 # Cloudflare publication — 2026-09-28
 
 - Published the [content library](https://shoes-chaos-director.reed-5c2.workers.dev/) and versioned starter download through the official Cloudflare MCP/API connection.

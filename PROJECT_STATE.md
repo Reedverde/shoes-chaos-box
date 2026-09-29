@@ -1,15 +1,24 @@
 # Project State
 
-Last audited: 2026-09-27
+Last updated: 2026-09-29 (full audit: September 27)
 
 ## Current result
 
-**Shoes Off, Dirtbag!** is a working two-controller bench prototype. The ESP32
+**Shoes Off, Dirtbag!** is a working two-controller proof of concept. The ESP32
 drives the round display, local forward/previous buttons, visual microSD, DFPlayer/speaker,
 and STRICH Bluetooth pedal. The Circuit Playground Express supplies the lapel
-halo. The next milestone is mechanical conversion from the working breadboard
-into a secure two-unit wearable; a perfboard conversion is not required for the
-first event build.
+halo. Reed confirmed the final physical assembly on September 29 and supplied
+a photo; placement in the bag remains. Movement and battery-endurance checks
+below are still separate acceptance tests.
+
+September 29 follow-up: Reed reported an occasional missed initial Arc light
+start and distorted audio at higher volume. A subsequent live trace confirmed
+both the ESP32 Arc command and the halo's immediate acknowledgement. A quieter
+audio trial sounded clean; supply/speaker/connection causes remain unisolated.
+New home-logo and QR lighting is installed on both controllers and described
+in the halo firmware README. Builds and host tests passed; live logs confirm
+the home command was received. Final visual approval and the new QR/Arc/home
+pedal check remain pending.
 
 ## Verified or implemented
 
