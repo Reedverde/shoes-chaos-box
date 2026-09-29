@@ -1,3 +1,13 @@
+# Richer movie lighting — 2026-09-29
+
+- Replaced the generic pale stripes for 17 movie/meme scenes with saturated
+  scene colors, comet tails, paired runners, marquee chases, split sweeps, and
+  softly breathing highlights. Dark gaps preserve contrast through the diffuser.
+- Kept movie brightness at 48/255 and retained the approved home/QR patterns,
+  Arc Core, Wizard of Oz, SpongeBob, and dedicated Shoes/Kling effects.
+- Added checks for moving colored highlights, dark gaps after interpolation,
+  and one LED update per frame across the revised scenes.
+
 # Home and QR lighting — 2026-09-29
 
 - Added a soft blue/pink/yellow home-logo rotation: three LED groups, a

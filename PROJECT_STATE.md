@@ -17,8 +17,12 @@ both the ESP32 Arc command and the halo's immediate acknowledgement. A quieter
 audio trial sounded clean; supply/speaker/connection causes remain unisolated.
 New home-logo and QR lighting is installed on both controllers and described
 in the halo firmware README. Builds and host tests passed; live logs confirm
-the home command was received. Final visual approval and the new QR/Arc/home
-pedal check remain pending.
+the home command was received. Reed approved the home/QR appearance and
+reported Arc starting immediately after pedal reconnection. The subsequent
+movie-light update is installed and replaces 17 pale stripe palettes with
+saturated, moving looks. Builds and host checks passed, and the connected halo
+reports the new firmware marker. Diffuser approval of those new scene looks
+remains separate.
 
 ## Verified or implemented
 

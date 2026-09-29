@@ -36,26 +36,26 @@ struct Color {
   uint8_t blue;
 };
 
-// Palettes S001-S032. They follow the dominant colors of the actual circular
-// scene exports rather than rotating through unrelated generic colors.
+// Palettes S001-S032. Movie accents are deliberately saturated so the
+// diffuser preserves their scene identity instead of blending into white.
 constexpr Color SCENE_PALETTES[SCENE_COUNT][3] = {
-    {{236, 244, 255}, {160, 205, 255}, {112, 112, 112}},  // S001 Damn Daniel
+    {{  0, 100, 255}, {  0, 230, 190}, {160,  10, 255}},  // S001 Damn Daniel
     {{224,   0,  48}, {  0, 170,  80}, {  0,  70,  36}},  // S002 Wizard of Oz
-    {{255, 208,  91}, {144, 112,  80}, {255, 244, 210}},  // S003 Curb
-    {{ 87, 170, 255}, {255, 255, 255}, {255, 195,  67}},  // S004 Austin Powers
-    {{177, 156, 255}, {144,  80, 112}, {255, 255, 255}},  // S005 Silence/Lambs
-    {{140, 224, 180}, { 40, 112,  72}, {255, 255, 255}},  // S006 Forrest Gump
-    {{173, 198, 213}, { 72,  96, 112}, {255, 255, 255}},  // S007 Shawshank
-    {{255, 195,  67}, { 48,  80, 112}, {220,  64,  48}},  // S008 Toy Story
-    {{112, 237, 255}, {255,  71, 170}, {255, 255, 255}},  // S009 Back/Future
-    {{237, 237, 255}, {176, 176, 192}, { 48,  96, 180}},  // S010 Michael Jackson
-    {{255,  84,  84}, {255, 255, 255}, { 32,  32,  32}},  // S011 Michael Jordan
-    {{156, 220, 255}, {208, 112, 144}, {255, 255, 255}},  // S012 Cinderella
-    {{226, 101, 103}, {255, 232, 192}, { 72, 112, 176}},  // S013 Mister Rogers
-    {{255, 124, 213}, {255, 190, 230}, {255, 255, 255}},  // S014 Barbie
-    {{127, 228, 179}, { 32, 128,  80}, {255, 255, 255}},  // S015 Get Smart
+    {{255, 145,   8}, {  0, 165, 220}, {255,  45,  12}},  // S003 Curb
+    {{165,   0, 255}, {255, 145,   0}, {255,  15, 110}},  // S004 Austin Powers
+    {{130,   0, 240}, {215,   0,  28}, {  0,  80, 170}},  // S005 Silence/Lambs
+    {{  8, 220,  75}, {255, 150,  12}, {  0, 125, 180}},  // S006 Forrest Gump
+    {{  0, 100, 240}, {  0, 205, 170}, {255, 115,   8}},  // S007 Shawshank
+    {{255, 165,   0}, {  0,  80, 225}, {235,  25,   8}},  // S008 Toy Story
+    {{  0, 195, 255}, {255,  65,   0}, {125,   0, 255}},  // S009 Back/Future
+    {{  0,  65, 255}, {150,   0, 255}, {  0, 220, 225}},  // S010 Michael Jackson
+    {{255,  12,  20}, {255,  95,   0}, { 85,   0, 155}},  // S011 Michael Jordan
+    {{  0, 170, 255}, {125,  15, 255}, {255,  45, 130}},  // S012 Cinderella
+    {{235,  22,  40}, {255, 150,  10}, {  0, 145, 130}},  // S013 Mister Rogers
+    {{255,   0, 115}, {155,   0, 235}, {255, 145,   0}},  // S014 Barbie
+    {{  0, 235,  65}, {  0, 120, 200}, {255, 125,   0}},  // S015 Get Smart
     {{255, 225,  40}, { 72, 190, 255}, {210, 245, 255}},  // S016 SpongeBob
-    {{238, 231, 213}, {176, 144,  96}, {255, 208,  91}},  // S017 Chaplin
+    {{255, 145,  15}, {170,  10, 165}, {255,  55,   0}},  // S017 Chaplin
     {{255,  71, 170}, {255, 255, 255}, {224, 112,  48}},  // S018 Oh my God
     {{255,  71, 170}, {255, 255, 255}, {240, 144, 112}},  // S019 Get some shoes
     {{255, 144, 112}, {255,  71, 170}, {255, 208,  91}},  // S020 Rule/suck
@@ -66,8 +66,8 @@ constexpr Color SCENE_PALETTES[SCENE_COUNT][3] = {
     {{255, 144,  80}, {255, 240, 112}, {208,  80,  48}},  // S025 Let's get 'em
     {{255, 240, 144}, {255, 176, 112}, {112,  80,  48}},  // S026 Runs small
     {{255, 255, 255}, {208, 240,  16}, {255,  71, 170}},  // S027 Those are mine
-    {{160, 205, 255}, {255, 255, 255}, {112, 112, 112}},  // S028 Larry refuses
-    {{255, 208,  91}, {160, 205, 255}, {255, 255, 255}},  // S029 Larry gets chilly
+    {{  0, 175, 230}, {255, 130,   0}, {135,   0, 230}},  // S028 Larry refuses
+    {{  0, 110, 255}, {255, 140,  10}, {  0, 225, 165}},  // S029 Larry gets chilly
     {{246, 211,  45}, {  0, 213, 245}, {238,   0, 168}},  // S030 Kling Curb
     {{  0, 213, 245}, {238,   0, 168}, {201, 255,   0}},  // S031 Kling Kelly
     {{164, 255,   0}, {238,   0, 168}, {  0, 213, 245}},  // S032 bacteria rave
@@ -203,14 +203,80 @@ void fillPixels(const Color &color) {
   }
 }
 
-void drawCalmSceneFrame(uint8_t brightness) {
-  CircuitPlayground.setBrightness(brightness);
-  for (uint8_t pixel = 0; pixel < PIXEL_COUNT; ++pixel) {
-    const Color color = SCENE_PALETTES[scenePalette]
-                                      [pixel % 3];
-    setFramePixel(pixel, color.red, color.green, color.blue);
-  }
+enum class MovieLook : uint8_t { Comet, Opposed, Marquee, Split, Beacon };
 
+struct MovieStyle { MovieLook look; uint16_t stepMs; };
+
+MovieStyle movieStyle() {
+  switch (scenePalette) {
+    case 0:  return {MovieLook::Comet, 110};    // Daniel: blue/cyan sneaker streak.
+    case 2:  return {MovieLook::Opposed, 155};  // Curb: amber/cyan conversation.
+    case 3:  return {MovieLook::Marquee, 120};  // Austin: purple/gold go-go lights.
+    case 4:  return {MovieLook::Beacon, 210};   // Lambs: violet/crimson suspense.
+    case 5:  return {MovieLook::Comet, 180};    // Forrest: green running trail.
+    case 6:  return {MovieLook::Split, 200};    // Shawshank: blue/teal sweep.
+    case 7:  return {MovieLook::Marquee, 150};  // Woody: sheriff gold and blue.
+    case 8:  return {MovieLook::Opposed, 85};   // Future: cyan/orange energy trails.
+    case 9:  return {MovieLook::Comet, 95};     // MJ: blue/violet dance-floor chase.
+    case 10: return {MovieLook::Opposed, 115};  // Jordan: red/orange court runners.
+    case 11: return {MovieLook::Beacon, 175};   // Cinderella: blue/violet glow.
+    case 12: return {MovieLook::Split, 220};    // Rogers: cardigan red/warm gold.
+    case 13: return {MovieLook::Marquee, 125};  // Barbie: pink/violet runway.
+    case 14: return {MovieLook::Opposed, 140};  // Smart: green/teal spy scanners.
+    case 16: return {MovieLook::Marquee, 180};  // Chaplin: amber/violet theater.
+    case 27: return {MovieLook::Split, 150};   // Larry refuses: cool/warm halves.
+    case 28: return {MovieLook::Comet, 160};   // Larry chilly: blue/gold trail.
+    default: return {MovieLook::Comet, 150};
+  }
+}
+
+void drawMovieSceneFrame(uint8_t brightness) {
+  CircuitPlayground.setBrightness(brightness);
+  clearPixels();
+  const Color first = SCENE_PALETTES[scenePalette][0];
+  const Color second = SCENE_PALETTES[scenePalette][1];
+  const Color accent = SCENE_PALETTES[scenePalette][2];
+  const auto put = [](uint8_t pixel, Color c) {
+    setFramePixel(pixel, c.red, c.green, c.blue);
+  };
+  const uint32_t age = millis() - sceneStartedAt;
+  switch (movieStyle().look) {
+    case MovieLook::Comet:
+      // A broad colored head and diminishing tail, with real darkness ahead.
+      put(0, scaleColor(second, 40));
+      put(1, scaleColor(second, 90));
+      put(2, scaleColor(first, 170));
+      put(3, first);
+      put(4, scaleColor(accent, 100));
+      break;
+    case MovieLook::Opposed:
+      for (uint8_t i = 0; i < 3; ++i) {
+        const uint8_t levels[] = {55, 140, 255};
+        put(i, scaleColor(first, levels[i]));
+        put(i + 5, scaleColor(second, levels[i]));
+      }
+      break;
+    case MovieLook::Marquee: {
+      const uint8_t glow = 120U + ambientPulse(age, 2400U) * 135U / 255U;
+      put(0, scaleColor(first, 100)); put(1, first); put(2, scaleColor(first, 100));
+      put(5, scaleColor(second, 100)); put(6, scaleColor(second, glow));
+      put(7, scaleColor(second, 100));
+      break;
+    }
+    case MovieLook::Split:
+      // Two dark pixels between groups retain contrast even mid-interpolation.
+      for (uint8_t i = 0; i < 3; ++i) {
+        put(i, first); put(i + 5, second);
+      }
+      break;
+    case MovieLook::Beacon: {
+      const uint8_t glow = 135U + ambientPulse(age, 3000U) * 120U / 255U;
+      put(0, scaleColor(second, 55)); put(1, scaleColor(second, 145));
+      put(2, scaleColor(first, glow)); put(3, scaleColor(first, 145));
+      put(4, scaleColor(second, 55));
+      break;
+    }
+  }
 }
 
 void drawWizardOfOzFrame(uint8_t brightness) {
@@ -513,7 +579,7 @@ uint16_t rotationPeriod() {
       default: return 0;
     }
   }
-  return 45;
+  return movieStyle().stepMs;
 }
 
 void presentFrame(bool rotate) {
@@ -546,7 +612,7 @@ void drawSceneFrame(uint8_t brightness) {
   else if (isSpongeBobScene()) drawSpongeBobFrame(brightness);
   else if (isKlingScene()) drawKlingSceneFrame(brightness);
   else if (isShoesSongScene()) drawSongSceneFrame(brightness);
-  else drawCalmSceneFrame(brightness);
+  else drawMovieSceneFrame(brightness);
   presentFrame(period != 0);
 }
 
@@ -650,7 +716,7 @@ void setup() {
     bootArcRecoveryPending = true;
   }
   drawIdle();
-  Serial.println("HALO_READY A1 scene-code v4 + ARCCORE + HOME/QR");
+  Serial.println("HALO_READY A1 scene-code v4 + ARCCORE + HOME/QR + MOVIE_LOOKS");
 }
 
 void loop() {
@@ -684,7 +750,8 @@ void loop() {
     Serial.print(" arc=");
     Serial.print(arcCoreActive ? 1 : 0);
     Serial.print(" state=");
-    Serial.println(static_cast<uint8_t>(decodeState));
+    Serial.print(static_cast<uint8_t>(decodeState));
+    Serial.println(" movie_looks=1");
   }
 
   const int32_t afterglowRemaining = static_cast<int32_t>(afterglowUntil - now);

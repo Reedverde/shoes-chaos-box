@@ -1,4 +1,5 @@
 #include <cassert>
+#include <algorithm>
 #include <iostream>
 #include "../../src/main.cpp"
 int main(){
@@ -39,5 +40,31 @@ int main(){
  bootArcRecoveryPending=true;bootHighStartedAt=90000;recoverArcFromHeldBootSignal(90749,true);assert(!arcCoreActive);
  recoverArcFromHeldBootSignal(90750,true);assert(arcCoreActive&&!bootArcRecoveryPending);
  int before=CircuitPlayground.strip.shows;drawIdle();assert(CircuitPlayground.strip.shows==before+1);
- std::cout<<"PASS: 32 scene profiles plus Arc Core fast-gold/blue timing and protocol\n";
+ // The former pale stripe scenes retain dark gaps and saturated moving heads
+ // after subpixel interpolation, instead of lighting the whole diffuser white.
+ const int movieScenes[]={0,2,3,4,5,6,7,8,9,10,11,12,13,14,16,27,28};
+ for(int id:movieScenes){
+   decodedScene=id;fake_now=100000;rotationQ16=0;beginScene(fake_now);
+   uint32_t previous[10]={};bool moved=false;
+   for(int tick=0;tick<160;++tick){
+     fake_now+=16;int shows=CircuitPlayground.strip.shows;drawSceneFrame(48);
+     assert(CircuitPlayground.strip.shows==shows+1);
+     assert(CircuitPlayground.brightness==48);
+     int dark=0,colorful=0;
+     for(int p=0;p<10;++p){
+       auto &c=CircuitPlayground.strip.pixels[p];
+       int hi=std::max(c[0],std::max(c[1],c[2]));
+       int lo=std::min(c[0],std::min(c[1],c[2]));
+       if(hi<40)++dark;
+       if(hi>70 && hi-lo>hi/2)++colorful;
+       uint32_t packed=(c[0]<<16)|(c[1]<<8)|c[2];
+       if(tick && packed!=previous[p])moved=true;
+       previous[p]=packed;
+     }
+     if(!(dark>=1 && colorful>=2))std::cerr<<"S"<<id+1<<" tick="<<tick<<" dark="<<dark<<" colorful="<<colorful<<"\n";
+     assert(dark>=1 && colorful>=2);
+   }
+   assert(moved);
+ }
+ std::cout<<"PASS: 32 scene profiles, 17 colorful movie looks, Arc timing and protocol\n";
 }

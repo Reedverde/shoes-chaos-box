@@ -43,7 +43,31 @@ control line high, it recovers the Arc animation after a 750 ms guard. A serial
 status line every five seconds reports input, Arc activity, and decoder state
 for hardware diagnosis.
 
-Movie, television, and meme scenes use a restrained moving palette. The ten
+Movie, television, and meme scenes now use saturated accents separated by dark
+gaps, replacing the pale repeating stripes that washed out through the diffuser.
+Movie brightness remains 48/255. The revised looks are:
+
+| Scene | Colors and movement |
+| --- | --- |
+| S001 Damn Daniel | Blue/cyan comet with a violet trailing accent |
+| S003 Curb | Opposed amber/cyan runners |
+| S004 Austin Powers | Purple/gold marquee chase |
+| S005 Silence of the Lambs | Violet/crimson breathing highlight |
+| S006 Forrest Gump | Green/gold running trail |
+| S007 Shawshank | Blue/teal rotating bands |
+| S008 Toy Story | Sheriff-gold/blue marquee chase |
+| S009 Back to the Future | Fast cyan/orange energy trails |
+| S010 Michael Jackson | Blue/violet dance-floor comet |
+| S011 Michael Jordan | Red/orange paired runners |
+| S012 Cinderella | Blue/violet breathing glow |
+| S013 Mister Rogers | Cardigan-red/gold sweep |
+| S014 Barbie | Hot-pink/violet runway chase |
+| S015 Get Smart | Green/teal paired scanners |
+| S017 Chaplin | Amber/violet theater chase |
+| S028 Larry refuses | Cyan/amber rotating bands |
+| S029 Larry gets chilly | Blue/gold comet |
+
+The dedicated Wizard of Oz and SpongeBob looks are retained. The ten
 original Shoes-video scenes (S018-S027) each have a coherent, diffuser-aware
 club profile rather than sharing one continuous chase. Across those clips the
 profiles include wide chasing wedges, five-pixel color halves, full-ring blinks,
