@@ -18,7 +18,7 @@ Audited: 2026-09-26. Only confirmed hardware is listed here.
 | Two local pushbuttons | GPIO13 forward scene and GPIO22 previous scene |
 | Xinwei 1/4-watt resistor assortment | Includes installed/available 1 kΩ UART resistor |
 | Smatree DP20S USB-C power bank | ESP32 pocket power; 5V/2A, 5000mAh/18.5Wh |
-| Clipped external battery pack | Selected independent Circuit Playground lapel power |
+| Clipped external battery pack with two AAA cells | Independent Circuit Playground lapel power; Reed confirmed two AAA batteries on 2026-10-01. Cell chemistry not specified. |
 | Jumper wires and breadboard power rails | Current prototype wiring |
 
 ## Useful spares and later hardware
