@@ -12,6 +12,8 @@ This repository records the decisions, mistakes, measurements, and code behind t
 
 *An early September 2026 bench test, before the final wiring and timing repair.*
 
+[See the updated color component diagrams](docs/COMPONENT_DIAGRAMS.md), with each part named and explained in one sentence.
+
 ## What works today
 
 | Part | Current result |
@@ -76,6 +78,7 @@ The repair preserved the media and checked the actual hardware. [Read the measur
 |---|---|
 | Live links and publication status | [Publication handoff](docs/PUBLICATION.md) |
 | Build instructions and active firmware | [Getting started](docs/GETTING_STARTED.md) |
+| Labeled color drawings of the updated layout | [Component diagrams](docs/COMPONENT_DIAGRAMS.md) |
 | System decisions and current state | [PROJECT_STATE.md](PROJECT_STATE.md) |
 | Cloudflare hosting, downloads, API, and where Flue fits | [Cloudflare guide](docs/CLOUDFLARE.md) |
 | Controls and short demo sequence | [Demo guide](docs/DEMO.md) |
